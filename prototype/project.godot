@@ -19,6 +19,10 @@ config/name="Muslim Island (Prototype)"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Globals="*res://Scripts/Globals.gd"
+
 [display]
 
 window/size/width=960
