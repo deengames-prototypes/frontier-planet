@@ -1,4 +1,4 @@
-extends Node2D
+extends KinematicBody2D
 
 const MOVE_SPEED:int = 200 # px/s
 var _velocity:Vector2 = Vector2.ZERO
@@ -16,4 +16,4 @@ func _process(delta):
 	elif Input.is_action_pressed("ui_right"):
 		_velocity.x = MOVE_SPEED
 	
-	self.position += _velocity * delta
+	self.move_and_slide(_velocity)
