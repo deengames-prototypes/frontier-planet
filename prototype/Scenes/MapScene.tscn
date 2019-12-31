@@ -1,12 +1,29 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Entities/MapPlayer.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Entities/Wall.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Entities/Wall.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Entities/MapPlayer.tscn" type="PackedScene" id=2]
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Node2D" parent="." instance=ExtResource( 1 )]
-position = Vector2( 265.928, 118.56 )
+[node name="Wall" parent="." instance=ExtResource( 1 )]
+position = Vector2( 231.712, 22.556 )
 
-[node name="Node2D2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 169.529, 57.6177 )
+[node name="Wall2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 211.206, 379.351 )
+
+[node name="Wall4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 584.406, 381.402 )
+
+[node name="Wall5" parent="." instance=ExtResource( 1 )]
+position = Vector2( 570.052, 22.556 )
+
+[node name="Wall3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 22.556, 198.903 )
+rotation = 1.5708
+
+[node name="Wall6" parent="." instance=ExtResource( 1 )]
+position = Vector2( 758.702, 205.055 )
+rotation = 1.5708
+
+[node name="Node2D" parent="." instance=ExtResource( 2 )]
+position = Vector2( 62.0499, 75.3463 )
