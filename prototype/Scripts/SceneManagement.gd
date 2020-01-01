@@ -9,7 +9,7 @@ static func change_scene_to(tree, scene_instance, node_name):
 	var current_scene = root.get_child(root.get_child_count() - 1)
 	root.remove_child(current_scene)
 	current_scene.queue_free()
-		
+	
 	current_scene = scene_instance
 	# http://docs.godotengine.org/en/3.0/getting_started/step_by_step/singletons_autoload.html?highlight=change_scene	
 	root.add_child(current_scene)
