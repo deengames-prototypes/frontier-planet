@@ -4,6 +4,6 @@ extends Node2D
 func _ready():
 	call_deferred("position_player")
 
-func position_player():
-	$MapPlayer.position = get_node(Globals.target_node).position
+func move_player_to(node_name):
+	$MapPlayer.position = get_node(node_name).position
 	

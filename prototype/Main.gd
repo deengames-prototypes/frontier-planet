@@ -2,9 +2,10 @@ extends Node2D
 
 const SceneManagement = preload("res://Scripts/SceneManagement.gd")
 
-const START_SCENE = "res://Scenes/Home.tscn"
+const Home = preload("res://Scenes/Home.tscn")
 
 func _ready():
-	Globals.target_node = "Start"
-	get_tree().change_scene(START_SCENE)
-	
+	call_deferred("_change_scene")
+
+func _change_scene():
+	SceneManagement.change_scene_to(get_tree(), Home.instance(), "Start")

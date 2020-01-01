@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scenes/Home.gd" type="Script" id=1]
 [ext_resource path="res://Entities/Wall.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Entities/MapPlayer.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Entities/Door.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Entities/Door.tscn" type="PackedScene" id=3]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -28,12 +27,10 @@ rotation = 1.5708
 position = Vector2( 758.702, 205.055 )
 rotation = 1.5708
 
-[node name="MapPlayer" parent="." instance=ExtResource( 3 )]
-
 [node name="Start" type="Node2D" parent="."]
 position = Vector2( 657.725, 98.231 )
 
-[node name="Exit" parent="." instance=ExtResource( 4 )]
+[node name="Exit" parent="." instance=ExtResource( 3 )]
 position = Vector2( 360.896, 321.936 )
 location = "FromHome"
 
