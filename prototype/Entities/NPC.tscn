@@ -17,3 +17,4 @@ color = Color( 1, 1, 0, 1 )
 position = Vector2( 20, 20 )
 shape = SubResource( 1 )
 [connection signal="body_entered" from="." to="." method="_on_Door_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_NPC_body_exited"]
