@@ -1,6 +1,6 @@
 extends Node
 
-const MapPlayer = preload("res://Entities/MapPlayer.tscn")
+const MapPlayer = preload("res://Entities/World/MapPlayer.tscn")
 
 var _current_scene
 

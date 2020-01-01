@@ -1,8 +1,10 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scenes/Home.gd" type="Script" id=1]
-[ext_resource path="res://Entities/Wall.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Entities/Door.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Entities/World/Wall.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Entities/World/Door.tscn" type="PackedScene" id=3]
+
+
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
