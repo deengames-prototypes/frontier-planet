@@ -1,5 +1,6 @@
 extends Node2D
 
+const Catfish = preload("res://Entities/Fishing/Catfish.tscn")
 const Jellyfish = preload("res://Entities/Fishing/Jellyfish.tscn")
 
 const PROGRESS_BAR_VELOCITY = 96 # 960 = ~full cycle in 1s
@@ -19,11 +20,18 @@ func _ready():
 	
 	while num_jellyfish > 0:
 		num_jellyfish -= 1
-		var position = _get_random_ocean_position()
 		var jellyfish = Jellyfish.instance()
+		var position = _get_random_ocean_position(jellyfish)
 		jellyfish.max_coordinates = Vector2($Ocean.margin_right, $Ocean.margin_bottom)
 		jellyfish.position = position
 		$Ocean.add_child(jellyfish)
+	
+	if is_catfish:
+		var catfish = Catfish.instance()
+		catfish.max_x = int(HORIZONTAL_RANGE - catfish.get_child(0).margin_right)
+		catfish.position.x = randi() % catfish.max_x
+		catfish.position.y = VERTICAL_RANGE - catfish.get_child(0).margin_bottom
+		$Ocean.add_child(catfish)
 
 func _process(delta):
 	if _horizontal_percent == -1 or _vertical_percent == -1:
@@ -53,8 +61,9 @@ func _process(delta):
 		_horizontal_percent = -1
 		_vertical_percent = -1
 
-func _get_random_ocean_position():
-	var x = randi() % HORIZONTAL_RANGE
-	var y = randi() % VERTICAL_RANGE
+func _get_random_ocean_position(jellyfish):
+	var color_rect = jellyfish.get_child(0)
+	var x = randi() % int(HORIZONTAL_RANGE - color_rect.margin_right)
+	var y = randi() % int(VERTICAL_RANGE - color_rect.margin_bottom)
 	
 	return Vector2(x, y)

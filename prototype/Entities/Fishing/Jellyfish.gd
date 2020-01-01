@@ -15,15 +15,15 @@ func _process(delta):
 	self.position.x += (sign_x * VELOCITY * delta)
 	self.position.y += (sign_y * VELOCITY * delta)
 	
-	if self.position.x < 0:
+	if self.position.x  < 0:
 		self.position.x = 0
-	elif self.position.x > max_coordinates.x:
-		self.position.x = max_coordinates.x
+	elif self.position.x + $ColorRect.margin_right > max_coordinates.x:
+		self.position.x = max_coordinates.x - $ColorRect.margin_right
 		
 	if self.position.y < 0:
 		self.position.y = 0
-	elif self.position.y > max_coordinates.y:
-		self.position.y = max_coordinates.y
+	elif self.position.y + $ColorRect.margin_bottom > max_coordinates.y:
+		self.position.y = max_coordinates.y - $ColorRect.margin_bottom
 	
 	
 	

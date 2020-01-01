@@ -5,6 +5,7 @@ const SceneManagement = preload("res://Scripts/SceneManagement.gd")
 const Home = preload("res://Scenes/Home.tscn")
 
 func _ready():
+	randomize()
 	call_deferred("_change_scene")
 
 func _change_scene():
