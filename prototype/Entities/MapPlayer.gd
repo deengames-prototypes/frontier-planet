@@ -3,9 +3,6 @@ extends KinematicBody2D
 const MOVE_SPEED:int = 200 # px/s
 var _velocity:Vector2 = Vector2.ZERO
 
-func _ready():
-	print("!")
-
 func _process(delta):
 	_velocity = Vector2.ZERO
 	
