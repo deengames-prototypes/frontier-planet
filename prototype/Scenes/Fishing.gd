@@ -2,6 +2,7 @@ extends Node2D
 
 const Catfish = preload("res://Entities/Fishing/Catfish.tscn")
 const Jellyfish = preload("res://Entities/Fishing/Jellyfish.tscn")
+const Sockeye = preload("res://Entities/Fishing/Sockeye.tscn")
 
 const PROGRESS_BAR_VELOCITY = 96 # 960 = ~full cycle in 1s
 
@@ -32,6 +33,20 @@ func _ready():
 		catfish.position.x = randi() % catfish.max_x
 		catfish.position.y = VERTICAL_RANGE - catfish.get_child(0).margin_bottom
 		$Ocean.add_child(catfish)
+	
+	while num_fish > 0:
+		num_fish -= 1
+		var sockeye = Sockeye.instance()
+		
+		sockeye.max_position = Vector2(
+			HORIZONTAL_RANGE - sockeye.get_child(0).margin_right,
+			VERTICAL_RANGE - sockeye.get_child(0).margin_bottom)
+		
+		sockeye.position = Vector2(
+			randi() % int(sockeye.max_position.x),
+			randi() % int(sockeye.max_position.y))
+			 
+		$Ocean.add_child(sockeye)
 
 func _process(delta):
 	if _horizontal_percent == -1 or _vertical_percent == -1:
