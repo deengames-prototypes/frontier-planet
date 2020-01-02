@@ -71,10 +71,7 @@ func _process(delta):
 				$ProgressBar.value = 0
 				$Bobber.position.y = $Ocean.margin_top + (_vertical_percent / 100.0) * VERTICAL_RANGE
 	elif Input.is_action_just_pressed("ui_accept"):
-		$Bobber.position = BOBBER_HOME
-		$ProgressBar/Label.text = ""
-		_horizontal_percent = -1
-		_vertical_percent = -1
+		_reset_bobber()
 
 func _get_random_ocean_position(jellyfish):
 	var color_rect = jellyfish.get_child(0)
@@ -82,3 +79,9 @@ func _get_random_ocean_position(jellyfish):
 	var y = randi() % int(VERTICAL_RANGE - color_rect.margin_bottom)
 	
 	return Vector2(x, y)
+
+func _reset_bobber():
+	$Bobber.position = BOBBER_HOME
+	$ProgressBar/Label.text = ""
+	_horizontal_percent = -1
+	_vertical_percent = -1

@@ -1,4 +1,4 @@
-extends Area2D
+extends "res://Entities/Fishing/Fish.gd"
 
 const VELOCITY:int = 50
 
@@ -30,3 +30,9 @@ func _setup_move():
 
 func _move_again(a, b):
 	self._setup_move()
+	
+func _on_area_entered(area):
+	self.on_fish_body_entered(area)
+
+func _on_area_exited(area):
+	self.on_fish_body_exited(area)

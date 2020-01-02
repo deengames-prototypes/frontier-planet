@@ -16,3 +16,5 @@ color = Color( 0.419608, 0.419608, 0.419608, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 50, 25 )
 shape = SubResource( 1 )
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

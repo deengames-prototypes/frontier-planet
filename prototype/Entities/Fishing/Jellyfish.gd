@@ -1,4 +1,4 @@
-extends Area2D
+extends "res://Entities/Fishing/Fish.gd"
 
 export var max_coordinates:Vector2
 
@@ -25,5 +25,8 @@ func _process(delta):
 	elif self.position.y + $ColorRect.margin_bottom > max_coordinates.y:
 		self.position.y = max_coordinates.y - $ColorRect.margin_bottom
 	
-	
-	
+func _on_area_entered(area):
+	self.on_fish_body_entered(area)
+
+func _on_area_exited(area):
+	self.on_fish_body_exited(area)
