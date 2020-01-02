@@ -15,6 +15,7 @@ onready var VERTICAL_RANGE = int($Ocean.margin_bottom - $Ocean.margin_top - $Bob
 onready var BOBBER_HOME = $Bobber.position
 
 func _ready():
+	$PatternGame.visible = false
 	var is_catfish = randi() % 100 <= 50
 	var num_jellyfish = 1 + (randi() % 3) # 1-3
 	var num_fish = 3 + (randi() % 5) # 3-8
@@ -25,6 +26,7 @@ func _ready():
 		var position = _get_random_ocean_position(jellyfish)
 		jellyfish.max_coordinates = Vector2($Ocean.margin_right, $Ocean.margin_bottom)
 		jellyfish.position = position
+		jellyfish.connect("hooked", self, "_on_fish_hooked", [jellyfish])
 		$Ocean.add_child(jellyfish)
 	
 	if is_catfish:
@@ -32,6 +34,7 @@ func _ready():
 		catfish.max_x = int(HORIZONTAL_RANGE - catfish.get_child(0).margin_right)
 		catfish.position.x = randi() % catfish.max_x
 		catfish.position.y = VERTICAL_RANGE - catfish.get_child(0).margin_bottom
+		catfish.connect("hooked", self, "_on_fish_hooked", [catfish])
 		$Ocean.add_child(catfish)
 	
 	while num_fish > 0:
@@ -46,9 +49,13 @@ func _ready():
 			randi() % int(sockeye.max_position.x),
 			randi() % int(sockeye.max_position.y))
 			 
+		sockeye.connect("hooked", self, "_on_fish_hooked", [sockeye])
 		$Ocean.add_child(sockeye)
 
 func _process(delta):
+	if $PatternGame.visible:
+		return
+		
 	if _horizontal_percent == -1 or _vertical_percent == -1:
 		if _increasing_value:
 			$ProgressBar.value += (PROGRESS_BAR_VELOCITY * delta)
@@ -85,3 +92,8 @@ func _reset_bobber():
 	$ProgressBar/Label.text = ""
 	_horizontal_percent = -1
 	_vertical_percent = -1
+
+func _on_fish_hooked(fish):
+	print("Got me a " + fish.name)
+	$PatternGame.visible = true
+	_reset_bobber()
