@@ -1,14 +1,15 @@
 extends Panel
 
-export var sequence_length = 5
+export var sequence_length = 7
 export var show_tile_delay_seconds = 0.5
 
 var _correct_sequence = []
 
 func _ready():
+	randomize()
 	self.sequence_length = sequence_length
 	while len(_correct_sequence) < sequence_length:
-		var index = randi() % sequence_length
+		var index = randi() % $Node2D.get_child_count()
 		var next = $Node2D.get_child(index)
 		_correct_sequence.append(next.pitch_multiplier)
 	
