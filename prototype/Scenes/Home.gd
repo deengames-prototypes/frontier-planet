@@ -1,1 +1,1 @@
-extends "res://Scripts/Map.gd"
+extends "res://Scenes/Map.gd"
