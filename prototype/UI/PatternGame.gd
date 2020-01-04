@@ -1,11 +1,12 @@
 extends Panel
 
-export var sequence_length = 7
+export var sequence_length = 50
 export var show_tile_delay_seconds = 0.5
 
 var _correct_sequence = []
 
 func _ready():
+	yield(get_tree().create_timer(5), 'timeout')
 	randomize()
 	self.sequence_length = sequence_length
 	while len(_correct_sequence) < sequence_length:

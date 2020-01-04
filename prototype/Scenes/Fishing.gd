@@ -1,6 +1,7 @@
 extends Node2D
 
 const Catfish = preload("res://Entities/Fishing/Catfish.tscn")
+const FishTileGame = preload("res://UI/FishTileGame.tscn")
 const Jellyfish = preload("res://Entities/Fishing/Jellyfish.tscn")
 const Sockeye = preload("res://Entities/Fishing/Sockeye.tscn")
 
@@ -9,13 +10,13 @@ const PROGRESS_BAR_VELOCITY = 96 # 960 = ~full cycle in 1s
 var _horizontal_percent = -1
 var _vertical_percent = -1
 var _increasing_value = true
+var _paused = false
 
 onready var HORIZONTAL_RANGE = int($Ocean.margin_right - $RiverBank.margin_right - $Bobber.get_child(0).margin_right)
 onready var VERTICAL_RANGE = int($Ocean.margin_bottom - $Ocean.margin_top - $Bobber.get_child(0).margin_bottom)
 onready var BOBBER_HOME = $Bobber.position
 
 func _ready():
-	$PatternGame.visible = false
 	var is_catfish = randi() % 100 <= 50
 	var num_jellyfish = 1 + (randi() % 3) # 1-3
 	var num_fish = 3 + (randi() % 5) # 3-8
@@ -53,7 +54,7 @@ func _ready():
 		$Ocean.add_child(sockeye)
 
 func _process(delta):
-	if $PatternGame.visible:
+	if _paused:
 		return
 		
 	if _horizontal_percent == -1 or _vertical_percent == -1:
@@ -94,6 +95,17 @@ func _reset_bobber():
 	_vertical_percent = -1
 
 func _on_fish_hooked(fish):
-	print("Got me a " + fish.name)
-	$PatternGame.visible = true
+	_paused = true
 	_reset_bobber()
+	print("Got me a " + fish.name) # store
+	var mini_game = FishTileGame.instance()
+	mini_game.connect("game_over", self, "_catch_fish_done")
+	var color_rect = fish.get_child(0)
+	mini_game.set_fish(color_rect)
+	add_child(mini_game)
+	
+func _catch_fish_done(caught_fish):
+	_paused = false
+	if caught_fish:
+		pass # inventory.add(fish)
+	
