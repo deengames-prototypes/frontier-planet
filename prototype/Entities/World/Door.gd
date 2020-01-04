@@ -9,4 +9,4 @@ func _on_Door_body_entered(body):
 	if body.name == "MapPlayer":
 		var full_path = "res://Scenes/" + destination + ".tscn"
 		var map = load(full_path).instance()
-		SceneManagement.change_scene_to(get_tree(), map, location)
+		SceneManagement.change_map_to(get_tree(), map, location)
