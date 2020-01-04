@@ -3,7 +3,7 @@
 [ext_resource path="res://Entities/World/MapPlayer.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 20, 20 )
+extents = Vector2( 20, 10 )
 
 [node name="MapPlayer" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -13,5 +13,8 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 20, 20 )
+position = Vector2( 20, 30 )
 shape = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
