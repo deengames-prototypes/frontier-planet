@@ -3,7 +3,9 @@ extends Node2D
 const Catfish = preload("res://Entities/Fishing/Catfish.tscn")
 const FishTileGame = preload("res://UI/FishTileGame.tscn")
 const Jellyfish = preload("res://Entities/Fishing/Jellyfish.tscn")
+const SceneManagement = preload("res://Scripts/SceneManagement.gd")
 const Sockeye = preload("res://Entities/Fishing/Sockeye.tscn")
+const WorldMap = preload("res://Scenes/WorldMap.tscn")
 
 const PROGRESS_BAR_VELOCITY = 96 # 960 = ~full cycle in 1s
 const BOBBER_MOVES = 5
@@ -135,3 +137,13 @@ func _catch_fish_done(caught_fish):
 	if caught_fish:
 		pass # inventory.add(fish)
 	
+func _unhandled_key_input(event):
+	if event.is_pressed() and event.is_action_pressed("ui_cancel"):
+		if _horizontal_percent != -1 or _vertical_percent != -1:
+			_reset_bobber()
+		else:
+			# escape with no fishng = bye BYE
+			var map = WorldMap.instance()
+			# null = restore old position
+			SceneManagement.change_map_to(get_tree(), map, null)
+			
