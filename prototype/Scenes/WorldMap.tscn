@@ -11,7 +11,7 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 margin_right = 2880.0
 margin_bottom = 1620.0
-color = Color( 0.345098, 0.501961, 0.184314, 1 )
+color = Color( 0.219608, 0.717647, 0.392157, 1 )
 
 [node name="Home" parent="." instance=ExtResource( 2 )]
 position = Vector2( 1150.02, 0 )
@@ -24,3 +24,14 @@ position = Vector2( 1403, 376 )
 [node name="NPC" parent="." instance=ExtResource( 3 )]
 position = Vector2( 310.124, 138.569 )
 dialog = "Howdy, neighbour! Fine weather today, innit?"
+
+[node name="Lake" type="Node2D" parent="."]
+position = Vector2( 12, 1180 )
+rotation = -0.261799
+
+[node name="Lake" type="ColorRect" parent="Lake"]
+margin_left = 706.0
+margin_top = 663.0
+margin_right = 2823.0
+margin_bottom = 1191.0
+color = Color( 0.231373, 0.364706, 0.788235, 1 )
