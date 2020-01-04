@@ -95,14 +95,15 @@ func _reset_bobber():
 	_vertical_percent = -1
 
 func _on_fish_hooked(fish):
-	_paused = true
-	_reset_bobber()
-	print("Got me a " + fish.name) # store
-	var mini_game = FishTileGame.instance()
-	mini_game.connect("game_over", self, "_catch_fish_done")
-	var color_rect = fish.get_child(0)
-	mini_game.set_fish(color_rect)
-	add_child(mini_game)
+	if not _paused:
+		_paused = true
+		_reset_bobber()
+		print("Got me a " + fish.name) # store
+		var mini_game = FishTileGame.instance()
+		mini_game.connect("game_over", self, "_catch_fish_done")
+		var color_rect = fish.get_child(0)
+		mini_game.set_fish(color_rect)
+		add_child(mini_game)
 	
 func _catch_fish_done(caught_fish):
 	_paused = false
