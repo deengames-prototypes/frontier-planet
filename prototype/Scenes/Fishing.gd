@@ -6,11 +6,14 @@ const Jellyfish = preload("res://Entities/Fishing/Jellyfish.tscn")
 const Sockeye = preload("res://Entities/Fishing/Sockeye.tscn")
 
 const PROGRESS_BAR_VELOCITY = 96 # 960 = ~full cycle in 1s
+const BOBBER_MOVES = 5
+const BOBBER_MOVE_AMOUNT = 32
 
 var _horizontal_percent = -1
 var _vertical_percent = -1
 var _increasing_value = true
 var _paused = false
+var _bobber_moves_left = BOBBER_MOVES
 
 onready var HORIZONTAL_RANGE = int($Ocean.margin_right - $RiverBank.margin_right - $Bobber.get_child(0).margin_right)
 onready var VERTICAL_RANGE = int($Ocean.margin_bottom - $Ocean.margin_top - $Bobber.get_child(0).margin_bottom)
@@ -75,11 +78,32 @@ func _process(delta):
 				$Bobber.position.x = $RiverBank.margin_right + (_horizontal_percent / 100.0) * HORIZONTAL_RANGE
 			else:
 				_vertical_percent = $ProgressBar.value
-				$ProgressBar/Label.text += "\nVertical: " + str(_vertical_percent) + "%"
+				$ProgressBar/Label.text += "\nVertical: " + str(_vertical_percent) + "%\nMoves left: " + str(BOBBER_MOVES)
 				$ProgressBar.value = 0
 				$Bobber.position.y = $Ocean.margin_top + (_vertical_percent / 100.0) * VERTICAL_RANGE
-	elif Input.is_action_just_pressed("ui_accept"):
-		_reset_bobber()
+				
+	else:
+		if Input.is_action_just_pressed("ui_accept"):
+			_reset_bobber()
+		elif _bobber_moves_left > 0:
+			var moved = false
+			
+			if Input.is_action_just_pressed("ui_up"):
+				$Bobber.position.y -= BOBBER_MOVE_AMOUNT
+				moved = true
+			if Input.is_action_just_pressed("ui_left"):
+				$Bobber.position.x -= BOBBER_MOVE_AMOUNT
+				moved = true
+			if Input.is_action_just_pressed("ui_down"):
+				$Bobber.position.y += BOBBER_MOVE_AMOUNT
+				moved = true
+			if Input.is_action_just_pressed("ui_right"):
+				$Bobber.position.x += BOBBER_MOVE_AMOUNT
+				moved = true
+			
+			if moved:
+				_bobber_moves_left -= 1
+				$ProgressBar/Label.text = "Moves left: " + str(_bobber_moves_left)
 
 func _get_random_ocean_position(jellyfish):
 	var color_rect = jellyfish.get_child(0)
@@ -93,6 +117,7 @@ func _reset_bobber():
 	$ProgressBar/Label.text = ""
 	_horizontal_percent = -1
 	_vertical_percent = -1
+	_bobber_moves_left = BOBBER_MOVES
 
 func _on_fish_hooked(fish):
 	if not _paused:
