@@ -24,7 +24,9 @@ position = Vector2( 1403, 266 )
 
 [node name="NPC" parent="." instance=ExtResource( 3 )]
 position = Vector2( 310.124, 138.569 )
-dialog = "Howdy, neighbour! Fine weather today, innit?"
+quest_dialogs = [ "Salams, neighbour! Got any eggs? I'm fresh out!", "Salamun alaykum! The wife wants a morel, but I don't know what that is - could you rustle one up for me?", "Salams, brother! Just the man I wanted to see! Could you fish me a sockeye salmon? I need it for my famous sockeye stew!" ]
+quest_requires = [ "egg", "morel", "sockeye" ]
+quest_completions = [ "This egg looks \"egg-selent!\" Thank you so much!", "This morel is a masterpiece! Thanks!", "MashaAllah, is that a fresh sockeye! May Allah give you lots of khayr!" ]
 
 [node name="Lake" parent="." instance=ExtResource( 4 )]
 position = Vector2( 964.004, 1596.92 )
