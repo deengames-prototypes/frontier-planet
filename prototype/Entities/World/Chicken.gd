@@ -1,6 +1,6 @@
 extends Node2D
 
-const Egg = preload("res://Entities/World/Egg.tscn")
+const Egg = preload("res://Entities/World/Items/Egg.tscn")
 
 func on_end_day():
 	var egg = Egg.instance()

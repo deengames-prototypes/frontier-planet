@@ -147,5 +147,7 @@ func _unhandled_key_input(event):
 			# escape with no fishng = bye BYE
 			var map = WorldMap.instance()
 			# null = restore old position
-			SceneManagement.change_map_to(get_tree(), map, null)
-			
+			call_deferred("_change_map", map)
+
+func _change_map(map):
+	SceneManagement.change_map_to(get_tree(), map, null)

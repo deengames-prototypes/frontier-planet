@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 28, 60 )
+
+[node name="Tree" type="StaticBody2D"]
+
+[node name="Trunk" type="ColorRect" parent="."]
+margin_right = 56.0
+margin_bottom = 156.0
+color = Color( 0.364706, 0.152941, 0.364706, 1 )
+
+[node name="Foliage" type="Polygon2D" parent="."]
+position = Vector2( -284.811, -239.101 )
+color = Color( 0.145098, 0.443137, 0.47451, 1 )
+polygon = PoolVector2Array( 298.464, 97.3121, 347.691, 99.0702, 393.401, 148.297, 393.401, 202.798, 382.853, 250.266, 335.384, 269.605, 280.883, 269.605, 229.899, 218.621, 221.108, 143.023, 236.931, 111.377 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 28, 95 )
+shape = SubResource( 1 )
