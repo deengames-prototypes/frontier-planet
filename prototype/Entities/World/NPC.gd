@@ -43,6 +43,10 @@ func _figure_out_dialog():
 				var message = quest_completions[quest_index]
 				if quest_index + 1 < len(quest_dialogs):
 					message += "\n" + quest_dialogs[quest_index + 1]
+				else:
+					# QUEST DONE
+					Globals.gain_community_points(1)
+					
 				return message
 			else:
 				return quest_dialogs[quest_index]

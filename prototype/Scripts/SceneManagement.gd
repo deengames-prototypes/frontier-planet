@@ -1,6 +1,7 @@
 extends Node
 
 const MapPlayer = preload("res://Entities/World/MapPlayer.tscn")
+const MapUI = preload("res://UI/MapUI.tscn")
 
 var _current_scene
 
@@ -14,6 +15,9 @@ static func change_map_to(tree, scene_instance, node_name):
 		current_scene.move_player_to(node_name)
 	else:
 		player.position = Vector2(100, 100)
+	
+	# add community points thing
+	current_scene.add_child(MapUI.instance())
 
 static func change_scene_to(tree, scene_instance):
 	var root = tree.get_root()
