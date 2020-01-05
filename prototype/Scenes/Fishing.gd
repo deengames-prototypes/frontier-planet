@@ -126,8 +126,9 @@ func _on_fish_hooked(fish):
 	if not _paused:
 		_paused = true
 		_reset_bobber()
-		print("Got me a " + fish.name)
-		self._fish_name = fish.name
+		
+		self._fish_name = Globals.sanitize_name(fish.name)
+		
 		var mini_game = FishTileGame.instance()
 		mini_game.connect("game_over", self, "_catch_fish_done")
 		var color_rect = fish.get_child(0)
@@ -144,7 +145,7 @@ func _unhandled_key_input(event):
 		if _horizontal_percent != -1 or _vertical_percent != -1:
 			_reset_bobber()
 		else:
-			# escape with no fishng = bye BYE
+			# escape with no fishing = bye BYE
 			var map = WorldMap.instance()
 			# null = restore old position
 			call_deferred("_change_map", map)

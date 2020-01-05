@@ -13,3 +13,12 @@ var quest_indicies = {
 
 # Items spawned today; removed on consumption
 var forest_items = []
+
+func sanitize_name(item_name):
+	# Not sure why it *sometimes* is like @Sockeye@5
+	if item_name[0] == "@":
+		item_name = item_name.substr(1, len(item_name) - 1)
+	if item_name.find('@') > -1:
+		item_name = item_name.substr(0, item_name.find('@'))
+	item_name = item_name.to_lower()
+	return item_name
