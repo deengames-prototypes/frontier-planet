@@ -1,6 +1,6 @@
 extends Node
 
-const FOREST_ITEMS_TO_SPAWN = 3
+const FOREST_ITEMS_TO_SPAWN = 10
 const COMMUNITY_XP_TO_LEVEL_UP = 10
 
 var player # used for easy handling of stuff like freeze

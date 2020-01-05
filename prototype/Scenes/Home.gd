@@ -9,7 +9,7 @@ const FOREST_SPAWN_PROBABILITIES = {
 	"Herb": 30
 }
 
-const FOREST_SPOT_PROBABILITY = 70 # 40 = 40% chance to spawn at each spot
+const FOREST_SPOT_PROBABILITY = 40 # 40 = 40% chance to spawn at each spot
 
 func _on_Bed_end_day():
 	var tween = Tween.new()
