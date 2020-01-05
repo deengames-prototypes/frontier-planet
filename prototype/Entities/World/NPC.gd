@@ -39,7 +39,10 @@ func _figure_out_dialog():
 			current_quest_number += 1
 			Globals.quest_indicies[self.npc_name] = current_quest_number
 			Globals.player_inventory.remove(inventory_index)
-			return quest_completions[quest_index]
+			var message = quest_completions[quest_index]
+			if quest_index + 1 < len(quest_dialogs):
+				message += "\n" + quest_dialogs[quest_index + 1]
+			return message
 		else:
 			return quest_dialogs[quest_index]
 			

@@ -3,8 +3,10 @@
 [ext_resource path="res://UI/DialogPanel.gd" type="Script" id=1]
 [ext_resource path="res://DefaultFont.tres" type="DynamicFont" id=2]
 
-[node name="Panel" type="Node2D"]
+[node name="DialogPanel" type="Node2D"]
 script = ExtResource( 1 )
+width = 400.0
+height = 200.0
 
 [node name="Panel" type="Panel" parent="."]
 margin_right = 400.0
