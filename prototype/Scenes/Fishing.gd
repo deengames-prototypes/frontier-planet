@@ -16,6 +16,7 @@ var _vertical_percent = -1
 var _increasing_value = true
 var _paused = false
 var _bobber_moves_left = BOBBER_MOVES
+var _fish_name = ""
 
 onready var HORIZONTAL_RANGE = int($Ocean.margin_right - $RiverBank.margin_right - $Bobber.get_child(0).margin_right)
 onready var VERTICAL_RANGE = int($Ocean.margin_bottom - $Ocean.margin_top - $Bobber.get_child(0).margin_bottom)
@@ -125,7 +126,8 @@ func _on_fish_hooked(fish):
 	if not _paused:
 		_paused = true
 		_reset_bobber()
-		print("Got me a " + fish.name) # store
+		print("Got me a " + fish.name)
+		self._fish_name = fish.name
 		var mini_game = FishTileGame.instance()
 		mini_game.connect("game_over", self, "_catch_fish_done")
 		var color_rect = fish.get_child(0)
@@ -135,7 +137,7 @@ func _on_fish_hooked(fish):
 func _catch_fish_done(caught_fish):
 	_paused = false
 	if caught_fish:
-		pass # inventory.add(fish)
+		Globals.player_inventory.append(_fish_name)
 	
 func _unhandled_key_input(event):
 	if event.is_pressed() and event.is_action_pressed("ui_cancel"):
