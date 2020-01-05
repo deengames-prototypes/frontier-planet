@@ -9,4 +9,6 @@ func _ready():
 	call_deferred("_change_scene")
 
 func _change_scene():
-	SceneManagement.change_map_to(get_tree(), Home.instance(), "Start")
+	var home = Home.instance()
+	home.start_new_day()
+	SceneManagement.change_map_to(get_tree(), home, "Start")
