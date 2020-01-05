@@ -10,24 +10,25 @@ script = ExtResource( 1 )
 
 [node name="Grass" type="ColorRect" parent="."]
 anchor_right = 1.0
-margin_right = 2880.0
-margin_bottom = 1620.0
+margin_right = 2364.0
+margin_bottom = 1101.0
 color = Color( 0.219608, 0.717647, 0.392157, 1 )
 
 [node name="Home" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1150.02, -120 )
+position = Vector2( 399.676, -85.6705 )
 destination = "Home"
 location = "Entrance"
 
 [node name="FromHome" type="Node2D" parent="."]
-position = Vector2( 1403, 266 )
+position = Vector2( 652.656, 275.808 )
 
 [node name="NPC" parent="." instance=ExtResource( 3 )]
 position = Vector2( 310.124, 138.569 )
 quest_dialogs = [ "Salams, neighbour! Got any eggs? I'm fresh out!", "Salamun alaykum! The wife wants a morel, but I don't know what that is - could you rustle one up for me?", "Salams, brother! Just the man I wanted to see! Could you fish me a sockeye salmon? I need it for my famous sockeye stew!" ]
 quest_requires = [ "egg", "morel", "sockeye" ]
 quest_completions = [ "This egg looks \"egg-selent!\" Thank you so much!", "This morel is a masterpiece! Thanks!", "MashaAllah, is that a fresh sockeye! May Allah give you lots of khayr!" ]
+npc_name = "Farmer"
 
 [node name="Lake" parent="." instance=ExtResource( 4 )]
-position = Vector2( 964.004, 1596.92 )
+position = Vector2( 620.708, 1131.02 )
 rotation = -0.261799
