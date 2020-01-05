@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Entities/World/Lake.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 1050, 250 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 1150, 350 )
+
+[node name="Lake" type="Area2D"]
+script = ExtResource( 1 )
+
+[node name="Body" type="StaticBody2D" parent="."]
+
+[node name="Color" type="ColorRect" parent="Body"]
+margin_right = 2100.0
+margin_bottom = 500.0
+color = Color( 0.231373, 0.364706, 0.788235, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+position = Vector2( 1050, 250 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( 1050, 250 )
+shape = SubResource( 2 )
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

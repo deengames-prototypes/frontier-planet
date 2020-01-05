@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/Home.gd" type="Script" id=1]
 [ext_resource path="res://Entities/World/Wall.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Entities/World/Door.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Entities/World/Chicken.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Entities/World/Egg.tscn" type="PackedScene" id=5]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -41,6 +40,3 @@ position = Vector2( 390, 250 )
 
 [node name="Chicken" parent="." instance=ExtResource( 4 )]
 position = Vector2( 91.6462, 74.4626 )
-
-[node name="Egg" parent="." instance=ExtResource( 5 )]
-position = Vector2( 164.677, 154.653 )

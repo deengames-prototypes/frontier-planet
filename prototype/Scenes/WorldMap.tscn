@@ -1,15 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/WorldMap.gd" type="Script" id=1]
 [ext_resource path="res://Entities/World/House.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Entities/World/NPC.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/Lake.gd" type="Script" id=4]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 1050, 250 )
-
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 1150, 350 )
+[ext_resource path="res://Entities/World/Lake.tscn" type="PackedScene" id=4]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -32,29 +26,6 @@ position = Vector2( 1403, 266 )
 position = Vector2( 310.124, 138.569 )
 dialog = "Howdy, neighbour! Fine weather today, innit?"
 
-[node name="Lake" type="Area2D" parent="."]
-position = Vector2( 12, 1180 )
+[node name="Lake" parent="." instance=ExtResource( 4 )]
+position = Vector2( 964.004, 1596.92 )
 rotation = -0.261799
-scale = Vector2( 1, 1 )
-script = ExtResource( 4 )
-
-[node name="Body" type="StaticBody2D" parent="Lake"]
-scale = Vector2( 1, 1 )
-
-[node name="Color" type="ColorRect" parent="Lake/Body"]
-margin_left = 700.0
-margin_top = 700.0
-margin_right = 2800.0
-margin_bottom = 1200.0
-color = Color( 0.231373, 0.364706, 0.788235, 1 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Lake/Body"]
-position = Vector2( 1750, 950 )
-shape = SubResource( 1 )
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Lake"]
-position = Vector2( 1750, 950 )
-scale = Vector2( 1, 1 )
-shape = SubResource( 2 )
-[connection signal="body_entered" from="Lake" to="Lake" method="_on_Lake_body_entered"]
-[connection signal="body_exited" from="Lake" to="Lake" method="_on_Lake_body_exited"]
