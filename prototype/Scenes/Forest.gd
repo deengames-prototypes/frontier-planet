@@ -1,33 +1,25 @@
 extends Node2D
 
-export var resource_probability = 50
-
 const Mushroom = preload("res://Entities/World/Items/Mushroom.tscn")
 const Morel = preload("res://Entities/World/Items/Morel.tscn")
 const Herb = preload("res://Entities/World/Items/Herb.tscn")
 
-# TODO: could probably be preload(...) => int
-const SPAWN_PROBABILITIES = {
-	"Morel": 20,
-	"Mushroom": 50,
-	"Herb": 30
-}
-
 func _ready():
-	for child in $ResourceSpot.get_children():
-		if randi() % 100 <= resource_probability:
-			# SPAWN MORE OVERLORDS!
-			# TODO: could be more dynamic
-			var spawn_what = randi() % 100
-			if spawn_what <= SPAWN_PROBABILITIES["Morel"]:
-				_spawn(Morel, child.position)
-			elif spawn_what <= SPAWN_PROBABILITIES["Morel"] + SPAWN_PROBABILITIES["Mushroom"]:
-				_spawn(Mushroom, child.position)
-			else:
-				_spawn(Herb, child.position)
+	
+	var spot_num = 1
+	for spawn_what in Globals.forest_items:
+		# SPAWN MORE OVERLORDS!
+		# TODO: could be more dynamic
+		if spawn_what == "Morel":
+			_spawn(Morel, spot_num)
+		elif spawn_what == "Mushroom":
+			_spawn(Mushroom, spot_num)
+		else: # Herb
+			_spawn(Herb, spot_num)
+		spot_num += 1
 				
-func _spawn(what, where):
+func _spawn(what, spot_num):
+	var where = $ResourceSpot.get_node("Spot" + str(spot_num)).position
 	var instance = what.instance()
 	instance.position = where
 	add_child(instance)
-	print(str(what))

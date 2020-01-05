@@ -20,3 +20,4 @@ polygon = PoolVector2Array( 7.78301, 11.5941, 4.00428, 11.783, 2.20938, 10.4605,
 [node name="Polygon2D2" type="Polygon2D" parent="."]
 color = Color( 0.956863, 0.956863, 0.956863, 1 )
 polygon = PoolVector2Array( 6.27151, 11.783, 6.08258, 18.8681, 7.31067, 20.663, 8.91663, 21.4188, 10.6171, 20.0962, 10.5226, 11.1217, 8.82216, 10.177, 7.4996, 10.177 )
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
