@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://MapUI.gd" type="Script" id=1]
+[ext_resource path="res://UI/MapUI.gd" type="Script" id=1]
 [ext_resource path="res://DefaultFont.tres" type="DynamicFont" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.694118, 0.243137, 0.32549, 1 )
 
 [node name="MapUI" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -12,3 +15,19 @@ margin_bottom = 14.0
 custom_fonts/font = ExtResource( 2 )
 text = "Community Level: 3
 XP: 0/10"
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 752.0
+margin_top = 2.0
+margin_right = 835.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 2 )
+text = "Health:"
+
+[node name="HealthBar" type="ProgressBar" parent="Label2"]
+margin_left = 84.0
+margin_top = -3.0
+margin_right = 206.0
+margin_bottom = 28.0
+custom_styles/fg = SubResource( 1 )
+value = 100.0

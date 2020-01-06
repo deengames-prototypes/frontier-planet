@@ -2,8 +2,10 @@ extends Node
 
 const FOREST_ITEMS_TO_SPAWN = 10
 const COMMUNITY_XP_TO_LEVEL_UP = 10
+const MAX_HEALTH = 100
 
 var player # used for easy handling of stuff like freeze
+var player_health = MAX_HEALTH
 
 # Used when transitioning from map => fishing => map
 var player_position:Vector2 = Vector2.ZERO # saved to transition to/from fishing
