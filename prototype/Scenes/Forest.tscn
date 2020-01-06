@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/Forest.gd" type="Script" id=1]
 [ext_resource path="res://Entities/World/Tree.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Entities/World/PineTree.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Entities/World/Monsters/Slime.tscn" type="PackedScene" id=4]
 
 [node name="Forest" type="Node2D"]
 script = ExtResource( 1 )
@@ -118,6 +119,7 @@ position = Vector2( 1771.06, 817.471 )
 position = Vector2( 116.475, 335.449 )
 
 [node name="ResourceSpot" type="Node2D" parent="."]
+editor/display_folded = true
 position = Vector2( 60, 20 )
 
 [node name="Spot1" type="Node2D" parent="ResourceSpot"]
@@ -149,3 +151,8 @@ position = Vector2( 449.689, 2089.8 )
 
 [node name="Spot10" type="Node2D" parent="ResourceSpot"]
 position = Vector2( 1045.46, 1500.36 )
+
+[node name="Monsters" type="Node2D" parent="."]
+
+[node name="Slime" parent="Monsters" instance=ExtResource( 4 )]
+position = Vector2( 712.672, 788.479 )
