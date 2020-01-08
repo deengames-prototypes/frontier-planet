@@ -34,6 +34,5 @@ func _process(delta):
 
 func _fade_in(a, b):
 	var home_instance = Home.instance()
-	Globals.player_health = Globals.MAX_HEALTH
 	SceneManagement.change_map_to(get_tree(), home_instance, "Bed")
 	home_instance._fade_in(a, b) # pass time and fade in

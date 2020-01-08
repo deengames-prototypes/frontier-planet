@@ -38,6 +38,7 @@ func start_new_day():
 	# TODO: event bus and everyone who cares subscribes
 	###
 	$Chicken.on_end_day()
+	Globals.player_health = Globals.MAX_HEALTH
 	
 	Globals.forest_items = []
 	for i in range(Globals.FOREST_ITEMS_TO_SPAWN):
