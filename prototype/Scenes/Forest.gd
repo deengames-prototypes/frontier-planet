@@ -5,8 +5,8 @@ const Morel = preload("res://Entities/World/Items/Morel.tscn")
 const Herb = preload("res://Entities/World/Items/Herb.tscn")
 
 const monsters = [
-	preload("res://Entities/World/Monsters/Slime.tscn")#,
-	#preload("res://Entities/World/Monsters/Wolf.tscn")
+	preload("res://Entities/World/Monsters/Slime.tscn"),
+	preload("res://Entities/World/Monsters/Wolf.tscn")
 ]
 
 func _ready():
