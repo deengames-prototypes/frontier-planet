@@ -16,5 +16,5 @@ func _process(delta):
 		Globals.player_health -= (damage_per_second * delta)
 		if Globals.player_health <= 0:
 			Globals.player_health = 0
-			Globals.plyer.get_parent().remove(Globals.player)
-			Globals.plyer.queue_free()
+			Globals.player.get_parent().remove_child(Globals.player)
+			Globals.player.queue_free()
