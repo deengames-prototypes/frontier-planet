@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scenes/Home.gd" type="Script" id=1]
 [ext_resource path="res://Entities/World/Wall.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Entities/World/Chicken.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Entities/World/Chicken.gd" type="Script" id=5]
 [ext_resource path="res://Entities/World/Bed.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Entities/World/Stove.tscn" type="PackedScene" id=7]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -55,6 +56,9 @@ script = ExtResource( 5 )
 position = Vector2( 631.021, 76.7109 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+
+[node name="Stove" parent="." instance=ExtResource( 7 )]
+position = Vector2( 290.691, 24.3436 )
 [connection signal="body_entered" from="Bed" to="Bed" method="_on_body_entered"]
 [connection signal="body_exited" from="Bed" to="Bed" method="_on_body_exited"]
 [connection signal="end_day" from="Bed" to="." method="_on_Bed_end_day"]
