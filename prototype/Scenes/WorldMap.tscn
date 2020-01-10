@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/WorldMap.gd" type="Script" id=1]
 [ext_resource path="res://Entities/World/House.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Entities/World/NPC.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Entities/World/Lake.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/Forest.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Entities/World/HungryHippo.tscn" type="PackedScene" id=6]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -36,3 +37,5 @@ rotation = 1.309
 
 [node name="Forest" parent="." instance=ExtResource( 5 )]
 position = Vector2( 1250, -60 )
+
+[node name="HungryHippo" parent="." instance=ExtResource( 6 )]

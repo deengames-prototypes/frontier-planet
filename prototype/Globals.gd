@@ -13,7 +13,8 @@ var player_inventory = [] # Array of strings for now
 
 # a hack of a hack of a hack; keep NPC[0]'s quest state
 var quest_indicies = {
-	"Farmer": 0
+	"Farmer": 0,
+	"Hungry Hippo": 0
 }
 
 # Items spawned today; removed on consumption
