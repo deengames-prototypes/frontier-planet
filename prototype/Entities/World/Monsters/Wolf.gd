@@ -8,8 +8,6 @@ var MAX_ENERGY_SECONDS = 5
 var _energy_left_seconds = MAX_ENERGY_SECONDS
 var _resting_since = 0
 
-var print_stuff = false
-
 func _ready():
 	damage_per_second = 40
 
