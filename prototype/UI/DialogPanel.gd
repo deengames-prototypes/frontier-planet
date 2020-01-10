@@ -10,6 +10,7 @@ func set_text(text):
 func set_width(value):
 	if has_child("Panel") and $Panel != null:
 		$Panel.margin_right = value
+		$Label.margin_right = value - 10
 
 func get_width():
 	return $Panel.margin_right
@@ -17,6 +18,7 @@ func get_width():
 func set_height(value):
 	if has_child("Panel") and $Panel != null:
 		$Panel.margin_bottom = value
+		$Label.margin_bottom = value - 10
 
 func get_height():
 	return $Panel.margin_bottom

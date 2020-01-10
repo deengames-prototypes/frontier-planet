@@ -5,8 +5,6 @@
 
 [node name="DialogPanel" type="Node2D"]
 script = ExtResource( 1 )
-width = 400.0
-height = 200.0
 
 [node name="Panel" type="Panel" parent="."]
 margin_right = 400.0
