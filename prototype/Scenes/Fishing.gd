@@ -38,9 +38,9 @@ func _ready():
 	
 	if is_catfish:
 		var catfish = Catfish.instance()
-		catfish.max_x = int(HORIZONTAL_RANGE - catfish.get_child(0).margin_right)
+		catfish.max_x = int(HORIZONTAL_RANGE - catfish.get_child(1).margin_right)
 		catfish.position.x = randi() % catfish.max_x
-		catfish.position.y = VERTICAL_RANGE - catfish.get_child(0).margin_bottom
+		catfish.position.y = VERTICAL_RANGE - catfish.get_child(1).margin_bottom
 		catfish.connect("hooked", self, "_on_fish_hooked", [catfish])
 		$Ocean.add_child(catfish)
 	
@@ -49,8 +49,8 @@ func _ready():
 		var sockeye = Sockeye.instance()
 		
 		sockeye.max_position = Vector2(
-			HORIZONTAL_RANGE - sockeye.get_child(0).margin_right,
-			VERTICAL_RANGE - sockeye.get_child(0).margin_bottom)
+			HORIZONTAL_RANGE - sockeye.get_child(1).margin_right,
+			VERTICAL_RANGE - sockeye.get_child(1).margin_bottom)
 		
 		sockeye.position = Vector2(
 			randi() % int(sockeye.max_position.x),
@@ -109,7 +109,7 @@ func _process(delta):
 				$ProgressBar/Label.text = "Moves left: " + str(_bobber_moves_left)
 
 func _get_random_ocean_position(jellyfish):
-	var color_rect = jellyfish.get_child(0)
+	var color_rect = jellyfish.get_child(1)
 	var x = randi() % int(HORIZONTAL_RANGE - color_rect.margin_right)
 	var y = randi() % int(VERTICAL_RANGE - color_rect.margin_bottom)
 	
@@ -131,7 +131,7 @@ func _on_fish_hooked(fish):
 		
 		var mini_game = FishTileGame.instance()
 		mini_game.connect("game_over", self, "_catch_fish_done")
-		var color_rect = fish.get_child(0)
+		var color_rect = fish.get_child(1)
 		mini_game.set_fish(color_rect)
 		add_child(mini_game)
 	

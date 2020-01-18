@@ -12,7 +12,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color( 0.254902, 0.65098, 0.964706, 1 )
+color = Color( 0.156863, 0.8, 0.87451, 1 )
 polygon = PoolVector2Array( -24.4561, 49.7783, 22.8126, 50.9699, 45.8511, 27.137, 47.44, -16.1596, 27.9764, -49.5257, 0.568489, -57.47, -29.2227, -47.1424, -47.0974, -19.3373, -44.3169, 28.3286 )
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

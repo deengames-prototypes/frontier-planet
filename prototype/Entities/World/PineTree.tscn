@@ -8,7 +8,7 @@ extents = Vector2( 28, 60 )
 [node name="Trunk" type="ColorRect" parent="."]
 margin_right = 56.0
 margin_bottom = 156.0
-color = Color( 0.364706, 0.152941, 0.364706, 1 )
+color = Color( 0.368627, 0.211765, 0.262745, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 28, 95 )
@@ -16,5 +16,5 @@ shape = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="Polygon2D" parent="."]
 position = Vector2( 0, 40 )
-color = Color( 0.145098, 0.443137, 0.47451, 1 )
+color = Color( 0.443137, 0.666667, 0.203922, 1 )
 polygon = PoolVector2Array( 22.0344, -123.659, -8.99069, -61.6086, 9.84595, -60.5006, -35.5836, 19.2781, 64.0707, 20.0818, 101.813, 20.3861, 40.871, -60.5006, 60.8156, -61.6086 )

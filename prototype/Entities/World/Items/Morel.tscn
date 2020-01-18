@@ -14,10 +14,10 @@ position = Vector2( 8, 10 )
 shape = SubResource( 1 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color( 1, 0.803922, 0.458824, 1 )
+color = Color( 0.74902, 0.47451, 0.345098, 1 )
 polygon = PoolVector2Array( 7.78301, 11.5941, 4.00428, 11.783, 2.20938, 10.4605, 1.07576, 8.76003, 1.54811, 2.24172, 5.32683, -1.25361, 10.2392, -1.34807, 14.1124, 1.95831, 15.0571, 8.09875, 12.223, 11.783 )
 
 [node name="Polygon2D2" type="Polygon2D" parent="."]
-color = Color( 0.956863, 0.956863, 0.956863, 1 )
+color = Color( 0.956863, 0.8, 0.631373, 1 )
 polygon = PoolVector2Array( 6.27151, 11.783, 6.08258, 18.8681, 7.31067, 20.663, 8.91663, 21.4188, 10.6171, 20.0962, 10.5226, 11.1217, 8.82216, 10.177, 7.4996, 10.177 )
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
