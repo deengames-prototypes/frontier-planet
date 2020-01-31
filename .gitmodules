@@ -1,4 +1,4 @@
 [submodule "Puffin"]
-	path = puffin
-	url = git@github.com:deengames-prototypes/puffin.git
+	path = source/Puffin
+	url = https://github.com/deengames-prototypes/puffin
 	branch = develop
