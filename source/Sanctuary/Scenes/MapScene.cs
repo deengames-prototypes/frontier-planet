@@ -22,7 +22,7 @@ namespace DeenGames.Sanctuary.Scenes
             }
 
             this.Add(tilemap);
-            this.Add(new Entity().Colour(0xFFFFFF, 32, 32).FourWayMovement(100).Move(100, 50));
+            this.Add(new Entity().Sprite("Content/Images/Characters/Imam.png").FourWayMovement(100).Move(100, 50));
         }
     }
 }
