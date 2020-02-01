@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Sanctuary/bin/Debug/netcoreapp3.1/Sanctuary.dll",
+            "program": "${workspaceFolder}/source/Sanctuary/bin/Debug/netcoreapp3.1/Sanctuary.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Sanctuary",
+            "cwd": "${workspaceFolder}/source/Sanctuary",
             "console": "internalConsole",
             "stopAtEntry": false
         },
