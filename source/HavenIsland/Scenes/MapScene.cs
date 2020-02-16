@@ -7,8 +7,8 @@ namespace DeenGames.HavenIsland.Scenes
 {
     public class MapScene : Scene
     {
-        private const int MAP_WIDTH = 30;
-        private const int MAP_HEIGHT = 20;
+        private const int MAP_WIDTH = 40;
+        private const int MAP_HEIGHT = 23;
         public MapScene()
         {
             var tilemap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
