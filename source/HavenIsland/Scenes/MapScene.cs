@@ -3,7 +3,7 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Tiles;
 
-namespace DeenGames.Sanctuary.Scenes
+namespace DeenGames.HavenIsland.Scenes
 {
     public class MapScene : Scene
     {
@@ -22,7 +22,6 @@ namespace DeenGames.Sanctuary.Scenes
             }
 
             this.Add(tilemap);
-            this.Add(new Entity().Sprite("Content/Images/Characters/Imam.png").FourWayMovement(100).Move(100, 50));
         }
     }
 }

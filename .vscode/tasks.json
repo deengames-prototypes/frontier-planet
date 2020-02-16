@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/source/Sanctuary/Sanctuary.csproj",
+                "${workspaceFolder}/source/HavenIsland/HavenIsland.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/source/Sanctuary/Sanctuary.csproj",
+                "${workspaceFolder}/source/HavenIsland/HavenIsland.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/source/Sanctuary/Sanctuary.csproj",
+                "${workspaceFolder}/source/HavenIsland/HavenIsland.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sanctuary", "Sanctuary\Sanctuary.csproj", "{6FD03283-563F-4B39-AE81-92669B7CBB4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HavenIsland", "HavenIsland\HavenIsland.csproj", "{6FD03283-563F-4B39-AE81-92669B7CBB4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

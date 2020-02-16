@@ -1,11 +1,11 @@
-using DeenGames.Sanctuary.Scenes;
+using DeenGames.HavenIsland.Scenes;
 using Puffin.Infrastructure.MonoGame;
 
-namespace DeenGames.Sanctuary
+namespace DeenGames.HavenIsland
 {
-    public class SanctuaryGame : PuffinGame
+    public class HavenIslandGame : PuffinGame
     {
-        public SanctuaryGame() : base(960, 540)
+        public HavenIslandGame() : base(960, 540)
         {
         }
 
