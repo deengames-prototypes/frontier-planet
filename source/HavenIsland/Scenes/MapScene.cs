@@ -1,7 +1,8 @@
-using System.IO;
+using DeenGames.HavenIsland.Entities.Map;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Tiles;
+using System.IO;
 
 namespace DeenGames.HavenIsland.Scenes
 {
@@ -24,18 +25,16 @@ namespace DeenGames.HavenIsland.Scenes
 
             this.Add(groundTileMap);
 
-            var objectsTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Tree.png"), 27, 32);
-            objectsTileMap.Define("TreeTop", 0, 0, true);
-            objectsTileMap.Define("TreeTrunk", 0, 1, true);
-            objectsTileMap.Set(20, 10, "TreeTop");
-            objectsTileMap.Set(20, 11, "TreeTrunk");
-            
-            this.Add(objectsTileMap);
+            this.Add(new Tree().Move(300, 300));
 
+            // Player
             this.Add(new Entity()
                 .Spritesheet(Path.Combine("Content", "Images", "Characters", "Protagonist.png"), 26, 32)
                 .Move(400, 300).FourWayMovement(100)
                 .Collide(26, 32, true));
+
+            // Camera
+            this.Add(new Entity().Camera(Constants.GAME_ZOOM));
         }
     }
 }
