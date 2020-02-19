@@ -25,13 +25,13 @@ namespace DeenGames.HavenIsland.Scenes
 
             this.Add(groundTileMap);
 
-            this.Add(new Tree().Move(300, 300));
+            this.Add(new Tree().Move(300, 200));
 
             // Player
             this.Add(new Entity()
                 .Spritesheet(Path.Combine("Content", "Images", "Characters", "Protagonist.png"), 26, 32)
-                .Move(400, 300).FourWayMovement(100)
-                .Collide(26, 32, true));
+                .Move(300, 300).FourWayMovement(100)
+                .Collide(26, 16, true, 0, 16));
 
             // Camera
             this.Add(new Entity().Camera(Constants.GAME_ZOOM));
