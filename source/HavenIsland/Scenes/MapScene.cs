@@ -11,6 +11,9 @@ namespace DeenGames.HavenIsland.Scenes
         private const int MAP_WIDTH = 40;
         private const int MAP_HEIGHT = 23;
 
+        // We don't have a concept like CanvasLayer, but we can reposition relative to camera
+        private Entity energyBar;
+
         public MapScene()
         {
             var groundTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
