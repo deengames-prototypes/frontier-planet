@@ -1,4 +1,6 @@
+using DeenGames.HavenIsland.Events;
 using Puffin.Core.Ecs;
+using Puffin.Core.Events;
 using System;
 using System.IO;
 
@@ -17,13 +19,17 @@ namespace DeenGames.HavenIsland.Entities.Map
                     if (!this.isPlayerInInteractionRange && e == Player.LatestInstance)
                     {
                         this.isPlayerInInteractionRange = true;
-                        Console.WriteLine("Player in");
                     }
                 },
                 (e) => {
                     if (this.isPlayerInInteractionRange && e == Player.LatestInstance) {
                         this.isPlayerInInteractionRange = false;
-                        Console.WriteLine("Player out");
+                    }
+                })
+                .Mouse(27, 64, () => {
+                    if (this.isPlayerInInteractionRange)
+                    {
+                        EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithTree, this);
                     }
                 });
         }
