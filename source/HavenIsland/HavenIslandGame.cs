@@ -11,6 +11,7 @@ namespace DeenGames.HavenIsland
         public HavenIslandGame() : base(1280, 736)
         {
             HavenIslandGame.LatestInstance = this;
+            // this.showCollisionAreas = true;
         }
 
         override protected void Ready()
