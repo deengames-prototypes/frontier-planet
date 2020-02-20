@@ -7,8 +7,8 @@ namespace DeenGames.HavenIsland.Entities.Map
     {
         public Tree()
         {
-            this.Spritesheet(Path.Join("Content", "Images", "Tilesets", "Tree.png"), 27, 64);
-            this.Collide(27, 24, false, 0, 40);
+            this.Spritesheet(Path.Join("Content", "Images", "Tilesets", "Tree.png"), 27, 64)
+                .Collide(27, 64);
         }
     }
 }
