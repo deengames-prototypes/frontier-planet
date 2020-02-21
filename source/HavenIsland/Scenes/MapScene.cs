@@ -1,4 +1,5 @@
-using DeenGames.HavenIsland.Entities.Map;
+using DeenGames.HavenIsland.Map.Entities;
+using DeenGames.HavenIsland.Map.UI;
 using DeenGames.HavenIsland.Events;
 using Puffin.Core;
 using Puffin.Core.Ecs;
@@ -31,18 +32,26 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new Tree().Move(300, 200));
             this.Add(new Player().Move(300, 300));
 
+            // UI
+            // TODO: probably backed by a PNG
+            // TODO: show/hide label on mouse over/out
+            var energyBar = new EnergyBar();
+            energyBar.Move(HavenIslandGame.LatestInstance.Width - 16 - energyBar.Width, HavenIslandGame.LatestInstance.Height - energyBar.Height - 8);
+            this.Add(energyBar);
+
             // Event handlers
-            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => {
+            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => 
+            {
                 var tree = obj as Tree;
-                this.Remove(tree);
+                if (Player.LatestInstance.Energy > Player.EnergyCost(MapEvent.InteractedWithTree))
+                {
+                    EventBus.LatestInstance.Broadcast(MapEvent.ChoppedDownTree, tree);
+                    this.Remove(tree);
+                }
             });
 
             // Camera
             this.Add(new Entity().Camera(Constants.GAME_ZOOM));
-
-            this.OnMouseClick = () => {
-                System.Console.WriteLine($"Clicked on {this.MouseCoordinates}");
-            };
         }
     }
 }
