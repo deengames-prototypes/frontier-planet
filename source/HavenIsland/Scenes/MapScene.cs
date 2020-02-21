@@ -30,7 +30,8 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(groundTileMap);
 
             this.Add(new Tree().Move(300, 200));
-            this.Add(new Player().Move(300, 300));
+            this.Add(new Rock().Move(500, 150));
+            this.Add(new Player().Move(500, 250));
 
             // UI
             // TODO: probably backed by a PNG
@@ -47,6 +48,16 @@ namespace DeenGames.HavenIsland.Scenes
                 {
                     EventBus.LatestInstance.Broadcast(MapEvent.ChoppedDownTree, tree);
                     this.Remove(tree);
+                }
+            });
+
+            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithRock, (obj) => 
+            {
+                var rock = obj as Rock;
+                if (Player.LatestInstance.Energy > Player.EnergyCost(MapEvent.InteractedWithRock))
+                {
+                    EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
+                    this.Remove(rock);
                 }
             });
 

@@ -22,21 +22,14 @@ namespace DeenGames.HavenIsland.Map.Entities
                 .Collide(26, 16, true, 0, 16)
                 .Overlap(26, 16, 0, 8);
 
-            EventBus.LatestInstance.Subscribe(
-                MapEvent.ChoppedDownTree, 
-                (obj) => this.SubtractEnergy(MapEvent.ChoppedDownTree));
+            EventBus.LatestInstance.Subscribe(MapEvent.ChoppedDownTree, (obj) => this.SubtractEnergy(MapEvent.ChoppedDownTree));
+            EventBus.LatestInstance.Subscribe(MapEvent.MinedRock, (obj) => this.SubtractEnergy(MapEvent.MinedRock));
         }
 
         public void SubtractEnergy(MapEvent m)
         {
-            switch (m)
-            {
-                case MapEvent.ChoppedDownTree:
-                    this.Energy -= 10;
-                    break;
-                default:
-                    break;
-            }
+            var cost = EnergyCost(m);
+            this.Energy -= cost;
         }
 
         public static int EnergyCost(MapEvent m)
@@ -44,6 +37,8 @@ namespace DeenGames.HavenIsland.Map.Entities
             switch (m)
             {
                 case MapEvent.ChoppedDownTree:
+                    return 10;
+                case MapEvent.MinedRock:
                     return 10;
                 default:
                     return 0;

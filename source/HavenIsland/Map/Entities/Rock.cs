@@ -6,15 +6,15 @@ using System.IO;
 
 namespace DeenGames.HavenIsland.Map.Entities
 {
-    public class Tree : Entity
+    public class Rock : Entity
     {
         private bool isPlayerInInteractionRange = false;
 
-        public Tree()
+        public Rock()
         {
-            this.Sprite(Path.Join("Content", "Images", "Tilesets", "Tree.png"))
-                .Collide(27, 64)
-                .Overlap(43, 32, -8, 48,
+            this.Sprite(Path.Join("Content", "Images", "Tilesets", "Rock.png"))
+                .Collide(16, 16)
+                .Overlap(32, 32, -8, -8,
                 (e) => {
                     if (!this.isPlayerInInteractionRange && e == Player.LatestInstance)
                     {
@@ -29,7 +29,7 @@ namespace DeenGames.HavenIsland.Map.Entities
                 .Mouse(27, 64, () => {
                     if (this.isPlayerInInteractionRange)
                     {
-                        EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithTree, this);
+                        EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithRock, this);
                     }
                 });
         }

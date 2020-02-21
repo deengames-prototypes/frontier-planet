@@ -4,5 +4,7 @@ namespace DeenGames.HavenIsland.Events
     {
         InteractedWithTree,
         ChoppedDownTree,
+        InteractedWithRock,
+        MinedRock,
     }
 }
