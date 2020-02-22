@@ -1,3 +1,4 @@
+using DeenGames.HavenIsland.Events;
 using DeenGames.HavenIsland.Map.Entities;
 using DeenGames.HavenIsland.Map.UI;
 using Puffin.Core;
@@ -66,6 +67,16 @@ namespace DeenGames.HavenIsland.Scenes
                     this.Add(gridTile);
                 }
             }
+
+            // Cancel if you hit escape.
+            // TODO: communicate that the rock wasn't destroyed (update model)
+            this.OnActionPressed = (data) =>
+            {
+                if ((HavenIslandActions)data == HavenIslandActions.Cancel)
+                {
+                    HavenIslandGame.LatestInstance.ShowScene(new MapScene());
+                }
+            };
         }
 
         private void OnTileSelected(RockTile gridTile)
@@ -77,7 +88,7 @@ namespace DeenGames.HavenIsland.Scenes
 
             if (this.integrityLeft <= 0)
             {
-                // Communicate: success or failure, and which rock to smash
+                // TODO: communicate: success or failure, and which rock to smash (update model)
                 HavenIslandGame.LatestInstance.ShowScene(new MapScene());
             }
         }

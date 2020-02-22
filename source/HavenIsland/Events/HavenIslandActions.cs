@@ -4,6 +4,7 @@ namespace DeenGames.HavenIsland.Events
     {
         // Interact with trees, rocks, people, select stuff, etc.
         Interact,
+        Cancel, // Cancel an interaction, like mining
 
         // Numpad/number keys being pressed. E.g. in rock-mining game.
         Pressed1,

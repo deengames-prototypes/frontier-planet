@@ -27,6 +27,7 @@ namespace DeenGames.HavenIsland
         private void BindCustomKeyboardActions()
         {
             this.ActionToKeys[HavenIslandActions.Interact] = new List<Keys> { Keys.Space };
+            this.ActionToKeys[HavenIslandActions.Cancel] = new List<Keys> { Keys.Escape };
             
             // Zero is unused thus far
             this.ActionToKeys[HavenIslandActions.Pressed1] = new List<Keys> { Keys.D0, Keys.NumPad0 };
