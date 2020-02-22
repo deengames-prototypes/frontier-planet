@@ -26,10 +26,17 @@ namespace DeenGames.HavenIsland.Map.Entities
                         this.isPlayerInInteractionRange = false;
                     }
                 })
+                .Keyboard((data) => {
+                    var action = (HavenIslandActions)data;
+                    if (this.isPlayerInInteractionRange && action == HavenIslandActions.Interact)
+                    {
+                        EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
+                    }
+                })
                 .Mouse(() => {
                     if (this.isPlayerInInteractionRange)
                     {
-                        EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithRock, this);
+                        EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
                     }
                 }, 27, 64);
         }

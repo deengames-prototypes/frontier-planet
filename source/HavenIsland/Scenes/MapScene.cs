@@ -40,20 +40,20 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new EnergyBar());
 
             // Event handlers
-            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => 
+            EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithTree, (obj) => 
             {
                 var tree = obj as Tree;
-                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvent.InteractedWithTree))
+                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithTree))
                 {
-                    EventBus.LatestInstance.Broadcast(MapEvent.ChoppedDownTree, tree);
+                    EventBus.LatestInstance.Broadcast(MapEvents.ChoppedDownTree, tree);
                     this.Remove(tree);
                 }
             });
 
-            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithRock, (obj) => 
+            EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
-                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvent.InteractedWithRock))
+                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithRock))
                 {
                     // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
                     // this.Remove(rock);

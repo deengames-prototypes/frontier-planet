@@ -1,5 +1,8 @@
+using DeenGames.HavenIsland.Events;
 using DeenGames.HavenIsland.Scenes;
+using Microsoft.Xna.Framework.Input;
 using Puffin.Infrastructure.MonoGame;
+using System.Collections.Generic;
 
 namespace DeenGames.HavenIsland
 {
@@ -11,6 +14,9 @@ namespace DeenGames.HavenIsland
         public HavenIslandGame() : base(1280, 736)
         {
             HavenIslandGame.LatestInstance = this;
+
+            this.ActionToKeys[HavenIslandActions.Interact] = new List<Keys> { Keys.Space };
+
             // this.showCollisionAreas = true;
         }
 

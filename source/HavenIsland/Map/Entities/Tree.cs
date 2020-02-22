@@ -29,7 +29,7 @@ namespace DeenGames.HavenIsland.Map.Entities
                 .Mouse(() => {
                     if (this.isPlayerInInteractionRange)
                     {
-                        EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithTree, this);
+                        EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithTree, this);
                     }
                 }, 27, 64);
         }

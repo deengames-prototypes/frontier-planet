@@ -1,6 +1,6 @@
 namespace DeenGames.HavenIsland.Events
 {
-    public enum MapEvent
+    public enum MapEvents
     {
         InteractedWithTree,
         ChoppedDownTree,

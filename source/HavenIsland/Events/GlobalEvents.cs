@@ -1,6 +1,6 @@
 namespace DeenGames.HavenIsland.Events
 {
-    public enum GlobalEvent
+    public enum GlobalEvents
     {
         ConsumedEnergy,
     }

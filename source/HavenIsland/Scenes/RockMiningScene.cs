@@ -72,7 +72,7 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 this.Integrity = 3 + random.Next(5); // 3-7
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Rock-Texture.png"))
-                    .Label($"{this.Integrity}", 40, -10);
+                    .Label($"{this.Integrity}", 40, 0);
                 this.Get<TextLabelComponent>().FontSize = FONT_SIZE * 2;
             }
         }

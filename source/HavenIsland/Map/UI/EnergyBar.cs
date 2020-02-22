@@ -20,7 +20,7 @@ namespace DeenGames.HavenIsland.Map.UI
             this.Colour(0xf4b41b, WIDTH, Height);
             this.Move(HavenIslandGame.LatestInstance.Width - PADDING - WIDTH, HavenIslandGame.LatestInstance.Height - this.Height - PADDING);
 
-            EventBus.LatestInstance.Subscribe(GlobalEvent.ConsumedEnergy, (amount) =>
+            EventBus.LatestInstance.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>
             {
                 this.Height -= (int)amount;
                 this.Colour(0xf4b41b, WIDTH, Height);
