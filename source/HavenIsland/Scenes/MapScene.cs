@@ -37,9 +37,7 @@ namespace DeenGames.HavenIsland.Scenes
             // UI
             // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
-            var energyBar = new EnergyBar();
-            energyBar.Move(HavenIslandGame.LatestInstance.Width - 16 - energyBar.Width, HavenIslandGame.LatestInstance.Height - energyBar.Height - 8);
-            this.Add(energyBar);
+            this.Add(new EnergyBar());
 
             // Event handlers
             EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => 

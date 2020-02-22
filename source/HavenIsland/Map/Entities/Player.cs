@@ -26,12 +26,13 @@ namespace DeenGames.HavenIsland.Map.Entities
         public void SubtractEnergy(MapEvent m)
         {
             var cost = EnergyCost(m);
-            GameModel.Instance.PlayerEnergy -= cost;
+            this.SubtractEnergy(cost);
         }
 
         public void SubtractEnergy(int cost)
         {
             GameModel.Instance.PlayerEnergy -= cost;
+            EventBus.LatestInstance.Broadcast(GlobalEvent.ConsumedEnergy, cost);
         }
 
         public static int EnergyCost(MapEvent m)

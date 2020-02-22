@@ -1,4 +1,5 @@
 using DeenGames.HavenIsland.Map.Entities;
+using DeenGames.HavenIsland.Map.UI;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
@@ -13,11 +14,13 @@ namespace DeenGames.HavenIsland.Scenes
         private const int TILE_WIDTH = 150;
         private const int TILE_HEIGHT = 150;
         
-        public RockMiningScene() : base()
+        override public void Ready()
         {
+            base.Ready();
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
+            this.Add(new EnergyBar());
 
             // Model concerns
             var integrityLeft = 20 + random.Next(11); // 20-30
@@ -34,7 +37,6 @@ namespace DeenGames.HavenIsland.Scenes
 
                     gridTile.Mouse(() => {
                         var tile = gridTile as RockTile;
-                        Console.WriteLine($"Clicked: {tile.Integrity}");
                         
                         integrityLeft -= tile.Integrity;
                         Player.LatestInstance.SubtractEnergy(tile.Integrity);
