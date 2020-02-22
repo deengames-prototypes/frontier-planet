@@ -56,8 +56,9 @@ namespace DeenGames.HavenIsland.Scenes
                 var rock = obj as Rock;
                 if (Player.LatestInstance.Energy > Player.EnergyCost(MapEvent.InteractedWithRock))
                 {
-                    EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
-                    this.Remove(rock);
+                    // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
+                    // this.Remove(rock);
+                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene());
                 }
             });
 
