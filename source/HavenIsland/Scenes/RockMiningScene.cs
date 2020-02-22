@@ -4,6 +4,7 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
 using System;
+using System.IO;
 
 namespace DeenGames.HavenIsland.Scenes
 {
@@ -13,6 +14,9 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GRID_HEIGHT = 3;
         private const int TILE_WIDTH = 150;
         private const int TILE_HEIGHT = 150;
+        private const int FONT_SIZE = 72;
+        private const int GRID_TILES_X_OFFSET = 300;
+        private const int GRID_TILES_Y_OFFSET = 100;
         
         override public void Ready()
         {
@@ -26,14 +30,18 @@ namespace DeenGames.HavenIsland.Scenes
             var integrityLeft = 20 + random.Next(11); // 20-30
 
             var label = new Entity(true).Label($"Integrity left: {integrityLeft}");
+            label.Get<TextLabelComponent>().FontSize = FONT_SIZE;
             this.Add(label);
+            label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - FONT_SIZE - 16);
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
                 for (int x = 0; x < GRID_WIDTH; x++)
                 {
                     var gridTile = new RockTile()
-                        .Move(300 + (x * (TILE_WIDTH + 10)), 100 + (y * (TILE_HEIGHT + 10)));
+                        .Move(
+                            GRID_TILES_X_OFFSET + (x * (TILE_WIDTH + 10)),
+                            GRID_TILES_Y_OFFSET + (y * (TILE_HEIGHT + 10)));
 
                     gridTile.Mouse(() => {
                         var tile = gridTile as RockTile;
@@ -59,14 +67,13 @@ namespace DeenGames.HavenIsland.Scenes
             private static Random random = new Random();
 
             public int Integrity { get; private set; }
-            private int[] colours = new int[] { 0x302c2e, 0x5a5353, 0x7d7071 };
 
             public RockTile() : base()
             {
-                var colour = colours[random.Next(colours.Length)];
                 this.Integrity = 3 + random.Next(5); // 3-7
-                this.Colour(colour, TILE_WIDTH, TILE_HEIGHT)
-                    .Label($"{this.Integrity}");
+                this.Sprite(Path.Join("Content", "Images", "Sprites", "Rock-Texture.png"))
+                    .Label($"{this.Integrity}", 40, -10);
+                this.Get<TextLabelComponent>().FontSize = FONT_SIZE * 2;
             }
         }
     }
