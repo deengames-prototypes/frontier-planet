@@ -1,4 +1,5 @@
 using DeenGames.HavenIsland.Events;
+using DeenGames.HavenIsland.Model;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using System.IO;
@@ -9,13 +10,9 @@ namespace DeenGames.HavenIsland.Map.Entities
     {
         internal static Player LatestInstance { get; private set; }
 
-        public int Energy { get; private set; }
-        public readonly int MaxEnergy = 100;
-        
         public Player()
         {
             Player.LatestInstance = this;
-            this.Energy = this.MaxEnergy;
 
             this.Spritesheet(Path.Combine("Content", "Images", "Characters", "Protagonist.png"), 26, 32)
                 .FourWayMovement(100)
@@ -29,7 +26,12 @@ namespace DeenGames.HavenIsland.Map.Entities
         public void SubtractEnergy(MapEvent m)
         {
             var cost = EnergyCost(m);
-            this.Energy -= cost;
+            GameModel.Instance.PlayerEnergy -= cost;
+        }
+
+        public void SubtractEnergy(int cost)
+        {
+            GameModel.Instance.PlayerEnergy -= cost;
         }
 
         public static int EnergyCost(MapEvent m)

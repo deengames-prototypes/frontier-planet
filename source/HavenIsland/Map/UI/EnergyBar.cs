@@ -1,4 +1,5 @@
 using DeenGames.HavenIsland.Events;
+using DeenGames.HavenIsland.Model;
 using DeenGames.HavenIsland.Map.Entities;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
@@ -8,7 +9,7 @@ namespace DeenGames.HavenIsland.Map.UI
     class EnergyBar : Entity
     {
         internal readonly int Width = 8;
-        internal int Height { get; set; } = Player.LatestInstance.Energy;
+        internal int Height { get; set; } = GameModel.Instance.PlayerEnergy;
 
         public EnergyBar() : base(true)
         {

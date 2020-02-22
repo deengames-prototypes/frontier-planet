@@ -1,6 +1,7 @@
+using DeenGames.HavenIsland.Events;
 using DeenGames.HavenIsland.Map.Entities;
 using DeenGames.HavenIsland.Map.UI;
-using DeenGames.HavenIsland.Events;
+using DeenGames.HavenIsland.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
@@ -44,7 +45,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => 
             {
                 var tree = obj as Tree;
-                if (Player.LatestInstance.Energy > Player.EnergyCost(MapEvent.InteractedWithTree))
+                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvent.InteractedWithTree))
                 {
                     EventBus.LatestInstance.Broadcast(MapEvent.ChoppedDownTree, tree);
                     this.Remove(tree);
@@ -54,7 +55,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
-                if (Player.LatestInstance.Energy > Player.EnergyCost(MapEvent.InteractedWithRock))
+                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvent.InteractedWithRock))
                 {
                     // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
                     // this.Remove(rock);
