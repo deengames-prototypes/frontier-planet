@@ -1,6 +1,7 @@
 using DeenGames.HavenIsland.Events;
 using DeenGames.HavenIsland.Map.Entities;
 using DeenGames.HavenIsland.Map.UI;
+using DeenGames.HavenIsland.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
@@ -22,7 +23,13 @@ namespace DeenGames.HavenIsland.Scenes
 
         private int integrityLeft;
         private Entity label;
-        
+        private RockModel model;
+
+        public RockMiningScene(RockModel model)
+        {
+            this.model = model;
+        }
+
         override public void Ready()
         {
             base.Ready();
@@ -89,7 +96,7 @@ namespace DeenGames.HavenIsland.Scenes
 
             if (this.integrityLeft <= 0)
             {
-                // TODO: communicate: success or failure, and which rock to smash (update model)
+                GameWorld.Instance.AreaMap.Contents.Remove(this.model);                
                 HavenIslandGame.LatestInstance.ShowScene(new MapScene());
             }
         }

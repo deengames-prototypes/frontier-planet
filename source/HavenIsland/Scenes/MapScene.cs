@@ -18,9 +18,6 @@ namespace DeenGames.HavenIsland.Scenes
         public MapScene()
         {
             var map = GameWorld.Instance.AreaMap;
-            map.Contents.Add(new TreeModel(-1, 9, 6));
-            map.Contents.Add(new RockModel(-1, 15, 5));
-            map.Contents.Add(new PlayerModel(15, 8));
 
             // Setup ground, trees, player, etc.
             var groundTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
@@ -70,11 +67,12 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
+                var model = rock.Model;
                 if (GameWorld.Instance.PlayerEnergy > PlayerModel.EnergyCost(MapEvents.InteractedWithRock))
                 {
                     // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
                     // this.Remove(rock);
-                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene());
+                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(rock.Model));
                 }
             });
 

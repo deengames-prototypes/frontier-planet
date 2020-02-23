@@ -8,13 +8,18 @@ namespace DeenGames.HavenIsland.Model
         public int PlayerEnergy { get; set; }
         public int PlayerMaxEnergy { get; set; }
         
-        // TODO: generate properly on new game
-        public AreaMap AreaMap = new AreaMap();
+        public AreaMap AreaMap;
 
         private GameWorld()
         {
             this.PlayerEnergy = 100;
             this.PlayerMaxEnergy = 100;
+
+            // TODO: generate properly
+            this.AreaMap = new AreaMap();
+            this.AreaMap.Contents.Add(new TreeModel(-1, 9, 6));
+            this.AreaMap.Contents.Add(new RockModel(-1, 15, 5));
+            this.AreaMap.Contents.Add(new PlayerModel(15, 8));
         }
     }
 }
