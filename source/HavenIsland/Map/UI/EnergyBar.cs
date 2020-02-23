@@ -10,7 +10,7 @@ namespace DeenGames.HavenIsland.Map.UI
     class EnergyBar : Entity
     {
         internal const int WIDTH = 16;
-        internal int Height { get; set; } = GameModel.Instance.PlayerEnergy;
+        internal int Height { get; set; } = GameWorld.Instance.PlayerEnergy;
         private const int PADDING = 16;
 
         public EnergyBar() : base(true)

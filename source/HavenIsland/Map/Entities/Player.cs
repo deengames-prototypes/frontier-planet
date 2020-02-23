@@ -31,7 +31,7 @@ namespace DeenGames.HavenIsland.Map.Entities
 
         public void SubtractEnergy(int cost)
         {
-            GameModel.Instance.PlayerEnergy -= cost;
+            GameWorld.Instance.PlayerEnergy -= cost;
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, cost);
         }
 

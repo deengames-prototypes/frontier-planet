@@ -43,7 +43,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithTree, (obj) => 
             {
                 var tree = obj as Tree;
-                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithTree))
+                if (GameWorld.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithTree))
                 {
                     EventBus.LatestInstance.Broadcast(MapEvents.ChoppedDownTree, tree);
                     this.Remove(tree);
@@ -53,7 +53,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
-                if (GameModel.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithRock))
+                if (GameWorld.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithRock))
                 {
                     // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
                     // this.Remove(rock);
