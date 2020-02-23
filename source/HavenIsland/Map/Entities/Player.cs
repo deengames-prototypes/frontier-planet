@@ -3,6 +3,7 @@ using DeenGames.HavenIsland.Model;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using Puffin.Core.IO;
+using System;
 using System.IO;
 
 namespace DeenGames.HavenIsland.Map.Entities
@@ -24,27 +25,32 @@ namespace DeenGames.HavenIsland.Map.Entities
                 if (data is PuffinAction)
                 {
                     var moveKey = (PuffinAction)data;
-                    if (moveKey == PuffinAction.Up)
+                    if (moveKey == PuffinAction.Up && GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, -1))
                     {
-                        GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, -1);
+                        this.OnMove(0, -1);
                     }
-                    else if (moveKey == PuffinAction.Down)
+                    else if (moveKey == PuffinAction.Down && GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, 1))
                     {
-                        GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, 1);
+                        this.OnMove(0, 1);
                     }
-                    else if (moveKey == PuffinAction.Left)
+                    else if (moveKey == PuffinAction.Left && GameWorld.Instance.AreaMap.TryToMovePlayerBy(-1, 0))
                     {
-                        GameWorld.Instance.AreaMap.TryToMovePlayerBy(-1, 0);
+                        this.OnMove(-1, 0);
                     }
-                    else if (moveKey == PuffinAction.Right)
+                    else if (moveKey == PuffinAction.Right && GameWorld.Instance.AreaMap.TryToMovePlayerBy(1, 0))
                     {
-                        GameWorld.Instance.AreaMap.TryToMovePlayerBy(1, 0);
+                        this.OnMove(1, 0);
                     }
-
-                    this.X = this.model.X * Constants.TILE_WIDTH;
-                    this.Y = this.model.Y * Constants.TILE_HEIGHT;
                 }
             });
+        }
+
+        private void OnMove(int dx, int dy)
+        {
+            //this.X = this.model.X * Constants.TILE_WIDTH;
+            //this.Y = this.model.Y * Constants.TILE_HEIGHT;
+            // Tween
+            EventBus.LatestInstance.Broadcast(MapEvents.PlayerMoved, new Tuple<int, int>(dx, dy));
         }
     }
 }

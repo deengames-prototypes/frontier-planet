@@ -6,6 +6,7 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using Puffin.Core.Tiles;
+using System;
 using System.IO;
 
 namespace DeenGames.HavenIsland.Scenes
@@ -14,6 +15,7 @@ namespace DeenGames.HavenIsland.Scenes
     {
         private const int MAP_WIDTH = 40;
         private const int MAP_HEIGHT = 23;
+        private Entity player;
 
         public MapScene()
         {
@@ -44,7 +46,8 @@ namespace DeenGames.HavenIsland.Scenes
                 }
                 else if (item is PlayerModel)
                 {
-                    this.Add(new Player(item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));   
+                    this.player = new Player(item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT);
+                    this.Add(this.player);   
                 }
             }
 
@@ -74,6 +77,18 @@ namespace DeenGames.HavenIsland.Scenes
                     // this.Remove(rock);
                     HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(rock.Model));
                 }
+            });
+
+            EventBus.LatestInstance.Subscribe(MapEvents.PlayerMoved, (obj) =>
+            {
+                (var dx, var dy) = obj as Tuple<int, int>;
+                
+                this.TweenPosition(
+                    this.player, new System.Tuple<float, float>(this.player.X, this.player.Y),
+                    new System.Tuple<float, float>(
+                        this.player.X + (dx * Constants.TILE_WIDTH),
+                        this.player.Y + (dy * Constants.TILE_HEIGHT))
+                        , 1f);
             });
 
             // Camera

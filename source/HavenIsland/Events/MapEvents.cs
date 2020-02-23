@@ -6,5 +6,6 @@ namespace DeenGames.HavenIsland.Events
         ChoppedDownTree,
         InteractedWithRock,
         MinedRock,
+        PlayerMoved,
     }
 }
