@@ -17,6 +17,11 @@ namespace DeenGames.HavenIsland.Scenes
 
         public MapScene()
         {
+            var map = GameWorld.Instance.AreaMap;
+            map.Contents.Add(new TreeModel(-1, 9, 6));
+            map.Contents.Add(new RockModel(-1, 15, 5));
+            map.Contents.Add(new PlayerModel(15, 8));
+
             // Setup ground, trees, player, etc.
             var groundTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
             groundTileMap.Define("Grass", 0, 0);
@@ -30,9 +35,21 @@ namespace DeenGames.HavenIsland.Scenes
 
             this.Add(groundTileMap);
 
-            this.Add(new Tree().Move(300, 200));
-            this.Add(new Rock().Move(500, 150));
-            this.Add(new Player().Move(500, 250));
+            foreach (var item in map.Contents)
+            {
+                if (item is TreeModel)
+                {
+                    this.Add(new Tree(item as TreeModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                }
+                else if (item is RockModel)
+                {
+                    this.Add(new Rock(item as RockModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                }
+                else if (item is PlayerModel)
+                {
+                    this.Add(new Player(item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));   
+                }
+            }
 
             // UI
             // TODO: probably backed by a PNG
@@ -43,7 +60,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithTree, (obj) => 
             {
                 var tree = obj as Tree;
-                if (GameWorld.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithTree))
+                if (GameWorld.Instance.PlayerEnergy > PlayerModel.EnergyCost(MapEvents.InteractedWithTree))
                 {
                     EventBus.LatestInstance.Broadcast(MapEvents.ChoppedDownTree, tree);
                     this.Remove(tree);
@@ -53,7 +70,7 @@ namespace DeenGames.HavenIsland.Scenes
             EventBus.LatestInstance.Subscribe(MapEvents.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
-                if (GameWorld.Instance.PlayerEnergy > Player.EnergyCost(MapEvents.InteractedWithRock))
+                if (GameWorld.Instance.PlayerEnergy > PlayerModel.EnergyCost(MapEvents.InteractedWithRock))
                 {
                     // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
                     // this.Remove(rock);

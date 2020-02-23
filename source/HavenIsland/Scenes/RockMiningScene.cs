@@ -4,6 +4,7 @@ using DeenGames.HavenIsland.Map.UI;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
+using Puffin.Core.Events;
 using System;
 using System.IO;
 
@@ -82,7 +83,7 @@ namespace DeenGames.HavenIsland.Scenes
         private void OnTileSelected(RockTile gridTile)
         {
             this.integrityLeft -= gridTile.Integrity;
-            Player.LatestInstance.SubtractEnergy(gridTile.Integrity);
+            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
             this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft}";
             this.Remove(gridTile);
 

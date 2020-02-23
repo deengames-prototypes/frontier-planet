@@ -1,4 +1,5 @@
 using DeenGames.HavenIsland.Events;
+using DeenGames.HavenIsland.Model;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using System;
@@ -8,37 +9,24 @@ namespace DeenGames.HavenIsland.Map.Entities
 {
     public class Rock : Entity
     {
-        private bool isPlayerInInteractionRange = false;
+        private RockModel model;
 
-        public Rock()
+        public Rock(RockModel model)
         {
+            this.model = model;
             this.Sprite(Path.Join("Content", "Images", "Tilesets", "Rock.png"))
-                .Collide(16, 16)
-                .Overlap(32, 32, -8, -8,
-                (e) => {
-                    if (!this.isPlayerInInteractionRange && e == Player.LatestInstance)
-                    {
-                        this.isPlayerInInteractionRange = true;
-                    }
-                },
-                (e) => {
-                    if (this.isPlayerInInteractionRange && e == Player.LatestInstance) {
-                        this.isPlayerInInteractionRange = false;
-                    }
-                })
                 .Keyboard((data) => {
-                    var action = (HavenIslandActions)data;
-                    if (this.isPlayerInInteractionRange && action == HavenIslandActions.Interact)
+                    if (data is HavenIslandActions)
                     {
-                        EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
+                        var action = (HavenIslandActions)data;
+                        var player = GameWorld.Instance.AreaMap.Player;
+                        var distance = Math.Sqrt(Math.Pow(this.model.X - player.X, 2) + Math.Pow(this.model.Y - player.Y, 2));
+                        if (distance == 1 && action == HavenIslandActions.Interact)
+                        {
+                            EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
+                        }
                     }
-                })
-                .Mouse(() => {
-                    if (this.isPlayerInInteractionRange)
-                    {
-                        EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
-                    }
-                }, 27, 64);
+                });
         }
     }
 }
