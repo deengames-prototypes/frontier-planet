@@ -96,7 +96,7 @@ namespace DeenGames.HavenIsland.Scenes
 
             if (this.integrityLeft <= 0)
             {
-                GameWorld.Instance.AreaMap.Contents.Remove(this.model);                
+                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);                
                 HavenIslandGame.LatestInstance.ShowScene(new MapScene());
             }
         }

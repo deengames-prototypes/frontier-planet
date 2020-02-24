@@ -26,19 +26,19 @@ namespace DeenGames.HavenIsland.Map.Entities
                 if (!this.IsMoving && data is PuffinAction)
                 {
                     var moveKey = (PuffinAction)data;
-                    if (moveKey == PuffinAction.Up && GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, -1))
+                    if (moveKey == PuffinAction.Up && GameWorld.LatestInstance.AreaMap.TryToMovePlayerBy(0, -1))
                     {
                         this.OnMove(0, -1);
                     }
-                    else if (moveKey == PuffinAction.Down && GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, 1))
+                    else if (moveKey == PuffinAction.Down && GameWorld.LatestInstance.AreaMap.TryToMovePlayerBy(0, 1))
                     {
                         this.OnMove(0, 1);
                     }
-                    else if (moveKey == PuffinAction.Left && GameWorld.Instance.AreaMap.TryToMovePlayerBy(-1, 0))
+                    else if (moveKey == PuffinAction.Left && GameWorld.LatestInstance.AreaMap.TryToMovePlayerBy(-1, 0))
                     {
                         this.OnMove(-1, 0);
                     }
-                    else if (moveKey == PuffinAction.Right && GameWorld.Instance.AreaMap.TryToMovePlayerBy(1, 0))
+                    else if (moveKey == PuffinAction.Right && GameWorld.LatestInstance.AreaMap.TryToMovePlayerBy(1, 0))
                     {
                         this.OnMove(1, 0);
                     }
