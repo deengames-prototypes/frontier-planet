@@ -16,9 +16,9 @@ namespace DeenGames.HavenIsland.UnitTests.Model
             new EventBus();
         }
 
-        [TestCase(MapEvents.ChoppedDownTree)]
-        [TestCase(MapEvents.MinedRock)]
-        public void SubtractEnergySubtractsEnergy(MapEvents m)
+        [TestCase(MapEvent.ChoppedDownTree)]
+        [TestCase(MapEvent.MinedRock)]
+        public void SubtractEnergySubtractsEnergy(MapEvent m)
         {
             var model = new PlayerModel(0, 0);
             model.SubtractEnergy(m);
@@ -33,16 +33,16 @@ namespace DeenGames.HavenIsland.UnitTests.Model
             Assert.That(GameWorld.LatestInstance.PlayerEnergy, Is.LessThan(GameWorld.LatestInstance.PlayerMaxEnergy - 37));
         }
 
-        [TestCase(MapEvents.ChoppedDownTree)]
-        [TestCase(MapEvents.MinedRock)]
-        public void EnergyCostReturnsNonZeroValuesForSomeEvents(MapEvents m)
+        [TestCase(MapEvent.ChoppedDownTree)]
+        [TestCase(MapEvent.MinedRock)]
+        public void EnergyCostReturnsNonZeroValuesForSomeEvents(MapEvent m)
         {
             Assert.That(PlayerModel.EnergyCost(m), Is.GreaterThan(0));
         }
 
-        [TestCase(MapEvents.ChoppedDownTree)]
-        [TestCase(MapEvents.MinedRock)]
-        public void BroadcastingAppropriateMapEventSubtractsEnergy(MapEvents m)
+        [TestCase(MapEvent.ChoppedDownTree)]
+        [TestCase(MapEvent.MinedRock)]
+        public void BroadcastingAppropriateMapEventubtractsEnergy(MapEvent m)
         {
             var eventBus = new EventBus();
             var model = new PlayerModel(0, 0);

@@ -23,7 +23,7 @@ namespace DeenGames.HavenIsland.Map.Entities
                         var distance = Math.Sqrt(Math.Pow(this.Model.X - player.X, 2) + Math.Pow(this.Model.Y - player.Y, 2));
                         if (distance == 1 && action == HavenIslandActions.Interact)
                         {
-                            EventBus.LatestInstance.Broadcast(MapEvents.InteractedWithRock, this);
+                            EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithRock, this);
                         }
                     }
                 });

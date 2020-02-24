@@ -49,7 +49,7 @@ namespace DeenGames.HavenIsland.Map.Entities
         private void OnMove(int dx, int dy)
         {
             this.IsMoving = true;
-            EventBus.LatestInstance.Broadcast(MapEvents.PlayerMoved, new Tuple<int, int>(dx, dy));
+            EventBus.LatestInstance.Broadcast(MapEvent.PlayerMoved, new Tuple<int, int>(dx, dy));
         }
     }
 }
