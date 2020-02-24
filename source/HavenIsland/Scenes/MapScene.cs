@@ -17,7 +17,7 @@ namespace DeenGames.HavenIsland.Scenes
         private const int MAP_HEIGHT = 23;
         private Entity player;
 
-        public MapScene()
+        override public void Ready()
         {
             var map = GameWorld.LatestInstance.AreaMap;
 
