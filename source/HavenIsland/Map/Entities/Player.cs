@@ -11,6 +11,7 @@ namespace DeenGames.HavenIsland.Map.Entities
     public class Player : Entity
     {
         internal static Player LatestInstance { get; private set; }
+        internal bool IsMoving = false;
         private PlayerModel model;
 
         public Player(PlayerModel model)
@@ -20,9 +21,9 @@ namespace DeenGames.HavenIsland.Map.Entities
             
             this.Spritesheet(Path.Combine("Content", "Images", "Characters", "Protagonist.png"), 26, 32);
 
-            this.Keyboard((data) =>
+            this.Keyboard(onActionDown: (data) =>
             {
-                if (data is PuffinAction)
+                if (!this.IsMoving && data is PuffinAction)
                 {
                     var moveKey = (PuffinAction)data;
                     if (moveKey == PuffinAction.Up && GameWorld.Instance.AreaMap.TryToMovePlayerBy(0, -1))
@@ -47,9 +48,7 @@ namespace DeenGames.HavenIsland.Map.Entities
 
         private void OnMove(int dx, int dy)
         {
-            //this.X = this.model.X * Constants.TILE_WIDTH;
-            //this.Y = this.model.Y * Constants.TILE_HEIGHT;
-            // Tween
+            this.IsMoving = true;
             EventBus.LatestInstance.Broadcast(MapEvents.PlayerMoved, new Tuple<int, int>(dx, dy));
         }
     }

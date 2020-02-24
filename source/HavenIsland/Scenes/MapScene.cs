@@ -88,7 +88,8 @@ namespace DeenGames.HavenIsland.Scenes
                     new System.Tuple<float, float>(
                         this.player.X + (dx * Constants.TILE_WIDTH),
                         this.player.Y + (dy * Constants.TILE_HEIGHT))
-                        , 1f);
+                        , 1f,
+                        () => (this.player as Player).IsMoving = false);
             });
 
             // Camera
