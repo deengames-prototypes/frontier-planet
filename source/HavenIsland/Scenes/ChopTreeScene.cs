@@ -24,6 +24,8 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GRID_TILES_Y_OFFSET = 100;
         private const int HIT_TILE_ENERGY_COST = 3;
 
+        private readonly int targetNumber;
+
         private int integrityLeft;
         private Entity label;
         private TreeModel model;
@@ -32,6 +34,7 @@ namespace DeenGames.HavenIsland.Scenes
         public ChopTreeScene(TreeModel model)
         {
             this.model = model;
+            this.targetNumber = new Random().Next(3, 6); // 3-5
         }
 
         override public void Ready()
@@ -43,9 +46,9 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new EnergyBar());
 
             // Model concerns
-            this.integrityLeft = 35 + random.Next(9); // 36-45
+            this.integrityLeft = 10 + random.Next(6); // 10-15
 
-            this.label = new Entity(true).Label($"Integrity left: {integrityLeft}");
+            this.label = new Entity(true).Label($"Integrity left: {integrityLeft} Target: {this.targetNumber}");
             this.label.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.label);
             this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
@@ -86,9 +89,13 @@ namespace DeenGames.HavenIsland.Scenes
             // includes gridTile
             foreach (var tile in this.GetNonDeadTilesAround(gridTile))
             {
+                if (tile.Integrity == targetNumber)
+                {
+                    this.integrityLeft -= 1;
+                }
+
                 tile.Integrity -= 1;
                 tile.Get<TextLabelComponent>().Text = $"{tile.Integrity}";
-                this.integrityLeft -= 1;
 
                 if (tile.Integrity <= 0)
                 {
@@ -97,7 +104,7 @@ namespace DeenGames.HavenIsland.Scenes
             }
 
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
-            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {this.integrityLeft}";
+            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Target: {this.targetNumber}";
             
             if (this.integrityLeft <= 0)
             {
