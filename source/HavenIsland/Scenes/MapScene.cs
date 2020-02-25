@@ -62,8 +62,7 @@ namespace DeenGames.HavenIsland.Scenes
                 var tree = obj as Tree;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithTree))
                 {
-                    EventBus.LatestInstance.Broadcast(MapEvent.ChoppedDownTree, tree);
-                    this.Remove(tree);
+                    HavenIslandGame.LatestInstance.ShowScene(new ChopTreeScene(tree.Model));
                 }
             });
 
@@ -73,8 +72,6 @@ namespace DeenGames.HavenIsland.Scenes
                 var model = rock.Model;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithRock))
                 {
-                    // EventBus.LatestInstance.Broadcast(MapEvent.MinedRock, rock);
-                    // this.Remove(rock);
                     HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(rock.Model));
                 }
             });
