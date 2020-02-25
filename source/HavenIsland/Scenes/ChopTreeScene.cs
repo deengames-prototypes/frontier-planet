@@ -7,7 +7,9 @@ using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DeenGames.HavenIsland.Scenes
 {
@@ -20,10 +22,12 @@ namespace DeenGames.HavenIsland.Scenes
         private const int FONT_SIZE = 36;
         private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
+        private const int HIT_TILE_ENERGY_COST = 3;
 
         private int integrityLeft;
         private Entity label;
         private TreeModel model;
+        private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
 
         public ChopTreeScene(TreeModel model)
         {
@@ -39,24 +43,19 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new EnergyBar());
 
             // Model concerns
-            this.integrityLeft = 20 + random.Next(11); // 20-30
+            this.integrityLeft = 35 + random.Next(9); // 36-45
 
             this.label = new Entity(true).Label($"Integrity left: {integrityLeft}");
             this.label.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.label);
             this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
-            int index = 0;
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
                 for (int x = 0; x < GRID_WIDTH; x++)
                 {
-                    index++;
-
-                    var gridTile = new TreeTile(index)
-                        .Move(
-                            GRID_TILES_X_OFFSET + (x * TILE_WIDTH),
-                            GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
+                    var gridTile = new TreeTile(x, y)
+                        .Move(GRID_TILES_X_OFFSET + (x * TILE_WIDTH), GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
 
                     gridTile
                         .Mouse(() => {
@@ -66,6 +65,7 @@ namespace DeenGames.HavenIsland.Scenes
                             // TODO: selected tile
                         });
 
+                    this.gridTiles[x, y] = gridTile as TreeTile;
                     this.Add(gridTile);
                 }
             }
@@ -83,11 +83,22 @@ namespace DeenGames.HavenIsland.Scenes
 
         private void OnTileSelected(TreeTile gridTile)
         {
-            this.integrityLeft -= gridTile.Integrity;
-            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
-            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft}";
-            this.Remove(gridTile);
+            // includes gridTile
+            foreach (var tile in this.GetNonDeadTilesAround(gridTile))
+            {
+                tile.Integrity -= 1;
+                tile.Get<TextLabelComponent>().Text = $"{tile.Integrity}";
+                this.integrityLeft -= 1;
 
+                if (tile.Integrity <= 0)
+                {
+                    this.Remove(tile);
+                }
+            }
+
+            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
+            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {this.integrityLeft}";
+            
             if (this.integrityLeft <= 0)
             {
                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);                
@@ -95,15 +106,44 @@ namespace DeenGames.HavenIsland.Scenes
             }
         }
 
+        private List<TreeTile> GetNonDeadTilesAround(TreeTile root)
+        {
+            // Includes root
+            var x = root.Coordinates.Item1;
+            var y = root.Coordinates.Item2;
+
+            var toReturn = new List<TreeTile> { root };
+            
+            if (x > 0)
+            {
+                toReturn.Add(this.gridTiles[x - 1, y]);
+            }
+            if (x < GRID_WIDTH - 1)
+            {
+                toReturn.Add(this.gridTiles[x + 1, y]);
+            }
+
+            if (y > 0)
+            {
+                toReturn.Add(this.gridTiles[x, y - 1]);
+            }
+            if (y < GRID_HEIGHT - 1)
+            {
+                toReturn.Add(this.gridTiles[x, y + 1]);
+            }
+            
+            return toReturn.Where(t => t.Integrity > 0).ToList();
+        }
+
         class TreeTile : Entity
         {
             private static Random random = new Random();
-            public int Index { get; private set; }
-            public int Integrity { get; private set; }
+            public int Integrity { get; set; }
+            public readonly Tuple<int, int> Coordinates;
 
-            public TreeTile(int index) : base()
+            public TreeTile(int x, int y) : base()
             {
-                this.Index = index;
+                this.Coordinates = new Tuple<int, int>(x, y);
                 this.Integrity = 3 + random.Next(5); // 3-7
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Tree-Texture.png"))
                     .Label($"{this.Integrity}", 10, -10);
