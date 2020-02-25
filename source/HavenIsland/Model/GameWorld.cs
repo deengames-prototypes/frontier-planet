@@ -19,7 +19,7 @@ namespace DeenGames.HavenIsland.Model
             this.AreaMap = new AreaMap();
             this.AreaMap.Contents.Add(new TreeModel(-1, 9, 6));
             this.AreaMap.Contents.Add(new RockModel(-1, 15, 5));
-            this.AreaMap.Contents.Add(new PlayerModel(15, 8));
+            this.AreaMap.Contents.Add(new PlayerModel(9, 8));
         }
     }
 }

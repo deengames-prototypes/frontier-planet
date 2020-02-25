@@ -14,11 +14,11 @@ namespace DeenGames.HavenIsland.Scenes
     public class ChopTreeScene : Scene
     {
         private const int GRID_WIDTH = 5;
-        private const int GRID_HEIGHT = 5;
+        private const int GRID_HEIGHT = 9;
         private const int TILE_WIDTH = 60;
         private const int TILE_HEIGHT = 60;
         private const int FONT_SIZE = 36;
-        private const int GRID_TILES_X_OFFSET = 200;
+        private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
 
         private int integrityLeft;
@@ -42,9 +42,9 @@ namespace DeenGames.HavenIsland.Scenes
             this.integrityLeft = 20 + random.Next(11); // 20-30
 
             this.label = new Entity(true).Label($"Integrity left: {integrityLeft}");
-            this.label.Get<TextLabelComponent>().FontSize = 72;
+            this.label.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.label);
-            this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - FONT_SIZE - 16);
+            this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
             int index = 0;
 
             for (int y = 0; y < GRID_HEIGHT; y++)
@@ -55,8 +55,8 @@ namespace DeenGames.HavenIsland.Scenes
 
                     var gridTile = new TreeTile(index)
                         .Move(
-                            GRID_TILES_X_OFFSET + (x * (TILE_WIDTH + 10)),
-                            GRID_TILES_Y_OFFSET + (y * (TILE_HEIGHT + 10)));
+                            GRID_TILES_X_OFFSET + (x * TILE_WIDTH),
+                            GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
 
                     gridTile
                         .Mouse(() => {
@@ -106,7 +106,7 @@ namespace DeenGames.HavenIsland.Scenes
                 this.Index = index;
                 this.Integrity = 3 + random.Next(5); // 3-7
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Tree-Texture.png"))
-                    .Label($"{this.Integrity}", 40, 0);
+                    .Label($"{this.Integrity}", 10, -10);
                 this.Get<TextLabelComponent>().FontSize = FONT_SIZE * 2;
             }
         }
