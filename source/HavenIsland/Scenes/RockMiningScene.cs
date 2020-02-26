@@ -6,6 +6,7 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
+using Puffin.UI.Controls;
 using System;
 using System.IO;
 
@@ -85,6 +86,12 @@ namespace DeenGames.HavenIsland.Scenes
                     HavenIslandGame.LatestInstance.ShowScene(new MapScene());
                 }
             };
+
+            var cancelButton = new Button("", () => HavenIslandGame.LatestInstance.ShowScene(new MapScene()))
+                .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
+            
+            cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
+            this.Add(cancelButton);
         }
 
         private void OnTileSelected(RockTile gridTile)
