@@ -1,4 +1,5 @@
 using DeenGames.HavenIsland.Events;
+using DeenGames.HavenIsland.Model;
 using DeenGames.HavenIsland.Scenes;
 using Microsoft.Xna.Framework.Input;
 using Puffin.Infrastructure.MonoGame;
@@ -21,7 +22,7 @@ namespace DeenGames.HavenIsland
 
         override protected void Ready()
         {
-            this.ShowScene(new MapScene());
+            this.ShowScene(new MapScene(GameWorld.LatestInstance.AreaMap));
         }
 
         private void BindCustomKeyboardActions()

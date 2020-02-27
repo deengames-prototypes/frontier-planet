@@ -16,11 +16,15 @@ namespace DeenGames.HavenIsland.Scenes
         private const int MAP_WIDTH = 40;
         private const int MAP_HEIGHT = 23;
         private Entity player;
+        private AreaMap map;
+
+        public MapScene(AreaMap map)
+        {
+            this.map = map;
+        }
 
         override public void Ready()
         {
-            var map = GameWorld.LatestInstance.AreaMap;
-
             // Setup ground, trees, player, etc.
             var groundTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
             groundTileMap.Define("Grass", 0, 0);
@@ -34,7 +38,7 @@ namespace DeenGames.HavenIsland.Scenes
 
             this.Add(groundTileMap);
 
-            foreach (var item in map.Contents)
+            foreach (var item in this.map.Contents)
             {
                 if (item is TreeModel)
                 {
@@ -62,7 +66,7 @@ namespace DeenGames.HavenIsland.Scenes
                 var tree = obj as Tree;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithTree))
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new ChopTreeScene(tree.Model));
+                    HavenIslandGame.LatestInstance.ShowScene(new ChopTreeScene(this.map, tree.Model));
                 }
             });
 
@@ -72,7 +76,7 @@ namespace DeenGames.HavenIsland.Scenes
                 var model = rock.Model;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithRock))
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(rock.Model));
+                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(this.map, rock.Model));
                 }
             });
 

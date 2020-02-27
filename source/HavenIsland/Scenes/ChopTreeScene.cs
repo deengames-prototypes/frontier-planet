@@ -32,10 +32,12 @@ namespace DeenGames.HavenIsland.Scenes
         private Entity label;
         private Entity streakLabel;
         private TreeModel model;
+        private AreaMap map;
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
 
-        public ChopTreeScene(TreeModel model)
+        public ChopTreeScene(AreaMap map, TreeModel model)
         {
+            this.map = map;
             this.model = model;
         }
 
@@ -85,11 +87,11 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 if ((HavenIslandActions)data == HavenIslandActions.Cancel)
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new MapScene());
+                    HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
                 }
             };
 
-            var cancelButton = new Button("", () => HavenIslandGame.LatestInstance.ShowScene(new MapScene()))
+            var cancelButton = new Button("", () => HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             
             cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
@@ -159,8 +161,8 @@ namespace DeenGames.HavenIsland.Scenes
             
             if (this.integrityLeft <= 0)
             {
-                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);                
-                HavenIslandGame.LatestInstance.ShowScene(new MapScene());
+                this.map.Contents.Remove(this.model);                
+                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
             }
         }
 
