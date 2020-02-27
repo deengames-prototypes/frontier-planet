@@ -11,7 +11,10 @@ namespace DeenGames.HavenIsland.Map.Entities
     public class Player : Entity
     {
         internal static Player LatestInstance { get; private set; }
+        internal const float SecondsToMoveToTile = 0.5f;
+        
         internal bool IsMoving = false;
+
         private PlayerModel model;
 
         public Player(PlayerModel model)
