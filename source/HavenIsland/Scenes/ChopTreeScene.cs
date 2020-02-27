@@ -30,6 +30,7 @@ namespace DeenGames.HavenIsland.Scenes
 
         private int integrityLeft;
         private Entity label;
+        private Entity streakLabel;
         private TreeModel model;
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
 
@@ -47,12 +48,17 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new EnergyBar());
 
             // Model concerns
-            this.integrityLeft = 15 + random.Next(6);
+            this.integrityLeft = 40 + random.Next(10);
 
-            this.label = new Entity(true).Label($"Integrity left: {integrityLeft} Target: {this.targetNumber}");
+            this.label = new Entity(true).Label("");
             this.label.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.label);
             this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
+
+            this.streakLabel = new Entity(true).Label("");
+            this.streakLabel.Get<TextLabelComponent>().FontSize = 48;
+            this.Add(this.streakLabel);
+            this.streakLabel.Move((int)this.label.X - 64, HavenIslandGame.LatestInstance.Height - 72);
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
@@ -90,6 +96,7 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(cancelButton);
 
             this.PickTargetNumber();
+            this.UpdateIntegrityLeft();
         }
 
         private void PickTargetNumber()
@@ -105,7 +112,7 @@ namespace DeenGames.HavenIsland.Scenes
                 
                 this.targetNumber = tile.Integrity;
             }
-            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Target: {this.targetNumber}";
+            this.UpdateIntegrityLeft();
         }
 
         private void OnTileSelected(TreeTile gridTile)
@@ -117,17 +124,23 @@ namespace DeenGames.HavenIsland.Scenes
                 {
                     int bonus = this.currentCorrectStreak - 1;
                     this.integrityLeft -= bonus;
-                    Console.WriteLine($"Streak bonus: {bonus}!");
+                    this.streakLabel.Get<TextLabelComponent>().Text = $"Precise chopping bonus - {this.currentCorrectStreak} in a row!";
                 }
             }
             else
             {
                 this.currentCorrectStreak = 0;
+                this.streakLabel.Get<TextLabelComponent>().Text = "";
             }
 
             foreach (var tile in this.GetNonDeadTilesAround(gridTile))
             {
+                // -2 integrity for correct tiles
                 if (tile.Integrity == targetNumber)
+                {
+                    this.integrityLeft -= 2;
+                }
+                else
                 {
                     this.integrityLeft -= 1;
                 }
@@ -149,6 +162,11 @@ namespace DeenGames.HavenIsland.Scenes
                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);                
                 HavenIslandGame.LatestInstance.ShowScene(new MapScene());
             }
+        }
+
+        private void UpdateIntegrityLeft()
+        {
+            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Weak spots: {this.targetNumber}";
         }
 
         private List<TreeTile> GetNonDeadTilesAround(TreeTile root)
