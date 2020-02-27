@@ -23,14 +23,8 @@ namespace DeenGames.HavenIsland.Scenes
         private const int FONT_SIZE = 36;
         private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
-        private const int HIT_TILE_ENERGY_COST = 3;
 
-        private int targetNumber;
-        private int currentCorrectStreak = 0;
-
-        private int integrityLeft;
         private Entity label;
-        private Entity streakLabel;
         private TreeModel model;
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
 
@@ -47,18 +41,10 @@ namespace DeenGames.HavenIsland.Scenes
             this.BackgroundColour = 0x397b44;
             this.Add(new EnergyBar());
 
-            // Model concerns
-            this.integrityLeft = 40 + random.Next(10);
-
             this.label = new Entity(true).Label("");
             this.label.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.label);
             this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
-
-            this.streakLabel = new Entity(true).Label("");
-            this.streakLabel.Get<TextLabelComponent>().FontSize = 48;
-            this.Add(this.streakLabel);
-            this.streakLabel.Move((int)this.label.X - 64, HavenIslandGame.LatestInstance.Height - 72);
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
@@ -94,115 +80,21 @@ namespace DeenGames.HavenIsland.Scenes
             
             cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
-
-            this.PickTargetNumber();
-            this.UpdateIntegrityLeft();
-        }
-
-        private void PickTargetNumber()
-        {
-            this.targetNumber = 0;
-            while (this.targetNumber == 0)
-            {
-                // Pick a random tile on-board.
-                // Source: https://stackoverflow.com/questions/15884285/get-a-random-value-from-a-two-dimensional-array
-                int values = this.gridTiles.GetLength(0) * this.gridTiles.GetLength(1);
-                int index = new Random().Next(values);
-                var tile = this.gridTiles[index / this.gridTiles.GetLength(0), index % this.gridTiles.GetLength(0)];
-                
-                this.targetNumber = tile.Integrity;
-            }
-            this.UpdateIntegrityLeft();
         }
 
         private void OnTileSelected(TreeTile gridTile)
         {
-            if (gridTile.Integrity == this.targetNumber)
-            {
-                this.currentCorrectStreak++;
-                if (this.currentCorrectStreak > 1)
-                {
-                    int bonus = this.currentCorrectStreak - 1;
-                    this.integrityLeft -= bonus;
-                    this.streakLabel.Get<TextLabelComponent>().Text = $"Precise chopping bonus - {this.currentCorrectStreak} in a row!";
-                }
-            }
-            else
-            {
-                this.currentCorrectStreak = 0;
-                this.streakLabel.Get<TextLabelComponent>().Text = "";
-            }
-
-            foreach (var tile in this.GetNonDeadTilesAround(gridTile))
-            {
-                // -2 integrity for correct tiles
-                if (tile.Integrity == targetNumber)
-                {
-                    this.integrityLeft -= 2;
-                }
-                else
-                {
-                    this.integrityLeft -= 1;
-                }
-
-                tile.Integrity -= 1;
-                tile.Get<TextLabelComponent>().Text = $"{tile.Integrity}";
-
-                if (tile.Integrity <= 0)
-                {
-                    this.Remove(tile);
-                }
-            }
-
-            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
-            this.PickTargetNumber();
-            
-            if (this.integrityLeft <= 0)
-            {
-                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);                
-                HavenIslandGame.LatestInstance.ShowScene(new MapScene());
-            }
-        }
-
-        private void UpdateIntegrityLeft()
-        {
-            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Weak spots: {this.targetNumber}";
-        }
-
-        private List<TreeTile> GetNonDeadTilesAround(TreeTile root)
-        {
-            // Includes root
-            var x = root.Coordinates.Item1;
-            var y = root.Coordinates.Item2;
-
-            var toReturn = new List<TreeTile> { root };
-            
-            if (x > 0)
-            {
-                toReturn.Add(this.gridTiles[x - 1, y]);
-            }
-            if (x < GRID_WIDTH - 1)
-            {
-                toReturn.Add(this.gridTiles[x + 1, y]);
-            }
-
-            if (y > 0)
-            {
-                toReturn.Add(this.gridTiles[x, y - 1]);
-            }
-            if (y < GRID_HEIGHT - 1)
-            {
-                toReturn.Add(this.gridTiles[x, y + 1]);
-            }
-            
-            return toReturn.Where(t => t.Integrity > 0).ToList();
+            this.Remove(gridTile);
+            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
         }
 
         class TreeTile : Entity
         {
             private static Random random = new Random();
+            
             public int Integrity { get; set; }
             public readonly Tuple<int, int> Coordinates;
+            public bool IsDiscovered = false;
 
             public TreeTile(int x, int y) : base()
             {
