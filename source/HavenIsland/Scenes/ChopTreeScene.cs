@@ -17,7 +17,7 @@ namespace DeenGames.HavenIsland.Scenes
     public class ChopTreeScene : Scene
     {
         private const int GRID_WIDTH = 5;
-        private const int GRID_HEIGHT = 9;
+        private const int GRID_HEIGHT = 5;
         private const int TILE_WIDTH = 60;
         private const int TILE_HEIGHT = 60;
         private const int FONT_SIZE = 36;
@@ -25,7 +25,8 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GRID_TILES_Y_OFFSET = 100;
         private const int HIT_TILE_ENERGY_COST = 3;
 
-        private readonly int targetNumber;
+        private int targetNumber;
+        private int currentCorrectStreak = 0;
 
         private int integrityLeft;
         private Entity label;
@@ -35,7 +36,6 @@ namespace DeenGames.HavenIsland.Scenes
         public ChopTreeScene(TreeModel model)
         {
             this.model = model;
-            this.targetNumber = new Random().Next(3, 6); // 3-5
         }
 
         override public void Ready()
@@ -47,7 +47,7 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(new EnergyBar());
 
             // Model concerns
-            this.integrityLeft = 10 + random.Next(6); // 10-15
+            this.integrityLeft = 15 + random.Next(6);
 
             this.label = new Entity(true).Label($"Integrity left: {integrityLeft} Target: {this.targetNumber}");
             this.label.Get<TextLabelComponent>().FontSize = 48;
@@ -88,11 +88,43 @@ namespace DeenGames.HavenIsland.Scenes
             
             cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
+
+            this.PickTargetNumber();
+        }
+
+        private void PickTargetNumber()
+        {
+            this.targetNumber = 0;
+            while (this.targetNumber == 0)
+            {
+                // Pick a random tile on-board.
+                // Source: https://stackoverflow.com/questions/15884285/get-a-random-value-from-a-two-dimensional-array
+                int values = this.gridTiles.GetLength(0) * this.gridTiles.GetLength(1);
+                int index = new Random().Next(values);
+                var tile = this.gridTiles[index / this.gridTiles.GetLength(0), index % this.gridTiles.GetLength(0)];
+                
+                this.targetNumber = tile.Integrity;
+            }
+            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Target: {this.targetNumber}";
         }
 
         private void OnTileSelected(TreeTile gridTile)
         {
-            // includes gridTile
+            if (gridTile.Integrity == this.targetNumber)
+            {
+                this.currentCorrectStreak++;
+                if (this.currentCorrectStreak > 1)
+                {
+                    int bonus = this.currentCorrectStreak - 1;
+                    this.integrityLeft -= bonus;
+                    Console.WriteLine($"Streak bonus: {bonus}!");
+                }
+            }
+            else
+            {
+                this.currentCorrectStreak = 0;
+            }
+
             foreach (var tile in this.GetNonDeadTilesAround(gridTile))
             {
                 if (tile.Integrity == targetNumber)
@@ -110,7 +142,7 @@ namespace DeenGames.HavenIsland.Scenes
             }
 
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
-            this.label.Get<TextLabelComponent>().Text = $"Integrity left: {integrityLeft} Target: {this.targetNumber}";
+            this.PickTargetNumber();
             
             if (this.integrityLeft <= 0)
             {
