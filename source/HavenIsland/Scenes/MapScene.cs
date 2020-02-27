@@ -72,7 +72,7 @@ namespace DeenGames.HavenIsland.Scenes
                 var model = rock.Model;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithRock))
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new RockMiningScene(rock.Model));
+                    HavenIslandGame.LatestInstance.ShowScene(new MineRockScene(rock.Model));
                 }
             });
 

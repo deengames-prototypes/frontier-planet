@@ -12,7 +12,7 @@ using System.IO;
 
 namespace DeenGames.HavenIsland.Scenes
 {
-    public class RockMiningScene : Scene
+    public class DeprecatedRockMiningScene : Scene
     {
         private const int GRID_WIDTH = 3;
         private const int GRID_HEIGHT = 3;
@@ -26,7 +26,7 @@ namespace DeenGames.HavenIsland.Scenes
         private Entity label;
         private RockModel model;
 
-        public RockMiningScene(RockModel model)
+        public DeprecatedRockMiningScene(RockModel model)
         {
             this.model = model;
         }
