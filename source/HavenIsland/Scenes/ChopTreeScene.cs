@@ -5,6 +5,7 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
+using Puffin.Core.IO;
 using Puffin.UI.Controls;
 using System;
 using System.IO;
@@ -26,6 +27,8 @@ namespace DeenGames.HavenIsland.Scenes
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
         private TreeTile lastClicked;
         private HorizontalProgressBar progressBar;
+        private Entity cursor;
+        private TreeTile cursorTile;
 
         public ChopTreeScene(AreaMap map, TreeModel model)
         {
@@ -66,9 +69,37 @@ namespace DeenGames.HavenIsland.Scenes
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
-                if ((HavenIslandActions)data == HavenIslandActions.Cancel)
+                if (data is HavenIslandActions)
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    var havenAction = (HavenIslandActions)data;
+                    if (havenAction == HavenIslandActions.Cancel)
+                    {
+                        HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    }
+                    else if (havenAction == HavenIslandActions.Interact)
+                    {
+                        this.OnTileSelected(this.cursorTile);
+                    }
+                }
+                else if (data is PuffinAction)
+                {
+                    var puff = (PuffinAction)data;
+                    if (puff == PuffinAction.Up && this.cursorTile.TileIndicies.Item2 > 0 && this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 - 1].IsDiscovered)
+                    {
+                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 - 1]);
+                    }
+                    else if (puff == PuffinAction.Down && this.cursorTile.TileIndicies.Item2 < GRID_HEIGHT - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 + 1].IsDiscovered)
+                    {
+                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 + 1]);
+                    }
+                    else if (puff == PuffinAction.Left && this.cursorTile.TileIndicies.Item1 > 0 && this.gridTiles[this.cursorTile.TileIndicies.Item1 - 1, this.cursorTile.TileIndicies.Item2].IsDiscovered)
+                    {
+                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1 - 1, this.cursorTile.TileIndicies.Item2]);
+                    }
+                    else if (puff == PuffinAction.Right && this.cursorTile.TileIndicies.Item1 < GRID_WIDTH - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1 + 1, this.cursorTile.TileIndicies.Item2].IsDiscovered)
+                    {
+                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1 + 1, this.cursorTile.TileIndicies.Item2]);
+                    }
                 }
             };
 
@@ -83,6 +114,40 @@ namespace DeenGames.HavenIsland.Scenes
             this.progressBar.Value = 0;
             
             this.Add(this.progressBar);
+
+            this.cursor = new Entity(true)
+                .Sprite(Path.Combine("Content", "Images", "UI", "TileCursor.png"));
+            this.Add(this.cursor);
+            this.MoveCursorToFirstVisibleTile();
+        }
+
+        public void MoveCursorToFirstVisibleTile()
+        {
+            var tile = this.FirstGridTile(t => t.IsDiscovered);
+            this.MoveCursorTo(tile);
+        }
+
+        private void MoveCursorTo(TreeTile tile)
+        {
+            this.cursor.Move(tile.X, tile.Y);
+            this.cursorTile = tile;
+        }
+
+        private TreeTile FirstGridTile(Func<TreeTile, bool> lambda)
+        {
+            for (var y = 0; y < GRID_HEIGHT; y++)
+            {
+                for (var x = 0; x < GRID_WIDTH; x++)
+                {
+                    var currentTile = gridTiles[x, y];
+                    if (lambda.Invoke(currentTile) == true)
+                    {
+                        return currentTile;
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void OnTileSelected(TreeTile gridTile)
@@ -109,6 +174,7 @@ namespace DeenGames.HavenIsland.Scenes
                 else
                 {
                     this.ShowHideGridTiles();
+                    this.MoveCursorToFirstVisibleTile();
                 }
             }
         }
