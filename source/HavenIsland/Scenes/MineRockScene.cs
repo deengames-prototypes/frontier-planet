@@ -162,6 +162,7 @@ namespace DeenGames.HavenIsland.Scenes
                 }
             }
 
+            GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
             
             if (tilesLeft <= 0)

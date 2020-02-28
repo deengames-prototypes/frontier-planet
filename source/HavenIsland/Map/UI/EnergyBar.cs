@@ -3,6 +3,7 @@ using DeenGames.HavenIsland.Model;
 using DeenGames.HavenIsland.Map.Entities;
 using Puffin.Core;
 using Puffin.Core.Ecs;
+using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
 
 namespace DeenGames.HavenIsland.Map.UI
@@ -17,14 +18,23 @@ namespace DeenGames.HavenIsland.Map.UI
         {
             // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
-            this.Colour(0xf4b41b, WIDTH, Height);
-            this.Move(HavenIslandGame.LatestInstance.Width - PADDING - WIDTH, HavenIslandGame.LatestInstance.Height - this.Height - PADDING);
+            this.Colour(0xf4b41b, WIDTH, Height);            
+            var text = this.Label("");
+            this.UpdatePosition();
 
             EventBus.LatestInstance.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>
             {
-                this.Height -= (int)amount;
-                this.Colour(0xf4b41b, WIDTH, Height);
+                this.Height = GameWorld.LatestInstance.PlayerEnergy;
+                this.UpdatePosition();
+                this.Colour(0xf4b41b, WIDTH, this.Height);
             });
+        }
+
+        private void UpdatePosition()
+        {
+            var energyDiff = (GameWorld.LatestInstance.PlayerMaxEnergy - GameWorld.LatestInstance.PlayerEnergy);
+            this.Move(HavenIslandGame.LatestInstance.Width - PADDING - WIDTH,
+                HavenIslandGame.LatestInstance.Height - (GameWorld.LatestInstance.PlayerMaxEnergy - energyDiff) - PADDING);
         }
     }
 }

@@ -91,6 +91,8 @@ namespace DeenGames.HavenIsland.Scenes
         {
             this.lastClicked = gridTile;
             this.Remove(gridTile);
+
+            GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
 
             if (gridTile.TileIndicies.Item1 == 0)
