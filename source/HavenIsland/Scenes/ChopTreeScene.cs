@@ -1,5 +1,4 @@
 using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Map.Entities;
 using DeenGames.HavenIsland.Map.UI;
 using DeenGames.HavenIsland.Model;
 using Puffin.Core;
@@ -8,9 +7,7 @@ using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
 using Puffin.UI.Controls;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace DeenGames.HavenIsland.Scenes
 {
@@ -24,11 +21,11 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
 
-        private Entity label;
         private TreeModel model;
         private AreaMap map;
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
         private TreeTile lastClicked;
+        private HorizontalProgressBar progressBar;
 
         public ChopTreeScene(AreaMap map, TreeModel model)
         {
@@ -43,11 +40,6 @@ namespace DeenGames.HavenIsland.Scenes
 
             this.BackgroundColour = 0x397b44;
             this.Add(new EnergyBar());
-
-            this.label = new Entity(true).Label("");
-            this.label.Get<TextLabelComponent>().FontSize = 48;
-            this.Add(this.label);
-            this.label.Move(GRID_TILES_X_OFFSET + 30, GRID_TILES_Y_OFFSET - 48 - 16);
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
@@ -85,26 +77,39 @@ namespace DeenGames.HavenIsland.Scenes
             
             cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
+
+            this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, 300, 8, 8);
+            this.progressBar.Move(GRID_TILES_X_OFFSET - 10, GRID_TILES_Y_OFFSET - 72);
+            this.progressBar.Value = 0;
+            
+            this.Add(this.progressBar);
         }
 
         private void OnTileSelected(TreeTile gridTile)
         {
-            this.lastClicked = gridTile;
-            this.Remove(gridTile);
-
-            GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
-            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
-
-            if (gridTile.TileIndicies.Item1 == 0)
+            if (gridTile.IsDiscovered)
             {
-                // Done
-                // TODO: should probably use events for this
-                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
-            }
-            else
-            {
-                this.ShowHideGridTiles();
+                this.lastClicked = gridTile;
+                this.Remove(gridTile);
+                
+                // Five tiles wide, so progress is 5-x for tile X we clicked on.
+                var currentProgress = (GRID_WIDTH - this.lastClicked.TileIndicies.Item1) * TILE_WIDTH;
+                this.progressBar.Value = currentProgress;
+
+                GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
+                EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
+
+                if (gridTile.TileIndicies.Item1 == 0)
+                {
+                    // Done
+                    // TODO: should probably use events for this
+                    GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
+                    HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                }
+                else
+                {
+                    this.ShowHideGridTiles();
+                }
             }
         }
 
