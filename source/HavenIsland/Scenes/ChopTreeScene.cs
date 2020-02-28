@@ -28,6 +28,7 @@ namespace DeenGames.HavenIsland.Scenes
         private TreeModel model;
         private AreaMap map;
         private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
+        private TreeTile lastClicked;
 
         public ChopTreeScene(AreaMap map, TreeModel model)
         {
@@ -62,6 +63,11 @@ namespace DeenGames.HavenIsland.Scenes
 
                     this.gridTiles[x, y] = gridTile as TreeTile;
                     this.Add(gridTile);
+
+                    if (x == GRID_WIDTH - 1)
+                    {
+                        (gridTile as TreeTile).Show();
+                    }
                 }
             }
 
@@ -83,8 +89,38 @@ namespace DeenGames.HavenIsland.Scenes
 
         private void OnTileSelected(TreeTile gridTile)
         {
+            this.lastClicked = gridTile;
             this.Remove(gridTile);
             EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
+
+            if (gridTile.TileIndicies.Item1 == 0)
+            {
+                // Done
+                // TODO: should probably use events for this
+                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
+                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+            }
+            else
+            {
+                this.ShowHideGridTiles();
+            }
+        }
+
+        private void ShowHideGridTiles()
+        {
+            for (int y = 0; y < GRID_HEIGHT; y++)
+            {
+                for (int x = 0; x < GRID_WIDTH; x++)
+                {
+                    this.gridTiles[x, y].Hide();
+                    var tileX = this.lastClicked.TileIndicies.Item1;
+                    var tileY = this.lastClicked.TileIndicies.Item2;
+                    if (x == tileX - 1 && Math.Abs(y - tileY) <= 1)
+                    {
+                        this.gridTiles[x, y].Show();
+                    }
+                }
+            }
         }
 
         class TreeTile : Entity
@@ -92,16 +128,28 @@ namespace DeenGames.HavenIsland.Scenes
             private static Random random = new Random();
             
             public int Integrity { get; set; }
-            public readonly Tuple<int, int> Coordinates;
-            public bool IsDiscovered = false;
+            public bool IsDiscovered { get; private set; }
+            public readonly Tuple<int, int> TileIndicies;
 
             public TreeTile(int x, int y) : base()
             {
-                this.Coordinates = new Tuple<int, int>(x, y);
+                this.TileIndicies = new Tuple<int, int>(x, y);
                 this.Integrity = 3 + random.Next(5); // 3-7
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Tree-Texture.png"))
-                    .Label($"{this.Integrity}", 10, -10);
+                    .Label($"", 10, -10);
                 this.Get<TextLabelComponent>().FontSize = FONT_SIZE * 2;
+            }
+
+            public void Show()
+            {
+                this.IsDiscovered = true;
+                this.Get<TextLabelComponent>().Text = $"{this.Integrity}";
+            }
+
+            public void Hide()
+            {
+                this.IsDiscovered = false;
+                this.Get<TextLabelComponent>().Text = "";
             }
         }
     }
