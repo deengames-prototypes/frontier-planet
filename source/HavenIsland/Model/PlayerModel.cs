@@ -5,10 +5,13 @@ namespace DeenGames.HavenIsland.Model
 {
     public class PlayerModel : MapObject
     {
-        public PlayerModel(int x, int y) : base(x, y)
+        private EventBus eventBus;
+        
+        public PlayerModel(EventBus eventBus, int x, int y) : base(x, y)
         {
-            EventBus.LatestInstance.Subscribe(MapEvent.ChoppedDownTree, (obj) => this.SubtractEnergy(MapEvent.ChoppedDownTree));
-            EventBus.LatestInstance.Subscribe(MapEvent.MinedRock, (obj) => this.SubtractEnergy(MapEvent.MinedRock));
+            this.eventBus = eventBus;
+            eventBus.Subscribe(MapEvent.ChoppedDownTree, (obj) => this.SubtractEnergy(MapEvent.ChoppedDownTree));
+            eventBus.Subscribe(MapEvent.MinedRock, (obj) => this.SubtractEnergy(MapEvent.MinedRock));
         }
         
         public void SubtractEnergy(MapEvent m)
@@ -20,7 +23,7 @@ namespace DeenGames.HavenIsland.Model
         public void SubtractEnergy(int cost)
         {
             GameWorld.LatestInstance.PlayerEnergy -= cost;
-            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, cost);
+            this.eventBus.Broadcast(GlobalEvents.ConsumedEnergy, cost);
         }
 
         public static int EnergyCost(MapEvent m)

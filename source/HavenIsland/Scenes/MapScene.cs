@@ -42,15 +42,15 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 if (item is TreeModel)
                 {
-                    this.Add(new Tree(item as TreeModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                    this.Add(new Tree(this.EventBus, item as TreeModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
                 }
                 else if (item is RockModel)
                 {
-                    this.Add(new Rock(item as RockModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                    this.Add(new Rock(this.EventBus, item as RockModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
                 }
                 else if (item is PlayerModel)
                 {
-                    this.player = new Player(item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT);
+                    this.player = new Player(this.EventBus, item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT);
                     this.Add(this.player);   
                 }
             }
@@ -58,10 +58,10 @@ namespace DeenGames.HavenIsland.Scenes
             // UI
             // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
-            this.Add(new EnergyBar());
+            this.Add(new EnergyBar(this.EventBus));
 
             // Event handlers
-            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithTree, (obj) => 
+            this.EventBus.Subscribe(MapEvent.InteractedWithTree, (obj) => 
             {
                 var tree = obj as Tree;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithTree))
@@ -70,7 +70,7 @@ namespace DeenGames.HavenIsland.Scenes
                 }
             });
 
-            EventBus.LatestInstance.Subscribe(MapEvent.InteractedWithRock, (obj) => 
+            this.EventBus.Subscribe(MapEvent.InteractedWithRock, (obj) => 
             {
                 var rock = obj as Rock;
                 var model = rock.Model;
@@ -80,7 +80,7 @@ namespace DeenGames.HavenIsland.Scenes
                 }
             });
 
-            EventBus.LatestInstance.Subscribe(MapEvent.PlayerMoved, (obj) =>
+            this.EventBus.Subscribe(MapEvent.PlayerMoved, (obj) =>
             {
                 (var dx, var dy) = obj as Tuple<int, int>;
                 

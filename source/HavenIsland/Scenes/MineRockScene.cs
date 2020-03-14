@@ -46,7 +46,7 @@ namespace DeenGames.HavenIsland.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
-            this.Add(new EnergyBar());
+            this.Add(new EnergyBar(this.EventBus));
 
             this.label = new Entity(true).Label("");
             this.label.Get<TextLabelComponent>().FontSize = 48;
@@ -163,7 +163,7 @@ namespace DeenGames.HavenIsland.Scenes
             }
 
             GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
-            EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
+            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, HIT_TILE_ENERGY_COST);
             
             if (tilesLeft <= 0)
             {

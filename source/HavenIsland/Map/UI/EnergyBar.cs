@@ -14,7 +14,7 @@ namespace DeenGames.HavenIsland.Map.UI
         internal int Height { get; set; } = GameWorld.LatestInstance.PlayerEnergy;
         private const int PADDING = 16;
 
-        public EnergyBar() : base(true)
+        public EnergyBar(EventBus eventBus) : base(true)
         {
             // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
@@ -22,7 +22,7 @@ namespace DeenGames.HavenIsland.Map.UI
             var text = this.Label("");
             this.UpdatePosition();
 
-            EventBus.LatestInstance.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>
+            eventBus.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>
             {
                 this.Height = GameWorld.LatestInstance.PlayerEnergy;
                 this.UpdatePosition();

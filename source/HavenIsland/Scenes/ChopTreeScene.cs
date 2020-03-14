@@ -42,7 +42,7 @@ namespace DeenGames.HavenIsland.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
-            this.Add(new EnergyBar());
+            this.Add(new EnergyBar(this.EventBus));
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
@@ -162,7 +162,7 @@ namespace DeenGames.HavenIsland.Scenes
                 this.progressBar.Value = currentProgress;
 
                 GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
-                EventBus.LatestInstance.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
+                this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Integrity);
 
                 if (gridTile.TileIndicies.Item1 == 0)
                 {

@@ -16,11 +16,13 @@ namespace DeenGames.HavenIsland.Map.Entities
         internal bool IsMoving = false;
 
         private PlayerModel model;
+        private EventBus eventBus;
 
-        public Player(PlayerModel model)
+        public Player(EventBus eventBus, PlayerModel model)
         {
             Player.LatestInstance = this;
             this.model = model;
+            this.eventBus = eventBus;
             
             this.Spritesheet(Path.Combine("Content", "Images", "Characters", "Protagonist.png"), 26, 32);
 
@@ -52,7 +54,7 @@ namespace DeenGames.HavenIsland.Map.Entities
         private void OnMove(int dx, int dy)
         {
             this.IsMoving = true;
-            EventBus.LatestInstance.Broadcast(MapEvent.PlayerMoved, new Tuple<int, int>(dx, dy));
+            this.eventBus.Broadcast(MapEvent.PlayerMoved, new Tuple<int, int>(dx, dy));
         }
     }
 }

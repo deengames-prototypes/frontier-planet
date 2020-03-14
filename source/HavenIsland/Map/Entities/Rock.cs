@@ -10,10 +10,13 @@ namespace DeenGames.HavenIsland.Map.Entities
     public class Rock : Entity
     {
         internal RockModel Model;
+        private EventBus eventBus;
 
-        public Rock(RockModel model)
+        public Rock(EventBus eventBus, RockModel model)
         {
             this.Model = model;
+            this.eventBus = eventBus;
+            
             this.Sprite(Path.Join("Content", "Images", "Tilesets", "Rock.png"))
                 .Keyboard((data) => {
                     if (data is HavenIslandActions)
@@ -23,7 +26,7 @@ namespace DeenGames.HavenIsland.Map.Entities
                         var distance = Math.Sqrt(Math.Pow(this.Model.X - player.X, 2) + Math.Pow(this.Model.Y - player.Y, 2));
                         if (distance == 1 && action == HavenIslandActions.Interact)
                         {
-                            EventBus.LatestInstance.Broadcast(MapEvent.InteractedWithRock, this);
+                            this.eventBus.Broadcast(MapEvent.InteractedWithRock, this);
                         }
                     }
                 });

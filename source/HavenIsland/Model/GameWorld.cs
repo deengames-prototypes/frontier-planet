@@ -19,7 +19,8 @@ namespace DeenGames.HavenIsland.Model
             this.AreaMap = new AreaMap();
             this.AreaMap.Contents.Add(new TreeModel(-1, 9, 6));
             this.AreaMap.Contents.Add(new RockModel(-1, 15, 5));
-            this.AreaMap.Contents.Add(new PlayerModel(9, 8));
+            // Doesn't make sense: passing in a new event bus here
+            this.AreaMap.Contents.Add(new PlayerModel(new Puffin.Core.Events.EventBus(), 9, 8));
         }
     }
 }
