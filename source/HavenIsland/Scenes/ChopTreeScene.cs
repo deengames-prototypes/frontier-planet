@@ -42,6 +42,7 @@ namespace DeenGames.HavenIsland.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
+            this.Add(new EnergyBar(this.EventBus));
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {

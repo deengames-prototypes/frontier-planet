@@ -46,6 +46,7 @@ namespace DeenGames.HavenIsland.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
+            this.Add(new EnergyBar(this.EventBus));
 
             this.label = new Entity(true).Label("");
             this.label.Get<TextLabelComponent>().FontSize = 48;

@@ -5,6 +5,8 @@ using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
 using Puffin.Core.Events;
+using System.IO;
+using System;
 
 namespace DeenGames.HavenIsland.Map.UI
 {
@@ -12,29 +14,31 @@ namespace DeenGames.HavenIsland.Map.UI
     {
         internal const int WIDTH = 16;
         internal int Height { get; set; } = GameWorld.LatestInstance.PlayerEnergy;
-        private const int PADDING = 16;
+        private const int PADDING = 16; // relative to the bottom-right of the parent window
+        private const int BAR_PADDING = 4; // Relative to backing PNG
 
         public EnergyBar(EventBus eventBus) : base(true)
         {
-            // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
-            this.Colour(0xf4b41b, WIDTH, Height);            
+            this.Sprite(Path.Combine("Content", "Images", "UI", "EnergyBar.png"));
+            this.Colour(0xf4b41b, WIDTH, Height, BAR_PADDING, this.CalculateOffsetY());
+            this.Move(
+                HavenIslandGame.LatestInstance.Width - PADDING - WIDTH,
+                HavenIslandGame.LatestInstance.Height - PADDING - GameWorld.LatestInstance.PlayerMaxEnergy);
             var text = this.Label("");
-            this.UpdatePosition();
 
             eventBus.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>
             {
-                this.Height = GameWorld.LatestInstance.PlayerEnergy;
-                this.UpdatePosition();
-                this.Colour(0xf4b41b, WIDTH, this.Height);
+                var colour = this.Get<ColourComponent>();
+                colour.Height = GameWorld.LatestInstance.PlayerEnergy;
+                colour.OffsetY = this.CalculateOffsetY();
             });
         }
 
-        private void UpdatePosition()
+        private int CalculateOffsetY()
         {
-            var energyDiff = (GameWorld.LatestInstance.PlayerMaxEnergy - GameWorld.LatestInstance.PlayerEnergy);
-            this.Move(HavenIslandGame.LatestInstance.Width - PADDING - WIDTH,
-                HavenIslandGame.LatestInstance.Height - (GameWorld.LatestInstance.PlayerMaxEnergy - energyDiff) - PADDING);
+            // Move the bar so that consuming energy diminishes it from the top of the bar
+            return BAR_PADDING + (GameWorld.LatestInstance.PlayerMaxEnergy - GameWorld.LatestInstance.PlayerEnergy);
         }
     }
 }
