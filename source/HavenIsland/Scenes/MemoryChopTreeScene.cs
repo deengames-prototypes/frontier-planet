@@ -16,15 +16,19 @@ namespace DeenGames.HavenIsland.Scenes
 {
     public class MemoryChopTreeScene : Scene
     {
-        private const int GRID_WIDTH = 5;
-        private const int GRID_HEIGHT = 5;
+        // Easy: 4x4. Hard: 8x8.
+        private const int GRID_WIDTH = 4;
+        private const int GRID_HEIGHT = 4;
         private const int TILE_WIDTH = 60;
         private const int TILE_HEIGHT = 60;
         private const int FONT_SIZE = 36;
         private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
-        private const int EnergyPerClick = 3;
+        private const int EnergyPerClick = 2;
         private const int ShowTilesSeconds = 1;
+        // Fix bar as 300px wide
+        private const int ProgressBarWidth = 300;
+        private const float TileToProgressBarConstant = ProgressBarWidth * 1.0f / GRID_WIDTH;
 
         private TreeModel model;
         private AreaMap map;
@@ -138,7 +142,7 @@ namespace DeenGames.HavenIsland.Scenes
             cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
 
-            this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, 300, 8, 8);
+            this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, ProgressBarWidth, 8, 8);
             this.progressBar.Move(GRID_TILES_X_OFFSET - 10, GRID_TILES_Y_OFFSET - 72);
             this.progressBar.Value = 0;
             
@@ -151,7 +155,7 @@ namespace DeenGames.HavenIsland.Scenes
             this.cursor.Get<SpriteComponent>().IsVisible = false;
 
             // Draw, sleep 1s, then hide the grid
-            this.After(ShowTilesSeconds, () => {
+            this.After(ShowTilesSeconds * 2, () => {
                 this.HideAllTiles();
                 this.cursor.Get<SpriteComponent>().IsVisible = true;
                 this.MoveCursorTo(this.gridTiles[GRID_WIDTH - 1, 0]);
@@ -172,6 +176,10 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 gridTile.Show();
                 this.lastClicked = gridTile;
+
+                GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+
                 return;
             }
             else
@@ -180,6 +188,9 @@ namespace DeenGames.HavenIsland.Scenes
                 if (Math.Abs(gridTile.TileX - lastClicked.TileX) == 1)
                 {
                     gridTile.Show();
+                    GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                    this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+
                     // Second click: match?
                     if (gridTile.Number == this.lastClicked.Number)
                     {
@@ -192,21 +203,20 @@ namespace DeenGames.HavenIsland.Scenes
                                 this.Remove(this.gridTiles[earlierRow + 1, y]);
                             }
 
-                            // Five tiles wide, so progress is 5-x for tile X we clicked on.
-                            var currentProgress = GRID_WIDTH - (earlierRow * TILE_WIDTH);
-                            this.progressBar.Value = currentProgress;
+                            // Six tiles wide, so progress is 6-x for tile X we clicked on.
+                            var currentProgress = (GRID_WIDTH - earlierRow) * TileToProgressBarConstant;
+                            this.progressBar.Value = (int)currentProgress;
 
-                            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-                            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
-
-                            this.MoveCursorTo(this.gridTiles[earlierRow - 1, 0]);
-
-                            if (false)
+                            if (earlierRow == 0)
                             {
                                 // Done
                                 // TODO: should probably use events for this
                                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
                                 HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                            }
+                            else
+                            {
+                                this.MoveCursorTo(this.gridTiles[earlierRow - 1, 0]);
                             }
                             
                             this.lastClicked = null;
