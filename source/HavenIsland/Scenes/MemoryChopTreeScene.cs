@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Timers;
 
 namespace DeenGames.HavenIsland.Scenes
 {
@@ -23,6 +24,7 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GRID_TILES_X_OFFSET = 300;
         private const int GRID_TILES_Y_OFFSET = 100;
         private const int EnergyPerClick = 3;
+        private const int ShowTilesSeconds = 1;
 
         private TreeModel model;
         private AreaMap map;
@@ -53,9 +55,7 @@ namespace DeenGames.HavenIsland.Scenes
                     var gridTile = new MemoryTreeTile(x, y)
                         .Move(GRID_TILES_X_OFFSET + (x * TILE_WIDTH), GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
 
-                    gridTile.Mouse(() => {
-                        this.OnTileSelected(gridTile as MemoryTreeTile);
-                    }, TILE_WIDTH, TILE_HEIGHT);
+                    gridTile.Mouse(() => this.OnTileSelected(gridTile as MemoryTreeTile), TILE_WIDTH, TILE_HEIGHT);
 
                     this.gridTiles[x, y] = gridTile as MemoryTreeTile;
                     this.Add(gridTile);
@@ -138,13 +138,21 @@ namespace DeenGames.HavenIsland.Scenes
             
             this.Add(this.progressBar);
 
-            this.cursor = new Entity(true)
-                .Sprite(Path.Combine("Content", "Images", "UI", "TileCursor.png"));
-            this.Add(this.cursor);
+            // Draw, sleep 1s, then hide the grid
+            var showTimer = new Timer(ShowTilesSeconds * 1000);
+            showTimer.Elapsed += (e, args) => {
+                foreach (var tile in this.gridTiles)
+                {
+                    tile.Hide();
+                }
 
-            this.MoveCursorTo(this.gridTiles[0, 0]);
+                this.cursor = new Entity(true)
+                    .Sprite(Path.Combine("Content", "Images", "UI", "TileCursor.png"));
+                this.Add(this.cursor);
+                this.MoveCursorTo(this.gridTiles[GRID_WIDTH - 1, 0]);
+            };
+            showTimer.Start();
         }
-
 
         private void MoveCursorTo(MemoryTreeTile tile)
         {
