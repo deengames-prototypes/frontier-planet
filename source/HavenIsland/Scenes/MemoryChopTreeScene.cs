@@ -151,15 +151,12 @@ namespace DeenGames.HavenIsland.Scenes
             this.cursor.Get<SpriteComponent>().IsVisible = false;
 
             // Draw, sleep 1s, then hide the grid
-            var showTimer = new Timer(ShowTilesSeconds * 1000);
-            showTimer.Elapsed += (e, args) => {
+            this.After(ShowTilesSeconds, () => {
                 this.HideAllTiles();
                 this.cursor.Get<SpriteComponent>().IsVisible = true;
                 this.MoveCursorTo(this.gridTiles[GRID_WIDTH - 1, 0]);
                 this.canPlayerInteract = true;
-            };
-            showTimer.AutoReset = false;
-            showTimer.Start();
+            });
         }
 
         private void MoveCursorTo(MemoryTreeTile tile)
@@ -186,41 +183,44 @@ namespace DeenGames.HavenIsland.Scenes
                     // Second click: match?
                     if (gridTile.Number == this.lastClicked.Number)
                     {
-                        // Remove both rows
-                        var earlierRow = Math.Min(gridTile.TileX, this.lastClicked.TileX);
-                        for (var y = 0; y < GRID_HEIGHT; y++)
-                        {
-                            this.Remove(this.gridTiles[earlierRow, y]);
-                            this.Remove(this.gridTiles[earlierRow + 1, y]);
-                        }
+                        this.After(ShowTilesSeconds, () => {
+                            // Remove both rows
+                            var earlierRow = Math.Min(gridTile.TileX, this.lastClicked.TileX);
+                            for (var y = 0; y < GRID_HEIGHT; y++)
+                            {
+                                this.Remove(this.gridTiles[earlierRow, y]);
+                                this.Remove(this.gridTiles[earlierRow + 1, y]);
+                            }
 
-                        // Five tiles wide, so progress is 5-x for tile X we clicked on.
-                        var currentProgress = GRID_WIDTH - (earlierRow * TILE_WIDTH);
-                        this.progressBar.Value = currentProgress;
+                            // Five tiles wide, so progress is 5-x for tile X we clicked on.
+                            var currentProgress = GRID_WIDTH - (earlierRow * TILE_WIDTH);
+                            this.progressBar.Value = currentProgress;
 
-                        GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-                        this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+                            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
 
-                        if (false)
-                        {
-                            // Done
-                            // TODO: should probably use events for this
-                            GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                            HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
-                        }
+                            this.MoveCursorTo(this.gridTiles[earlierRow - 1, 0]);
+
+                            if (false)
+                            {
+                                // Done
+                                // TODO: should probably use events for this
+                                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
+                                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                            }
+                            
+                            this.lastClicked = null;
+                        });
                     }
                     else
                     {
+                        this.lastClicked = null;
                         this.canPlayerInteract = false;
-                        var timer = new Timer(ShowTilesSeconds * 1000) { AutoReset = false };
-                        timer.Elapsed += (e, args) => {
+                        this.After(ShowTilesSeconds, () => {
                             this.HideAllTiles();
                             this.canPlayerInteract = true;
-                        };
-                        timer.Start();
+                        });
                     }
-
-                    this.lastClicked = null;
                 }
             }
         }
@@ -231,6 +231,13 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 tile.Hide();
             }
+        }
+
+        private void After(int seconds, Action callback)
+        {
+            var timer = new Timer(seconds * 1000) { AutoReset = false };
+            timer.Elapsed += (e, args) => callback.Invoke();
+            timer.Start();
         }
 
         class MemoryTreeTile : Entity
