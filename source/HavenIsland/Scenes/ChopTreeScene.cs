@@ -14,17 +14,17 @@ namespace DeenGames.HavenIsland.Scenes
 {
     public class ChopTreeScene : Scene
     {
-        private const int GRID_WIDTH = 5;
-        private const int GRID_HEIGHT = 5;
-        private const int TILE_WIDTH = 60;
-        private const int TILE_HEIGHT = 60;
-        private const int FONT_SIZE = 36;
-        private const int GRID_TILES_X_OFFSET = 300;
-        private const int GRID_TILES_Y_OFFSET = 100;
+        private const int GridWidth = 5;
+        private const int GridHeight = 5;
+        private const int TileWidth = 60;
+        private const int TileHeight = 60;
+        private const int FontSize = 36;
+        private const int GridTilesXOffset = 300;
+        private const int GridTilesYOffset = 100;
 
         private TreeModel model;
         private AreaMap map;
-        private TreeTile[,] gridTiles = new TreeTile[GRID_WIDTH, GRID_HEIGHT];
+        private TreeTile[,] gridTiles = new TreeTile[GridWidth, GridHeight];
         private TreeTile lastClicked;
         private HorizontalProgressBar progressBar;
         private Entity cursor;
@@ -44,22 +44,22 @@ namespace DeenGames.HavenIsland.Scenes
             this.BackgroundColour = 0x397b44;
             this.Add(new EnergyBar(this.EventBus));
 
-            for (int y = 0; y < GRID_HEIGHT; y++)
+            for (int y = 0; y < GridHeight; y++)
             {
-                for (int x = 0; x < GRID_WIDTH; x++)
+                for (int x = 0; x < GridWidth; x++)
                 {
                     var gridTile = new TreeTile(x, y)
-                        .Move(GRID_TILES_X_OFFSET + (x * TILE_WIDTH), GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
+                        .Move(GridTilesXOffset + (x * TileWidth), GridTilesYOffset + (y * TileHeight));
 
                     gridTile
                         .Mouse(() => {
                             this.OnTileSelected(gridTile as TreeTile);
-                        }, TILE_WIDTH, TILE_HEIGHT);
+                        }, TileWidth, TileHeight);
 
                     this.gridTiles[x, y] = gridTile as TreeTile;
                     this.Add(gridTile);
 
-                    if (x == GRID_WIDTH - 1)
+                    if (x == GridWidth - 1)
                     {
                         (gridTile as TreeTile).Show();
                     }
@@ -88,7 +88,7 @@ namespace DeenGames.HavenIsland.Scenes
                     {
                         this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 - 1]);
                     }
-                    else if (puff == PuffinAction.Down && this.cursorTile.TileIndicies.Item2 < GRID_HEIGHT - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 + 1].IsDiscovered)
+                    else if (puff == PuffinAction.Down && this.cursorTile.TileIndicies.Item2 < GridHeight - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 + 1].IsDiscovered)
                     {
                         this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1, this.cursorTile.TileIndicies.Item2 + 1]);
                     }
@@ -96,7 +96,7 @@ namespace DeenGames.HavenIsland.Scenes
                     {
                         this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1 - 1, this.cursorTile.TileIndicies.Item2]);
                     }
-                    else if (puff == PuffinAction.Right && this.cursorTile.TileIndicies.Item1 < GRID_WIDTH - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1 + 1, this.cursorTile.TileIndicies.Item2].IsDiscovered)
+                    else if (puff == PuffinAction.Right && this.cursorTile.TileIndicies.Item1 < GridWidth - 1 && this.gridTiles[this.cursorTile.TileIndicies.Item1 + 1, this.cursorTile.TileIndicies.Item2].IsDiscovered)
                     {
                         this.MoveCursorTo(this.gridTiles[this.cursorTile.TileIndicies.Item1 + 1, this.cursorTile.TileIndicies.Item2]);
                     }
@@ -110,7 +110,7 @@ namespace DeenGames.HavenIsland.Scenes
             this.Add(cancelButton);
 
             this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, 300, 8, 8);
-            this.progressBar.Move(GRID_TILES_X_OFFSET - 10, GRID_TILES_Y_OFFSET - 72);
+            this.progressBar.Move(GridTilesXOffset - 10, GridTilesYOffset - 72);
             this.progressBar.Value = 0;
             
             this.Add(this.progressBar);
@@ -135,9 +135,9 @@ namespace DeenGames.HavenIsland.Scenes
 
         private TreeTile FirstGridTile(Func<TreeTile, bool> lambda)
         {
-            for (var y = 0; y < GRID_HEIGHT; y++)
+            for (var y = 0; y < GridHeight; y++)
             {
-                for (var x = 0; x < GRID_WIDTH; x++)
+                for (var x = 0; x < GridWidth; x++)
                 {
                     var currentTile = gridTiles[x, y];
                     if (lambda.Invoke(currentTile) == true)
@@ -158,7 +158,7 @@ namespace DeenGames.HavenIsland.Scenes
                 this.Remove(gridTile);
                 
                 // Five tiles wide, so progress is 5-x for tile X we clicked on.
-                var currentProgress = (GRID_WIDTH - this.lastClicked.TileIndicies.Item1) * TILE_WIDTH;
+                var currentProgress = (GridWidth - this.lastClicked.TileIndicies.Item1) * TileWidth;
                 this.progressBar.Value = currentProgress;
 
                 GameWorld.LatestInstance.PlayerEnergy -= gridTile.Integrity;
@@ -181,9 +181,9 @@ namespace DeenGames.HavenIsland.Scenes
 
         private void ShowHideGridTiles()
         {
-            for (int y = 0; y < GRID_HEIGHT; y++)
+            for (int y = 0; y < GridHeight; y++)
             {
-                for (int x = 0; x < GRID_WIDTH; x++)
+                for (int x = 0; x < GridWidth; x++)
                 {
                     this.gridTiles[x, y].Hide();
                     var tileX = this.lastClicked.TileIndicies.Item1;
@@ -210,7 +210,7 @@ namespace DeenGames.HavenIsland.Scenes
                 this.Integrity = 3 + random.Next(5); // 3-7
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Tree-Texture.png"))
                     .Label($"", 10, -10);
-                this.Get<TextLabelComponent>().FontSize = FONT_SIZE * 2;
+                this.Get<TextLabelComponent>().FontSize = FontSize * 2;
             }
 
             public void Show()

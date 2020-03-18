@@ -12,8 +12,8 @@ namespace DeenGames.HavenIsland.Scenes
 {
     public class MapScene : Scene
     {
-        private const int MAP_WIDTH = 40;
-        private const int MAP_HEIGHT = 23;
+        private const int MapWidth = 40;
+        private const int MapHeight = 23;
         private Entity player;
         private AreaMap map;
 
@@ -25,11 +25,11 @@ namespace DeenGames.HavenIsland.Scenes
         override public void Ready()
         {
             // Setup ground, trees, player, etc.
-            var groundTileMap = new TileMap(MAP_WIDTH, MAP_HEIGHT, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
+            var groundTileMap = new TileMap(MapWidth, MapHeight, Path.Join("Content", "Images", "Tilesets", "Outside.png"), 32, 32);
             groundTileMap.Define("Grass", 0, 0);
-            for (var y = 0; y < MAP_HEIGHT; y++)
+            for (var y = 0; y < MapHeight; y++)
             {
-                for (var x = 0; x < MAP_WIDTH; x++)
+                for (var x = 0; x < MapWidth; x++)
                 {
                     groundTileMap.Set(x, y, "Grass");
                 }
@@ -41,15 +41,15 @@ namespace DeenGames.HavenIsland.Scenes
             {
                 if (item is TreeModel)
                 {
-                    this.Add(new Tree(this.EventBus, item as TreeModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                    this.Add(new Tree(this.EventBus, item as TreeModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
                 }
                 else if (item is RockModel)
                 {
-                    this.Add(new Rock(this.EventBus, item as RockModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT));
+                    this.Add(new Rock(this.EventBus, item as RockModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
                 }
                 else if (item is PlayerModel)
                 {
-                    this.player = new Player(this.EventBus, item as PlayerModel).Move(item.X * Constants.TILE_WIDTH, item.Y * Constants.TILE_HEIGHT);
+                    this.player = new Player(this.EventBus, item as PlayerModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight);
                     this.Add(this.player);   
                 }
             }
@@ -86,14 +86,14 @@ namespace DeenGames.HavenIsland.Scenes
                 this.TweenPosition(
                     this.player, new System.Tuple<float, float>(this.player.X, this.player.Y),
                     new System.Tuple<float, float>(
-                        this.player.X + (dx * Constants.TILE_WIDTH),
-                        this.player.Y + (dy * Constants.TILE_HEIGHT))
+                        this.player.X + (dx * Constants.TileWidth),
+                        this.player.Y + (dy * Constants.TileHeight))
                         , Player.SecondsToMoveToTile,
                         () => (this.player as Player).IsMoving = false);
             });
 
             // Camera
-            this.Add(new Entity().Camera(Constants.GAME_ZOOM));
+            this.Add(new Entity().Camera(Constants.GameZoom));
         }
     }
 }
