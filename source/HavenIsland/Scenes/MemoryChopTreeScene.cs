@@ -153,11 +153,7 @@ namespace DeenGames.HavenIsland.Scenes
             // Draw, sleep 1s, then hide the grid
             var showTimer = new Timer(ShowTilesSeconds * 1000);
             showTimer.Elapsed += (e, args) => {
-                foreach (var tile in this.gridTiles)
-                {
-                    tile.Hide();
-                }
-
+                this.HideAllTiles();
                 this.cursor.Get<SpriteComponent>().IsVisible = true;
                 this.MoveCursorTo(this.gridTiles[GRID_WIDTH - 1, 0]);
                 this.canPlayerInteract = true;
@@ -173,22 +169,67 @@ namespace DeenGames.HavenIsland.Scenes
         }
 
         private void OnTileSelected(MemoryTreeTile gridTile)
-        {
-            this.lastClicked = gridTile;
-            
-            // Five tiles wide, so progress is 5-x for tile X we clicked on.
-            var currentProgress = 0; // ???
-            this.progressBar.Value = currentProgress;
-
-            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
-
-            if (false)
+        {            
+            // First or second click?
+            if (this.lastClicked == null)
             {
-                // Done
-                // TODO: should probably use events for this
-                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                gridTile.Show();
+                this.lastClicked = gridTile;
+                return;
+            }
+            else
+            {
+                // Don't do anything if we didn't pick two adjacent rows
+                if (Math.Abs(gridTile.TileX - lastClicked.TileX) == 1)
+                {
+                    gridTile.Show();
+                    // Second click: match?
+                    if (gridTile.Number == this.lastClicked.Number)
+                    {
+                        // Remove both rows
+                        var earlierRow = Math.Min(gridTile.TileX, this.lastClicked.TileX);
+                        for (var y = 0; y < GRID_HEIGHT; y++)
+                        {
+                            this.Remove(this.gridTiles[earlierRow, y]);
+                            this.Remove(this.gridTiles[earlierRow + 1, y]);
+                        }
+
+                        // Five tiles wide, so progress is 5-x for tile X we clicked on.
+                        var currentProgress = GRID_WIDTH - (earlierRow * TILE_WIDTH);
+                        this.progressBar.Value = currentProgress;
+
+                        GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                        this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+
+                        if (false)
+                        {
+                            // Done
+                            // TODO: should probably use events for this
+                            GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
+                            HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                        }
+                    }
+                    else
+                    {
+                        this.canPlayerInteract = false;
+                        var timer = new Timer(ShowTilesSeconds * 1000) { AutoReset = false };
+                        timer.Elapsed += (e, args) => {
+                            this.HideAllTiles();
+                            this.canPlayerInteract = true;
+                        };
+                        timer.Start();
+                    }
+
+                    this.lastClicked = null;
+                }
+            }
+        }
+
+        private void HideAllTiles()
+        {
+            foreach (var tile in this.gridTiles)
+            {
+                tile.Hide();
             }
         }
 
