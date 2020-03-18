@@ -33,6 +33,7 @@ namespace DeenGames.HavenIsland.Scenes
         private HorizontalProgressBar progressBar;
         private Entity cursor;
         private MemoryTreeTile cursorTile;
+        private bool canPlayerInteract = false;
 
         public MemoryChopTreeScene(AreaMap map, TreeModel model)
         {
@@ -55,15 +56,16 @@ namespace DeenGames.HavenIsland.Scenes
                     var gridTile = new MemoryTreeTile(x, y)
                         .Move(GRID_TILES_X_OFFSET + (x * TILE_WIDTH), GRID_TILES_Y_OFFSET + (y * TILE_HEIGHT));
 
-                    gridTile.Mouse(() => this.OnTileSelected(gridTile as MemoryTreeTile), TILE_WIDTH, TILE_HEIGHT);
+                    gridTile.Mouse(() =>
+                    {
+                        if (canPlayerInteract)
+                        {
+                            this.OnTileSelected(gridTile as MemoryTreeTile);
+                        }
+                    }, TILE_WIDTH, TILE_HEIGHT);
 
                     this.gridTiles[x, y] = gridTile as MemoryTreeTile;
                     this.Add(gridTile);
-
-                    if (x == GRID_WIDTH - 1)
-                    {
-                        (gridTile as MemoryTreeTile).Show();
-                    }
                 }
             }
             
@@ -92,36 +94,40 @@ namespace DeenGames.HavenIsland.Scenes
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
-                if (data is HavenIslandActions)
+                if (canPlayerInteract)
                 {
-                    var havenAction = (HavenIslandActions)data;
-                    if (havenAction == HavenIslandActions.Cancel)
+                    if (data is HavenIslandActions)
                     {
-                        HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                        var havenAction = (HavenIslandActions)data;
+                        if (havenAction == HavenIslandActions.Cancel)
+                        {
+                            HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                        }
+                        else if (havenAction == HavenIslandActions.Interact)
+                        {
+                            this.OnTileSelected(this.cursorTile);
+                        }
                     }
-                    else if (havenAction == HavenIslandActions.Interact)
+                    else if (data is PuffinAction)
                     {
-                        this.OnTileSelected(this.cursorTile);
-                    }
-                }
-                else if (data is PuffinAction)
-                {
-                    var puff = (PuffinAction)data;
-                    if (puff == PuffinAction.Up && this.cursorTile.TileY > 0)
-                    {
-                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX, this.cursorTile.TileY - 1]);
-                    }
-                    else if (puff == PuffinAction.Down && this.cursorTile.TileY < GRID_HEIGHT - 1)
-                    {
-                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX, this.cursorTile.TileY + 1]);
-                    }
-                    else if (puff == PuffinAction.Left && this.cursorTile.TileX > 0)
-                    {
-                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX - 1, this.cursorTile.TileY]);
-                    }
-                    else if (puff == PuffinAction.Right && this.cursorTile.TileX < GRID_WIDTH - 1)
-                    {
-                        this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX + 1, this.cursorTile.TileY]);
+                        var puff = (PuffinAction)data;
+                        if (puff == PuffinAction.Up && this.cursorTile.TileY > 0)
+                        {
+                            this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX, this.cursorTile.TileY - 1]);
+                        }
+                        else if (puff == PuffinAction.Down && this.cursorTile.TileY < GRID_HEIGHT - 1)
+                        {
+                            this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX, this.cursorTile.TileY + 1]);
+                        }
+                        else if (puff == PuffinAction.Left && this.cursorTile.TileX > 0)
+                        {
+                            this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX - 1, this.cursorTile.TileY]);
+                        }
+                        else if (puff == PuffinAction.Right && this.cursorTile.TileX < GRID_WIDTH - 1)
+                        {
+                            this.MoveCursorTo(this.gridTiles[this.cursorTile.TileX + 1, this.cursorTile.TileY]);
+                        }
+                        
                     }
                 }
             };
@@ -138,6 +144,12 @@ namespace DeenGames.HavenIsland.Scenes
             
             this.Add(this.progressBar);
 
+            this.cursor = new Entity(true)
+                .Sprite(Path.Combine("Content", "Images", "UI", "TileCursor.png"));
+            this.Add(this.cursor);
+
+            this.cursor.Get<SpriteComponent>().IsVisible = false;
+
             // Draw, sleep 1s, then hide the grid
             var showTimer = new Timer(ShowTilesSeconds * 1000);
             showTimer.Elapsed += (e, args) => {
@@ -146,11 +158,11 @@ namespace DeenGames.HavenIsland.Scenes
                     tile.Hide();
                 }
 
-                this.cursor = new Entity(true)
-                    .Sprite(Path.Combine("Content", "Images", "UI", "TileCursor.png"));
-                this.Add(this.cursor);
+                this.cursor.Get<SpriteComponent>().IsVisible = true;
                 this.MoveCursorTo(this.gridTiles[GRID_WIDTH - 1, 0]);
+                this.canPlayerInteract = true;
             };
+            showTimer.AutoReset = false;
             showTimer.Start();
         }
 
@@ -158,23 +170,6 @@ namespace DeenGames.HavenIsland.Scenes
         {
             this.cursor.Move(tile.X, tile.Y);
             this.cursorTile = tile;
-        }
-
-        private MemoryTreeTile FirstGridTile(Func<MemoryTreeTile, bool> lambda)
-        {
-            for (var y = 0; y < GRID_HEIGHT; y++)
-            {
-                for (var x = 0; x < GRID_WIDTH; x++)
-                {
-                    var currentTile = gridTiles[x, y];
-                    if (lambda.Invoke(currentTile) == true)
-                    {
-                        return currentTile;
-                    }
-                }
-            }
-
-            return null;
         }
 
         private void OnTileSelected(MemoryTreeTile gridTile)
