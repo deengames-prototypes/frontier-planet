@@ -4,7 +4,6 @@ using DeenGames.HavenIsland.Map.UI;
 using DeenGames.HavenIsland.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
-using Puffin.Core.Events;
 using Puffin.Core.Tiles;
 using System;
 using System.IO;
@@ -66,7 +65,7 @@ namespace DeenGames.HavenIsland.Scenes
                 var tree = obj as Tree;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithTree))
                 {
-                    this.ShowSubScene(new ChopTreeScene(this.map, tree.Model));
+                    this.ShowSubScene(new MemoryChopTreeScene(this.map, tree.Model));
                 }
             });
 
