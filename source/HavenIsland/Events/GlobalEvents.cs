@@ -1,4 +1,4 @@
-namespace DeenGames.HavenIsland.Events
+namespace DeenGames.FrontierPlanet.Events
 {
     public enum GlobalEvents
     {

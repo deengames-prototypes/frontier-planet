@@ -1,4 +1,4 @@
-namespace DeenGames.HavenIsland
+namespace DeenGames.FrontierPlanet
 {
     internal static class Constants
     {

@@ -1,6 +1,6 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Map.UI;
-using DeenGames.HavenIsland.Model;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Map.UI;
+using DeenGames.FrontierPlanet.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
@@ -10,7 +10,7 @@ using Puffin.UI.Controls;
 using System;
 using System.IO;
 
-namespace DeenGames.HavenIsland.Scenes
+namespace DeenGames.FrontierPlanet.Scenes
 {
     public class ChopTreeScene : Scene
     {

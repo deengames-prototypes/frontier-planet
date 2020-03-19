@@ -1,11 +1,11 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Model;
-using DeenGames.HavenIsland.Scenes;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Scenes;
 using Microsoft.Xna.Framework.Input;
 using Puffin.Infrastructure.MonoGame;
 using System.Collections.Generic;
 
-namespace DeenGames.HavenIsland
+namespace DeenGames.FrontierPlanet
 {
     public class HavenIslandGame : PuffinGame
     {

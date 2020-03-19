@@ -1,4 +1,4 @@
-namespace DeenGames.HavenIsland.Model
+namespace DeenGames.FrontierPlanet.Model
 {
     public static class Options
     {

@@ -1,4 +1,4 @@
-namespace DeenGames.HavenIsland.Model
+namespace DeenGames.FrontierPlanet.Model
 {
     public class MapObject
     {

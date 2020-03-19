@@ -1,7 +1,7 @@
-using DeenGames.HavenIsland.Events;
+using DeenGames.FrontierPlanet.Events;
 using Puffin.Core.Events;
 
-namespace DeenGames.HavenIsland.Model
+namespace DeenGames.FrontierPlanet.Model
 {
     public class PlayerModel : MapObject
     {

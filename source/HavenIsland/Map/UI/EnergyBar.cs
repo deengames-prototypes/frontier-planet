@@ -1,6 +1,6 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Model;
-using DeenGames.HavenIsland.Map.Entities;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Map.Entities;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
@@ -8,7 +8,7 @@ using Puffin.Core.Events;
 using System.IO;
 using System;
 
-namespace DeenGames.HavenIsland.Map.UI
+namespace DeenGames.FrontierPlanet.Map.UI
 {
     class EnergyBar : Entity
     {

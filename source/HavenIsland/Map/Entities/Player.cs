@@ -1,12 +1,12 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Model;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Model;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using Puffin.Core.IO;
 using System;
 using System.IO;
 
-namespace DeenGames.HavenIsland.Map.Entities
+namespace DeenGames.FrontierPlanet.Map.Entities
 {
     public class Player : Entity
     {

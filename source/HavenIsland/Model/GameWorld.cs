@@ -1,4 +1,4 @@
-namespace DeenGames.HavenIsland.Model
+namespace DeenGames.FrontierPlanet.Model
 {
     // Represents a single save-game world. Maybe it should be called GameWorld.
     public class GameWorld

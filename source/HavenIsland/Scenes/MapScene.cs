@@ -1,14 +1,14 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Map.Entities;
-using DeenGames.HavenIsland.Map.UI;
-using DeenGames.HavenIsland.Model;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Map.Entities;
+using DeenGames.FrontierPlanet.Map.UI;
+using DeenGames.FrontierPlanet.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Tiles;
 using System;
 using System.IO;
 
-namespace DeenGames.HavenIsland.Scenes
+namespace DeenGames.FrontierPlanet.Scenes
 {
     public class MapScene : Scene
     {

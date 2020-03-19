@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeenGames.HavenIsland.Model
+namespace DeenGames.FrontierPlanet.Model
 {
     public class AreaMap
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeenGames.HavenIsland
+namespace DeenGames.FrontierPlanet
 {
     class Program
     {

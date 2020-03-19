@@ -1,9 +1,9 @@
-using DeenGames.HavenIsland.Events;
-using DeenGames.HavenIsland.Model;
+using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Model;
 using NUnit.Framework;
 using Puffin.Core.Events;
 
-namespace DeenGames.HavenIsland.UnitTests.Model
+namespace DeenGames.FrontierPlanet.UnitTests.Model
 {
     [TestFixture]
     public class PlayerModelTests
