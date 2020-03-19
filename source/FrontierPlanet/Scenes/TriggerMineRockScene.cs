@@ -20,8 +20,14 @@ namespace DeenGames.FrontierPlanet.Scenes
         private const int HIT_TILE_ENERGY_COST = 3;
         private bool isOnStreak = false;
         private int rocksGained = 0;
-
+        
         private Entity rocksGainedLabel;
+
+        // Trigger bar
+        private Entity triggerBar = new Entity();
+        private Entity hitArea = new Entity();
+        private Entity triggerArrow = new Entity();
+
         private AreaMap map;
         private RockModel model;
 
@@ -42,7 +48,19 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.rocksGainedLabel = new Entity(true).Label("Mined 0 rocks");
             this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.rocksGainedLabel);
-            this.rocksGainedLabel.Move(300, 100);
+            this.rocksGainedLabel.Move(300, 50);
+
+            this.triggerBar = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar.png"))
+                .Move(this.rocksGainedLabel.X, this.rocksGainedLabel.Y + 100);
+            // Starts roughly in the middle of the bar
+            this.hitArea = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar-Hit-Area.png"))
+                .Move(this.triggerBar.X + 250, this.triggerBar.Y);
+            this.triggerArrow = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar-Arrow.png"))
+                .Move(this.triggerBar.X, this.triggerBar.Y - 32);
+
+            this.Add(this.triggerBar);
+            this.Add(this.hitArea);
+            this.Add(this.triggerArrow);
 
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
