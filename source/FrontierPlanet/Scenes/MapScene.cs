@@ -75,7 +75,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 var model = rock.Model;
                 if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithRock))
                 {
-                    this.ShowSubScene(new MineRockScene(this.map, rock.Model));
+                    this.ShowSubScene(new TriggerMineRockScene(this.map, rock.Model));
                 }
             });
 
