@@ -42,10 +42,10 @@ namespace DeenGames.FrontierPlanet.UnitTests.Model
 
         [TestCase(MapEvent.ChoppedDownTree)]
         [TestCase(MapEvent.MinedRock)]
-        public void BroadcastingAppropriateMapEventubtractsEnergy(MapEvent m)
+        public void BroadcastingAppropriateMapEventSubtractsEnergy(MapEvent m)
         {
             var eventBus = new EventBus();
-            var model = new PlayerModel(new EventBus(), 0, 0);
+            var model = new PlayerModel(eventBus, 0, 0);
             eventBus.Broadcast(m);
             Assert.That(GameWorld.LatestInstance.PlayerEnergy, Is.LessThan(GameWorld.LatestInstance.PlayerMaxEnergy));
         }
