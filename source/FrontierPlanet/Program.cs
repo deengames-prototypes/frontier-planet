@@ -6,7 +6,7 @@ namespace DeenGames.FrontierPlanet
     {
         static void Main(string[] args)
         {
-            using (var game = new HavenIslandGame())
+            using (var game = new FrontierPlanetGame())
             {
                 game.Run();
             }

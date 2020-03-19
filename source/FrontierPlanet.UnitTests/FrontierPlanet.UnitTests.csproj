@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Puffin\Puffin.Core\Puffin.Core.csproj" />
-    <ProjectReference Include="..\HavenIsland\HavenIsland.csproj" />
+    <ProjectReference Include="..\FrontierPlanet\FrontierPlanet.csproj" />
   </ItemGroup>
 
 </Project>

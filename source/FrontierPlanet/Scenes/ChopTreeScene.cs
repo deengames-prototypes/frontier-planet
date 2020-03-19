@@ -69,14 +69,14 @@ namespace DeenGames.FrontierPlanet.Scenes
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
-                if (data is HavenIslandActions)
+                if (data is FrontierPlanetActions)
                 {
-                    var havenAction = (HavenIslandActions)data;
-                    if (havenAction == HavenIslandActions.Cancel)
+                    var havenAction = (FrontierPlanetActions)data;
+                    if (havenAction == FrontierPlanetActions.Cancel)
                     {
-                        HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                        FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
                     }
-                    else if (havenAction == HavenIslandActions.Interact)
+                    else if (havenAction == FrontierPlanetActions.Interact)
                     {
                         this.OnTileSelected(this.cursorTile);
                     }
@@ -103,10 +103,10 @@ namespace DeenGames.FrontierPlanet.Scenes
                 }
             };
 
-            var cancelButton = new Button("", () => HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map)))
+            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             
-            cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
+            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
 
             this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, 300, 8, 8);
@@ -169,7 +169,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                     // Done
                     // TODO: should probably use events for this
                     GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                    HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
                 }
                 else
                 {

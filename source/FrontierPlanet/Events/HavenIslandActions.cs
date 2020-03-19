@@ -1,6 +1,6 @@
 namespace DeenGames.FrontierPlanet.Events
 {
-    public enum HavenIslandActions
+    public enum FrontierPlanetActions
     {
         // Interact with trees, rocks, people, select stuff, etc.
         Interact,

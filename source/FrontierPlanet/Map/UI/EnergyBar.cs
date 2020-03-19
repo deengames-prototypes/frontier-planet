@@ -23,8 +23,8 @@ namespace DeenGames.FrontierPlanet.Map.UI
             this.Sprite(Path.Combine("Content", "Images", "UI", "EnergyBar.png"));
             this.Colour(0xf4b41b, WIDTH, Height, BAR_PADDING, this.CalculateOffsetY());
             this.Move(
-                HavenIslandGame.LatestInstance.Width - PADDING - WIDTH,
-                HavenIslandGame.LatestInstance.Height - PADDING - GameWorld.LatestInstance.PlayerMaxEnergy);
+                FrontierPlanetGame.LatestInstance.Width - PADDING - WIDTH,
+                FrontierPlanetGame.LatestInstance.Height - PADDING - GameWorld.LatestInstance.PlayerMaxEnergy);
             var text = this.Label("");
 
             eventBus.Subscribe(GlobalEvents.ConsumedEnergy, (amount) =>

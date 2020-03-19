@@ -56,7 +56,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.streakLabel = new Entity(true).Label("");
             this.streakLabel.Get<TextLabelComponent>().FontSize = 48;
             this.Add(this.streakLabel);
-            this.streakLabel.Move((int)this.label.X - 64, HavenIslandGame.LatestInstance.Height - 72);
+            this.streakLabel.Move((int)this.label.X - 64, FrontierPlanetGame.LatestInstance.Height - 72);
 
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
@@ -81,16 +81,16 @@ namespace DeenGames.FrontierPlanet.Scenes
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
-                if ((HavenIslandActions)data == HavenIslandActions.Cancel)
+                if ((FrontierPlanetActions)data == FrontierPlanetActions.Cancel)
                 {
-                    HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
                 }
             };
 
-            var cancelButton = new Button("", () => HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map)))
+            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             
-            cancelButton.Move(HavenIslandGame.LatestInstance.Width - 40 - 16, 16);
+            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
 
             this.PickTargetNumber();
@@ -168,7 +168,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             if (tilesLeft <= 0)
             {
                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                HavenIslandGame.LatestInstance.ShowScene(new MapScene(this.map));
+                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
             }
             else
             {

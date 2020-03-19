@@ -19,12 +19,12 @@ namespace DeenGames.FrontierPlanet.Map.Entities
             
             this.Sprite(Path.Join("Content", "Images", "Tilesets", "Rock.png"))
                 .Keyboard((data) => {
-                    if (data is HavenIslandActions)
+                    if (data is FrontierPlanetActions)
                     {
-                        var action = (HavenIslandActions)data;
+                        var action = (FrontierPlanetActions)data;
                         var player = GameWorld.LatestInstance.AreaMap.Player;
                         var distance = Math.Sqrt(Math.Pow(this.Model.X - player.X, 2) + Math.Pow(this.Model.Y - player.Y, 2));
-                        if (distance == 1 && action == HavenIslandActions.Interact)
+                        if (distance == 1 && action == FrontierPlanetActions.Interact)
                         {
                             this.eventBus.Broadcast(MapEvent.InteractedWithRock, this);
                         }

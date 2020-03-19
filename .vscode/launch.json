@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/source/HavenIsland/bin/Debug/netcoreapp3.1/HavenIsland.dll",
+            "program": "${workspaceFolder}/source/FrontierPlanet/bin/Debug/netcoreapp3.1/FrontierPlanet.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/source/HavenIsland",
+            "cwd": "${workspaceFolder}/source/FrontierPlanet",
             "console": "internalConsole",
             "stopAtEntry": false
         },
