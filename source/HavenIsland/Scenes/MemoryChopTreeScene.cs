@@ -190,6 +190,7 @@ namespace DeenGames.HavenIsland.Scenes
                     gridTile.Show();
                     GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
                     this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+                    this.canPlayerInteract = false;
 
                     // Second click: match?
                     if (gridTile.Number == this.lastClicked.Number)
@@ -220,12 +221,12 @@ namespace DeenGames.HavenIsland.Scenes
                             }
                             
                             this.lastClicked = null;
+                            this.canPlayerInteract = true;
                         });
                     }
                     else
                     {
                         this.lastClicked = null;
-                        this.canPlayerInteract = false;
                         this.After(showTilesSeconds, () => {
                             this.HideAllTiles();
                             this.canPlayerInteract = true;
