@@ -16,8 +16,10 @@ namespace DeenGames.FrontierPlanet.Scenes
 {
     public class TriggerMineRockScene : Scene
     {
-        private const int FONT_SIZE = 72;
-        private const int HIT_TILE_ENERGY_COST = 3;
+        private const int FontSize = 48;
+        private const int ArrowVelocity = 500;
+        private int maxArrowX;
+        private int minArrowX;
         private bool isOnStreak = false;
         private int rocksGained = 0;
         
@@ -27,6 +29,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private Entity triggerBar = new Entity();
         private Entity hitArea = new Entity();
         private Entity triggerArrow = new Entity();
+        private bool arrowMovingRight = true;
 
         private AreaMap map;
         private RockModel model;
@@ -46,7 +49,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(new EnergyBar(this.EventBus));
 
             this.rocksGainedLabel = new Entity(true).Label("Mined 0 rocks");
-            this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = 48;
+            this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = FontSize;
             this.Add(this.rocksGainedLabel);
             this.rocksGainedLabel.Move(300, 50);
 
@@ -62,6 +65,9 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(this.hitArea);
             this.Add(this.triggerArrow);
 
+            maxArrowX = (int)(this.triggerBar.X + this.triggerBar.Get<SpriteComponent>().Width - this.triggerArrow.Get<SpriteComponent>().Width);
+            minArrowX = (int)(this.triggerBar.X - this.triggerArrow.Get<SpriteComponent>().Width);
+
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
@@ -76,6 +82,29 @@ namespace DeenGames.FrontierPlanet.Scenes
             
             cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
+        }
+
+        override public void Update(float elapsedSeconds)
+        {
+            base.Update(elapsedSeconds);
+            if (this.arrowMovingRight && this.triggerArrow.X < maxArrowX)
+            {
+                this.triggerArrow.X += ArrowVelocity * elapsedSeconds;
+                if (this.triggerArrow.X >= maxArrowX)
+                {
+                    this.arrowMovingRight = !this.arrowMovingRight;
+                    this.triggerArrow.X = maxArrowX;
+                }
+            }
+            else if (!this.arrowMovingRight && this.triggerArrow.X > minArrowX)
+            {
+                this.triggerArrow.X -= ArrowVelocity * elapsedSeconds;
+                if (this.triggerArrow.X <= minArrowX)
+                {
+                    this.arrowMovingRight = !this.arrowMovingRight;
+                    this.triggerArrow.X = minArrowX;
+                }
+            }
         }
 
         private void UpdateGainedLabel()
