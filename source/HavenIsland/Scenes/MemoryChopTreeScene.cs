@@ -25,7 +25,7 @@ namespace DeenGames.HavenIsland.Scenes
         private const int GridTilesXOffset = 300;
         private const int GridTilesYOffset = 100;
         private const int EnergyPerClick = 2;
-        private const int ShowTilesSeconds = 1;
+        private readonly int showTilesSeconds = 1 * Options.ChopTreeDisplayMultiplier;
         // Fix bar as 300px wide
         private const int ProgressBarWidth = 300;
         private const float TileToProgressBarConstant = ProgressBarWidth * 1.0f / GridWidth;
@@ -155,7 +155,7 @@ namespace DeenGames.HavenIsland.Scenes
             this.cursor.Get<SpriteComponent>().IsVisible = false;
 
             // Draw, sleep 1s, then hide the grid
-            this.After(ShowTilesSeconds * 2, () => {
+            this.After(showTilesSeconds * 2, () => {
                 this.HideAllTiles();
                 this.cursor.Get<SpriteComponent>().IsVisible = true;
                 this.MoveCursorTo(this.gridTiles[GridWidth - 1, 0]);
@@ -194,7 +194,7 @@ namespace DeenGames.HavenIsland.Scenes
                     // Second click: match?
                     if (gridTile.Number == this.lastClicked.Number)
                     {
-                        this.After(ShowTilesSeconds, () => {
+                        this.After(showTilesSeconds, () => {
                             // Remove both rows
                             var earlierRow = Math.Min(gridTile.TileX, this.lastClicked.TileX);
                             for (var y = 0; y < GridHeight; y++)
@@ -226,7 +226,7 @@ namespace DeenGames.HavenIsland.Scenes
                     {
                         this.lastClicked = null;
                         this.canPlayerInteract = false;
-                        this.After(ShowTilesSeconds, () => {
+                        this.After(showTilesSeconds, () => {
                             this.HideAllTiles();
                             this.canPlayerInteract = true;
                         });
