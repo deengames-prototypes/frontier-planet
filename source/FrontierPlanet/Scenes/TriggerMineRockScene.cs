@@ -13,7 +13,7 @@ namespace DeenGames.FrontierPlanet.Scenes
     public class TriggerMineRockScene : Scene
     {
         private const int FontSize = 48;
-        private const int ArrowVelocity = 200;
+        private readonly int ArrowVelocity = 200 / Options.RockMiningSpeedMultiplier;
 
         private const int RocksGainedOnMiss = 1;
         private const int RocksGainedOnHit = 2;
