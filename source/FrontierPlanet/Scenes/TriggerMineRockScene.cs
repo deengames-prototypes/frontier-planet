@@ -19,6 +19,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private const int RocksGainedOnHit = 2;
         private const int RocksGainedOnBonus = 3;
         private const int EnergyPerClick = 2;
+        private int integrityLeft; // higher on harder/bigger rocks
 
         private int maxArrowX;
         private int minArrowX;
@@ -26,6 +27,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private int rocksGained = 0;
         
         private Entity rocksGainedLabel;
+        private Entity integrityLabel;
 
         // Trigger bar
         private Entity triggerBar = new Entity();
@@ -40,6 +42,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         {
             this.map = map;
             this.model = model;
+            this.integrityLeft = new Random().Next(4, 6);
         }
 
         override public void Ready()
@@ -55,8 +58,13 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(this.rocksGainedLabel);
             this.rocksGainedLabel.Move(300, 50);
 
+            this.integrityLabel = new Entity(true).Label("");
+            this.integrityLabel.Get<TextLabelComponent>().FontSize = FontSize;
+            this.Add(this.integrityLabel);
+            this.integrityLabel.Move(this.rocksGainedLabel.X, this.rocksGainedLabel.Y + FontSize);
+
             this.triggerBar = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar.png"))
-                .Move(this.rocksGainedLabel.X, this.rocksGainedLabel.Y + 100);
+                .Move(this.integrityLabel.X, this.integrityLabel.Y + 100);
             // Starts roughly in the middle of the bar
             this.hitArea = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar-Hit-Area.png"))
                 .Move(this.triggerBar.X + 250, this.triggerBar.Y);
@@ -122,6 +130,10 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private void CheckTrigger()
         {
+            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
+            this.integrityLeft--;
+
             var minCorrectX = this.hitArea.X;
             var maxCorrectX = this.hitArea.X + this.hitArea.Get<SpriteComponent>().Width - this.triggerArrow.Get<SpriteComponent>().Width;
 
@@ -164,13 +176,18 @@ namespace DeenGames.FrontierPlanet.Scenes
             // Reset position
             this.triggerArrow.X = this.triggerBar.X;
 
-            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
+            if  (this.integrityLeft <= 0)
+            {
+                // Done
+                GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
+                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+            }
         }
 
         private void UpdateGainedLabel()
         {
             this.rocksGainedLabel.Get<TextLabelComponent>().Text = $"Mined {this.rocksGained} rocks";
+            this.integrityLabel.Get<TextLabelComponent>().Text = $"Rock integrity: {this.integrityLeft}";
         }
     }
 }
