@@ -14,10 +14,11 @@ namespace DeenGames.FrontierPlanet.Scenes
     {
         private const int FontSize = 48;
         private const int ArrowVelocity = 200;
-        
+
         private const int RocksGainedOnMiss = 1;
         private const int RocksGainedOnHit = 2;
         private const int RocksGainedOnBonus = 3;
+        private const int EnergyPerClick = 2;
 
         private int maxArrowX;
         private int minArrowX;
@@ -162,6 +163,9 @@ namespace DeenGames.FrontierPlanet.Scenes
 
             // Reset position
             this.triggerArrow.X = this.triggerBar.X;
+
+            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+            this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
         }
 
         private void UpdateGainedLabel()

@@ -178,7 +178,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 this.lastClicked = gridTile;
 
                 GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-                this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+                this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
 
                 return;
             }
@@ -189,7 +189,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 {
                     gridTile.Show();
                     GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
-                    this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, gridTile.Number);
+                    this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
                     this.canPlayerInteract = false;
 
                     // Second click: match?
