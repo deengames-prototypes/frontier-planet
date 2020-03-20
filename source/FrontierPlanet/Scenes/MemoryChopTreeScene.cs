@@ -139,8 +139,8 @@ namespace DeenGames.FrontierPlanet.Scenes
             var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             
-            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
+            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - cancelButton.Get<SpriteComponent>().Width - 16, 16);
 
             this.progressBar = new HorizontalProgressBar(Path.Join("Content", "Images", "UI", "ProgressBar.png"), 0xF4B41B, ProgressBarWidth, 8, 8);
             this.progressBar.Move(GridTilesXOffset - 10, GridTilesYOffset - 72);

@@ -1,23 +1,24 @@
 using DeenGames.FrontierPlanet.Events;
-using DeenGames.FrontierPlanet.Map.Entities;
 using DeenGames.FrontierPlanet.Map.UI;
 using DeenGames.FrontierPlanet.Model;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Ecs.Components;
-using Puffin.Core.Events;
 using Puffin.UI.Controls;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace DeenGames.FrontierPlanet.Scenes
 {
     public class TriggerMineRockScene : Scene
     {
         private const int FontSize = 48;
-        private const int ArrowVelocity = 500;
+        private const int ArrowVelocity = 200;
+        
+        private const int RocksGainedOnMiss = 1;
+        private const int RocksGainedOnHit = 2;
+        private const int RocksGainedOnBonus = 3;
+
         private int maxArrowX;
         private int minArrowX;
         private bool isOnStreak = false;
@@ -48,7 +49,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.BackgroundColour = 0x397b44;
             this.Add(new EnergyBar(this.EventBus));
 
-            this.rocksGainedLabel = new Entity(true).Label("Mined 0 rocks");
+            this.rocksGainedLabel = new Entity(true).Label("");
             this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = FontSize;
             this.Add(this.rocksGainedLabel);
             this.rocksGainedLabel.Move(300, 50);
@@ -71,17 +72,28 @@ namespace DeenGames.FrontierPlanet.Scenes
             // Cancel if you hit escape.
             this.OnActionPressed = (data) =>
             {
-                if ((FrontierPlanetActions)data == FrontierPlanetActions.Cancel)
+                if (data is FrontierPlanetActions)
                 {
-                    FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    var action = (FrontierPlanetActions)data;
+                    if (action == FrontierPlanetActions.Cancel)
+                    {
+                        FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                    }
+                    else if (action == FrontierPlanetActions.Interact)
+                    {
+                        this.CheckTrigger();
+                    }
                 }
             };
+            
+            this.UpdateGainedLabel();
+            this.OnMouseClick = () => this.CheckTrigger();
 
             var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
-            
-            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - 40 - 16, 16);
             this.Add(cancelButton);
+            
+            cancelButton.Move(FrontierPlanetGame.LatestInstance.Width - cancelButton.Get<SpriteComponent>().Width - 16, 16);
         }
 
         override public void Update(float elapsedSeconds)
@@ -105,6 +117,51 @@ namespace DeenGames.FrontierPlanet.Scenes
                     this.triggerArrow.X = minArrowX;
                 }
             }
+        }
+
+        private void CheckTrigger()
+        {
+            var minCorrectX = this.hitArea.X;
+            var maxCorrectX = this.hitArea.X + this.hitArea.Get<SpriteComponent>().Width - this.triggerArrow.Get<SpriteComponent>().Width;
+
+            var isSuccess = this.triggerArrow.X >= minCorrectX && this.triggerArrow.X <= maxCorrectX;
+            if (isSuccess)
+            {
+                if (this.isOnStreak)
+                {
+                    this.rocksGained += RocksGainedOnBonus;
+                }
+                else
+                {
+                    this.rocksGained += RocksGainedOnHit;
+                }
+                
+                this.isOnStreak = true;
+            }
+            else
+            {
+                this.rocksGained += RocksGainedOnMiss;
+                this.isOnStreak = false;
+            }
+
+            this.UpdateGainedLabel();
+
+            // Center hit area on the arrow
+            this.hitArea.X = this.triggerArrow.X + (this.triggerArrow.Get<SpriteComponent>().Width / 2) - (this.hitArea.Get<SpriteComponent>().Width / 2);
+            
+            var maxX = this.triggerBar.X + this.triggerBar.Get<SpriteComponent>().Width - this.hitArea.Get<SpriteComponent>().Width;
+            
+            if (this.hitArea.X < this.triggerBar.X)
+            {
+                this.hitArea.X = this.triggerBar.X;
+            }
+            else if (this.hitArea.X > maxX)
+            {
+                this.hitArea.X = maxX;
+            }
+
+            // Reset position
+            this.triggerArrow.X = this.triggerBar.X;
         }
 
         private void UpdateGainedLabel()
