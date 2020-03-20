@@ -5,6 +5,9 @@ namespace DeenGames.FrontierPlanet.Model
         public bool IsWalkable { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public int TilesWide { get; set; } = 1;
+        public int TilesHigh { get; set; } = 1;
+
 
         public MapObject(int x, int y, bool isWalkable = false)
         {
@@ -16,19 +19,19 @@ namespace DeenGames.FrontierPlanet.Model
 
     public class RockModel : MapObject
     {
-        public int Size { get; private set; }
-        public RockModel(int size, int x, int y) : base(x, y)
+        public int Difficulty { get; private set; }
+
+        public RockModel(int difficulty, int x, int y) : base(x, y)
         {
-            this.Size = size;
+            this.Difficulty = difficulty;
         }
     }
 
     public class TreeModel : MapObject
     {
-        public int Height { get; private set; }
-        public TreeModel(int height, int x, int y) : base(x, y)
+        public TreeModel(int difficulty, int x, int y) : base(x, y)
         {
-            this.Height = height;
+            this.TilesHigh = 2;
         }
     }
 }
