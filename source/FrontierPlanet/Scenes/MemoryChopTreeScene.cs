@@ -31,6 +31,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private const float TileToProgressBarConstant = ProgressBarWidth * 1.0f / GridWidth;
 
         private TreeModel model;
+        private PlayerModel player;
         private AreaMap map;
         private MemoryTreeTile[,] gridTiles = new MemoryTreeTile[GridWidth, GridHeight];
         private MemoryTreeTile lastClicked;
@@ -39,9 +40,10 @@ namespace DeenGames.FrontierPlanet.Scenes
         private MemoryTreeTile cursorTile;
         private bool canPlayerInteract = false;
 
-        public MemoryChopTreeScene(AreaMap map, TreeModel model)
+        public MemoryChopTreeScene(AreaMap map, PlayerModel player, TreeModel model)
         {
             this.map = map;
+            this.player = player;
             this.model = model;
         }
 
@@ -51,7 +53,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
-            this.Add(new EnergyBar(this.EventBus));
+            this.Add(new EnergyBar(this.EventBus, this.player));
 
             for (int y = 0; y < GridHeight; y++)
             {
@@ -105,7 +107,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                         var havenAction = (FrontierPlanetActions)data;
                         if (havenAction == FrontierPlanetActions.Cancel)
                         {
-                            FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                            FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player));
                         }
                         else if (havenAction == FrontierPlanetActions.Interact)
                         {
@@ -136,7 +138,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 }
             };
 
-            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
+            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             
             this.Add(cancelButton);
@@ -177,7 +179,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 gridTile.Show();
                 this.lastClicked = gridTile;
 
-                GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                this.player.SubtractEnergy(EnergyPerClick);
                 this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
 
                 return;
@@ -188,7 +190,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 if (Math.Abs(gridTile.TileX - lastClicked.TileX) == 1)
                 {
                     gridTile.Show();
-                    GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+                    this.player.SubtractEnergy(EnergyPerClick);
                     this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
                     this.canPlayerInteract = false;
 
@@ -213,7 +215,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                                 // Done
                                 // TODO: should probably use events for this
                                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player));
                             }
                             else
                             {

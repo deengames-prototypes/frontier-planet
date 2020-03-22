@@ -1,26 +1,24 @@
 namespace DeenGames.FrontierPlanet.Model
 {
-    // Represents a single save-game world. Maybe it should be called GameWorld.
+    // Represents a single save-game world.
     public class GameWorld
     {
         public static GameWorld LatestInstance = new GameWorld();
 
-        public int PlayerEnergy { get; set; }
-        public int PlayerMaxEnergy { get; set; }
+        public PlayerModel Player { get; set; }
         
         public AreaMap AreaMap;
 
         public GameWorld()
         {
-            this.PlayerEnergy = 100;
-            this.PlayerMaxEnergy = 100;
-
+            this.Player = new PlayerModel();
+            
             // TODO: generate properly
             this.AreaMap = new AreaMap();
             this.AreaMap.Contents.Add(new TreeModel(0, 9, 6));
             this.AreaMap.Contents.Add(new RockModel(0, 15, 5));
             // Doesn't make sense: passing in a new event bus here
-            this.AreaMap.Contents.Add(new PlayerModel(new Puffin.Core.Events.EventBus(), 15, 7));
+            this.AreaMap.Contents.Add(new PlayerModel(15, 7));
         }
     }
 }

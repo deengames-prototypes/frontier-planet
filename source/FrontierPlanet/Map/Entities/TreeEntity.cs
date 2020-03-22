@@ -7,12 +7,12 @@ using System.IO;
 
 namespace DeenGames.FrontierPlanet.Map.Entities
 {
-    public class Tree : Entity
+    public class TreeEntity : Entity
     {
         internal TreeModel Model;
         private EventBus eventBus;
         
-        public Tree(EventBus eventBus, TreeModel model)
+        public TreeEntity(EventBus eventBus, TreeModel model)
         {
             this.eventBus = eventBus;
             this.Model = model;

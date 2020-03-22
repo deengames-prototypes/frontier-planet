@@ -8,9 +8,9 @@ using System.IO;
 
 namespace DeenGames.FrontierPlanet.Map.Entities
 {
-    public class Player : Entity
+    public class PlayerEntity : Entity
     {
-        internal static Player LatestInstance { get; private set; }
+        internal static PlayerEntity LatestInstance { get; private set; }
         internal const float SecondsToMoveToTile = 0.5f;
         
         internal bool IsMoving = false;
@@ -18,9 +18,9 @@ namespace DeenGames.FrontierPlanet.Map.Entities
         private PlayerModel model;
         private EventBus eventBus;
 
-        public Player(EventBus eventBus, PlayerModel model)
+        public PlayerEntity(EventBus eventBus, PlayerModel model)
         {
-            Player.LatestInstance = this;
+            PlayerEntity.LatestInstance = this;
             this.model = model;
             this.eventBus = eventBus;
             

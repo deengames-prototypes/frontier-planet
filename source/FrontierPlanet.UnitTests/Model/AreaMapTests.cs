@@ -19,7 +19,7 @@ namespace DeenGames.FrontierPlanet.UnitTests.Model
         {
             var eventBus = new EventBus();
             var map = new AreaMap();
-            map.Contents.Add(new PlayerModel(eventBus, 3, 3));
+            map.Contents.Add(new PlayerModel(3, 3));
             map.Contents.Add(new RockModel(0, 3, 4));
             var actual = map.TryToMovePlayerBy(0, 1);
             Assert.That(actual, Is.False);
@@ -32,7 +32,7 @@ namespace DeenGames.FrontierPlanet.UnitTests.Model
         {
             var eventBus = new EventBus();
             var map = new AreaMap();
-            map.Contents.Add(new PlayerModel(eventBus, 3, 3));
+            map.Contents.Add(new PlayerModel(3, 3));
             var actual = map.TryToMovePlayerBy(-1, 0);
             Assert.That(actual, Is.True);
             Assert.That(map.Player.X, Is.EqualTo(2));
@@ -44,7 +44,7 @@ namespace DeenGames.FrontierPlanet.UnitTests.Model
         {
             var eventBus = new EventBus();
             var map = new AreaMap();
-            map.Contents.Add(new PlayerModel(eventBus, 3, 3));
+            map.Contents.Add(new PlayerModel(3, 3));
             map.Contents.Add(new Feather(3, 4));
             var actual = map.TryToMovePlayerBy(0, 1);
             Assert.That(actual, Is.True);

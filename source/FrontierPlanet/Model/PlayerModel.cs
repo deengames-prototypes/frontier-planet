@@ -1,17 +1,22 @@
+using System;
 using DeenGames.FrontierPlanet.Events;
-using Puffin.Core.Events;
 
 namespace DeenGames.FrontierPlanet.Model
 {
     public class PlayerModel : MapObject
     {
-        private EventBus eventBus;
+        public int Energy { get; private set; }
+        public int MaxEnergy { get; private set; }
         
-        public PlayerModel(EventBus eventBus, int x, int y) : base(x, y)
+        public PlayerModel() : base()
         {
-            this.eventBus = eventBus;
-            eventBus.Subscribe(MapEvent.ChoppedDownTree, (obj) => this.SubtractEnergy(MapEvent.ChoppedDownTree));
-            eventBus.Subscribe(MapEvent.MinedRock, (obj) => this.SubtractEnergy(MapEvent.MinedRock));
+            this.MaxEnergy = 100;
+            this.Energy = this.MaxEnergy;
+        }
+
+        public PlayerModel(int x, int y) : base(x, y)
+        {
+            
         }
         
         public void SubtractEnergy(MapEvent m)
@@ -22,11 +27,16 @@ namespace DeenGames.FrontierPlanet.Model
 
         public void SubtractEnergy(int cost)
         {
-            GameWorld.LatestInstance.PlayerEnergy -= cost;
-            this.eventBus.Broadcast(GlobalEvents.ConsumedEnergy, cost);
+            this.Energy -= cost;
+            this.Energy = Math.Max(this.Energy, 0);
         }
 
-        public static int EnergyCost(MapEvent m)
+        public bool HasEnergyTo(MapEvent m)
+        {
+            return this.Energy >= this.EnergyCost(m);
+        }
+        
+        private int EnergyCost(MapEvent m)
         {
             switch (m)
             {

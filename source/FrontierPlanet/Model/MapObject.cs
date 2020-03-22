@@ -8,6 +8,9 @@ namespace DeenGames.FrontierPlanet.Model
         public int TilesWide { get; set; } = 1;
         public int TilesHigh { get; set; } = 1;
 
+        public MapObject()
+        {
+        }
 
         public MapObject(int x, int y, bool isWalkable = false)
         {

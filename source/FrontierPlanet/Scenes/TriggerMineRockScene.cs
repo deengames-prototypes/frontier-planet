@@ -37,11 +37,13 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private AreaMap map;
         private RockModel model;
+        private PlayerModel player;
 
-        public TriggerMineRockScene(AreaMap map, RockModel model)
+        public TriggerMineRockScene(AreaMap map, PlayerModel player, RockModel model)
         {
             this.map = map;
             this.model = model;
+            this.player = player;
             this.integrityLeft = new Random().Next(4, 6);
         }
 
@@ -51,7 +53,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             var random = new Random();
 
             this.BackgroundColour = 0x397b44;
-            this.Add(new EnergyBar(this.EventBus));
+            this.Add(new EnergyBar(this.EventBus, this.player));
 
             this.rocksGainedLabel = new Entity(true).Label("");
             this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = FontSize;
@@ -86,7 +88,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                     var action = (FrontierPlanetActions)data;
                     if (action == FrontierPlanetActions.Cancel)
                     {
-                        FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                        FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player));
                     }
                     else if (action == FrontierPlanetActions.Interact)
                     {
@@ -98,7 +100,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.UpdateGainedLabel();
             this.OnMouseClick = () => this.CheckTrigger();
 
-            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map)))
+            var cancelButton = new Button("", () => FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player)))
                 .Sprite(Path.Join("Content", "Images", "UI", "X-Button.png"));
             this.Add(cancelButton);
             
@@ -130,7 +132,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private void CheckTrigger()
         {
-            GameWorld.LatestInstance.PlayerEnergy -= EnergyPerClick;
+            this.player.SubtractEnergy(EnergyPerClick);
             this.EventBus.Broadcast(GlobalEvents.ConsumedEnergy, EnergyPerClick);
             this.integrityLeft--;
 
@@ -180,7 +182,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             {
                 // Done
                 GameWorld.LatestInstance.AreaMap.Contents.Remove(this.model);
-                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map));
+                FrontierPlanetGame.LatestInstance.ShowScene(new MapScene(this.map, this.player));
             }
         }
 

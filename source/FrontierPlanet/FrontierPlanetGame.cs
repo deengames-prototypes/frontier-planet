@@ -22,7 +22,7 @@ namespace DeenGames.FrontierPlanet
 
         override protected void Ready()
         {
-            this.ShowScene(new MapScene(GameWorld.LatestInstance.AreaMap));
+            this.ShowScene(new MapScene(GameWorld.LatestInstance.AreaMap, GameWorld.LatestInstance.Player));
         }
 
         private void BindCustomKeyboardActions()

@@ -16,10 +16,12 @@ namespace DeenGames.FrontierPlanet.Scenes
         private const int MapHeight = 23;
         private Entity player;
         private AreaMap map;
+        private PlayerModel playerModel;
 
-        public MapScene(AreaMap map)
+        public MapScene(AreaMap map, PlayerModel player)
         {
             this.map = map;
+            this.playerModel = player;
         }
 
         override public void Ready()
@@ -41,41 +43,40 @@ namespace DeenGames.FrontierPlanet.Scenes
             {
                 if (item is TreeModel)
                 {
-                    this.Add(new Tree(this.EventBus, item as TreeModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
+                    this.Add(new TreeEntity(this.EventBus, item as TreeModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
                 }
                 else if (item is RockModel)
                 {
-                    this.Add(new Rock(this.EventBus, item as RockModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
+                    this.Add(new RockEntity(this.EventBus, item as RockModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight));
                 }
                 else if (item is PlayerModel)
                 {
-                    this.player = new Player(this.EventBus, item as PlayerModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight);
+                    this.player = new PlayerEntity(this.EventBus, item as PlayerModel).Move(item.X * Constants.TileWidth, item.Y * Constants.TileHeight);
                     this.Add(this.player);   
                 }
             }
 
             // UI
-            // TODO: probably backed by a PNG
             // TODO: show/hide label on mouse over/out
-            this.Add(new EnergyBar(this.EventBus));
+            this.Add(new EnergyBar(this.EventBus, this.playerModel));
 
             // Event handlers
             this.EventBus.Subscribe(MapEvent.InteractedWithTree, (obj) => 
             {
-                var tree = obj as Tree;
-                if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithTree))
+                var tree = obj as TreeEntity;
+                if (this.playerModel.HasEnergyTo(MapEvent.InteractedWithTree))
                 {
-                    this.ShowSubScene(new MemoryChopTreeScene(this.map, tree.Model));
+                    this.ShowSubScene(new MemoryChopTreeScene(this.map, this.playerModel, tree.Model));
                 }
             });
 
             this.EventBus.Subscribe(MapEvent.InteractedWithRock, (obj) => 
             {
-                var rock = obj as Rock;
+                var rock = obj as RockEntity;
                 var model = rock.Model;
-                if (GameWorld.LatestInstance.PlayerEnergy > PlayerModel.EnergyCost(MapEvent.InteractedWithRock))
+                if (this.playerModel.HasEnergyTo(MapEvent.InteractedWithRock))
                 {
-                    this.ShowSubScene(new TriggerMineRockScene(this.map, rock.Model));
+                    this.ShowSubScene(new TriggerMineRockScene(this.map, this.playerModel, rock.Model));
                 }
             });
 
@@ -88,8 +89,8 @@ namespace DeenGames.FrontierPlanet.Scenes
                     new System.Tuple<float, float>(
                         this.player.X + (dx * Constants.TileWidth),
                         this.player.Y + (dy * Constants.TileHeight))
-                        , Player.SecondsToMoveToTile,
-                        () => (this.player as Player).IsMoving = false);
+                        , PlayerEntity.SecondsToMoveToTile,
+                        () => (this.player as PlayerEntity).IsMoving = false);
             });
 
             // Camera
