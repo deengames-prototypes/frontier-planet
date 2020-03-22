@@ -3,7 +3,9 @@ using DeenGames.FrontierPlanet.Model;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DeenGames.FrontierPlanet.Map.Entities
 {
@@ -21,11 +23,23 @@ namespace DeenGames.FrontierPlanet.Map.Entities
                     if (data is FrontierPlanetActions)
                     {
                         var action = (FrontierPlanetActions)data;
-                        var player = GameWorld.LatestInstance.AreaMap.Player;
-                        var distance = Math.Sqrt(Math.Pow(this.Model.X - player.X, 2) + Math.Pow(this.Model.Y - player.Y, 2));
-                        if (distance == 1 && action == FrontierPlanetActions.Interact)
+                        if (action == FrontierPlanetActions.Interact)
                         {
-                            this.eventBus.Broadcast(MapEvent.InteractedWithTree, this);
+                            var player = GameWorld.LatestInstance.AreaMap.Player;
+                            // Simpler algorithm: we occupy a set of tiles, na? So, get all adjacent tiles, and check if player is in 'em.
+                            var tilesToCheck = new List<Tuple<int, int>>();
+                            for (var x  = this.Model.X - 1; x < this.Model.X + this.Model.TilesWide + 1; x++)
+                            {
+                                for (var y  = this.Model.Y - 1; y < this.Model.Y + this.Model.TilesHigh + 1; y++)
+                                {
+                                    tilesToCheck.Add(new Tuple<int, int>(x, y));
+                                }
+                            }
+
+                            if (tilesToCheck.Any(t => t.Item1 == player.X && t.Item2 == player.Y))
+                            {
+                                this.eventBus.Broadcast(MapEvent.InteractedWithTree, this);
+                            }
                         }
                     }
                 });
