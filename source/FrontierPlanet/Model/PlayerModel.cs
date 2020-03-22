@@ -7,16 +7,17 @@ namespace DeenGames.FrontierPlanet.Model
     {
         public int Energy { get; private set; }
         public int MaxEnergy { get; private set; }
-        
-        public PlayerModel() : base()
+
+        // Used in testing, deserialization, etc.
+        public PlayerModel() : this(0, 0)
+        {
+
+        }        
+    
+        public PlayerModel(int x, int y) : base(x, y)
         {
             this.MaxEnergy = 100;
             this.Energy = this.MaxEnergy;
-        }
-
-        public PlayerModel(int x, int y) : base(x, y)
-        {
-            
         }
         
         public void SubtractEnergy(MapEvent m)
@@ -36,7 +37,7 @@ namespace DeenGames.FrontierPlanet.Model
             return this.Energy >= this.EnergyCost(m);
         }
         
-        private int EnergyCost(MapEvent m)
+        internal int EnergyCost(MapEvent m)
         {
             switch (m)
             {

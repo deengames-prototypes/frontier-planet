@@ -7,13 +7,6 @@ namespace DeenGames.FrontierPlanet.UnitTests.Model
     [TestFixture]
     public class AreaMapTests
     {
-        [TearDown]
-        public void ResetWorldAndEventBus()
-        {
-            new GameWorld();
-            new EventBus();
-        }
-
         [Test]
         public void TryToMovePlayerByReturnsFalseAndDoesntMovePlayerIfSpotIsOccupied()
         {
