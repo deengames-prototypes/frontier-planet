@@ -11,13 +11,14 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         // On a 4x4, I expect 4 monsters, 2 items, 1-2 chests
         // Given that each tile is independent: 25% monster change, 12.5% item/chest chance
         // NB: this assumes no wall tiles.
-        private const float MonsterProbability = 1/2f;
-        private const float ItemProbability = 1/4f;
+        private const float MonsterProbability = 1/4f;
+        private const float ItemProbability = 1/8f;
         private const float TreasureChestProbability = 1/8f;
         private const float AlienProbability = 1/32f; // one on every other 4x4 floors
 
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
         private bool[,] isVisible;
+        private string[,] contents;
 
         private int floorNum = 1;
         private Random random = new Random();
@@ -26,6 +27,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         {
             this.floorNum = floorNum;
             this.isVisible = new bool[TilesWide, TilesHigh];
+            this.contents = new string[TilesWide, TilesHigh];
 
             this.GenerateFloor();
         }
@@ -33,6 +35,11 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         public bool IsVisible(int x, int y)
         {
             return this.isVisible[x, y];
+        }
+
+        public string Contents(int x, int y)
+        {
+            return this.contents[x, y];
         }
 
         private void GenerateFloor()
@@ -62,19 +69,19 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)
                         {
-                            
+                            this.contents[x, y] = "Monster";
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.ItemProbability)
                         {
-
+                            this.contents[x, y] = "Item";
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.TreasureChestProbability)
                         {
-
+                            this.contents[x, y] = "Treasure";
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {
-
+                            this.contents[x, y] = "Alien";
                         }
                     }
                 }
