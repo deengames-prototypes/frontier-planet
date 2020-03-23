@@ -27,8 +27,12 @@ namespace DeenGames.FrontierPlanet.Scenes
 
             this.Add(groundAndFogTilemap);
             groundAndFogTilemap.Define("Fog", 1, 0);
-            groundAndFogTilemap.Define("Floor", 0, 1);
-            groundAndFogTilemap.Define("Stairs", 1, 1);
+            groundAndFogTilemap.Define("Floor", 2, 0);
+            groundAndFogTilemap.Define("Stairs", 3, 0);
+            groundAndFogTilemap.Define("Monster", 0, 1); // generic monster
+            groundAndFogTilemap.Define("Treasure", 1, 1); 
+            groundAndFogTilemap.Define("Item", 2, 1); 
+            groundAndFogTilemap.Define("Alien", 3, 1); // alien
 
             var dungeonWidth = (DiscoveryDungeon.TilesWide * TileSize);
             var dungeonHeight = (DiscoveryDungeon.TilesHigh * TileSize);
