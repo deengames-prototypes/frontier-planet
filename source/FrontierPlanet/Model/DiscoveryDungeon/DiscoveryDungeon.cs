@@ -4,9 +4,9 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 {
     class DiscoveryDungeon
     {
-        
-        private const int MaxTilesWide = 30; // 30 * 32 = 960px, minimum supported screen width
-        private const int MaxTilesHigh = 16; // fits on 960x540
+        // At 2x zoom, barely fits on-screen.
+        internal const int TilesWide = 8;
+        internal const int TilesHigh = 8;
         
         // On a 4x4, I expect 4 monsters, 2 items, 1-2 chests
         // Given that each tile is independent: 25% monster change, 12.5% item/chest chance
@@ -16,23 +16,23 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         private const float TreasureChestProbability = 1/8f;
         private const float AlienProbability = 1/32f; // one on every other 4x4 floors
 
-        private readonly int tilesWide;
-        private readonly int tilesHigh;
-
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
         private bool[,] isVisible;
 
         private int floorNum = 1;
         private Random random = new Random();
 
-        public DiscoveryDungeon(int floorNum, int tilesWide, int tilesHigh)
+        public DiscoveryDungeon(int floorNum)
         {
             this.floorNum = floorNum;
-            this.tilesWide = Math.Min(tilesWide, MaxTilesWide);
-            this.tilesHigh = Math.Min(tilesHigh, MaxTilesHigh);
-            this.isVisible = new bool[this.tilesWide, this.tilesHigh];
+            this.isVisible = new bool[TilesWide, TilesHigh];
 
             this.GenerateFloor();
+        }
+
+        public bool IsVisible(int x, int y)
+        {
+            return this.isVisible[x, y];
         }
 
         private void GenerateFloor()
@@ -40,9 +40,9 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             // Player starts in a random corner
             var corners = new Tuple<int, int>[] {
                 new Tuple<int, int>(0, 0),
-                new Tuple<int, int>(this.tilesWide - 2, 0),
-                new Tuple<int, int>(0, this.tilesHigh - 2),
-                new Tuple<int, int>(this.tilesWide - 2, this.tilesHigh - 2),
+                new Tuple<int, int>(TilesWide - 2, 0),
+                new Tuple<int, int>(0, TilesHigh - 2),
+                new Tuple<int, int>(TilesWide - 2, TilesHigh - 2),
             };
 
             var playerCorner = corners[random.Next(corners.Length)];
@@ -53,9 +53,9 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             this.isVisible[playerCorner.Item1 + 1, playerCorner.Item2 + 1] = true;
 
             // Generate monsters
-            for (var y = 0; y < this.tilesHigh; y++)
+            for (var y = 0; y < TilesHigh; y++)
             {
-                for (var x = 0; x < this.tilesWide; x++)
+                for (var x = 0; x < TilesWide; x++)
                 {
                     if (!this.isVisible[x, y])
                     {
