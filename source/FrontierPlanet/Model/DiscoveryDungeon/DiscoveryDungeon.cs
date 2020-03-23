@@ -1,6 +1,6 @@
 using System;
 
-namespace DeenGames.FrontierPlanet.Model
+namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 {
     class DiscoveryDungeon
     {

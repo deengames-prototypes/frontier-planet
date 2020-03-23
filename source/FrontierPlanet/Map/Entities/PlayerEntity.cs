@@ -1,5 +1,6 @@
 using DeenGames.FrontierPlanet.Events;
 using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core.Ecs;
 using Puffin.Core.Events;
 using Puffin.Core.IO;

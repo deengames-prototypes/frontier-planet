@@ -1,3 +1,5 @@
+using DeenGames.FrontierPlanet.Model.Maps;
+
 namespace DeenGames.FrontierPlanet.Model
 {
     // Represents a single save-game world.

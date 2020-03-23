@@ -1,7 +1,7 @@
 using System;
 using DeenGames.FrontierPlanet.Events;
 
-namespace DeenGames.FrontierPlanet.Model
+namespace DeenGames.FrontierPlanet.Model.Maps
 {
     public class PlayerModel : MapObject
     {

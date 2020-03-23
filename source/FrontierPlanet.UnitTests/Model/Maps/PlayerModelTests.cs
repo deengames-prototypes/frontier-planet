@@ -1,9 +1,8 @@
 using DeenGames.FrontierPlanet.Events;
-using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Model.Maps;
 using NUnit.Framework;
-using Puffin.Core.Events;
 
-namespace DeenGames.FrontierPlanet.UnitTests.Model
+namespace DeenGames.FrontierPlanet.UnitTests.Model.Maps
 {
     [TestFixture]
     public class PlayerModelTests

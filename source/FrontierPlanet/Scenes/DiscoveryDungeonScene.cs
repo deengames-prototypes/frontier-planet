@@ -1,4 +1,5 @@
-using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
+using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
 
 namespace DeenGames.FrontierPlanet.Scenes

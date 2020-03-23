@@ -1,7 +1,7 @@
 using DeenGames.FrontierPlanet.Events;
 using DeenGames.FrontierPlanet.Map.Entities;
 using DeenGames.FrontierPlanet.Map.UI;
-using DeenGames.FrontierPlanet.Model;
+using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
 using Puffin.Core.Ecs;
 using Puffin.Core.Tiles;
