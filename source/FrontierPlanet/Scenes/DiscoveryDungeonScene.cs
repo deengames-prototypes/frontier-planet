@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 using DeenGames.FrontierPlanet.Model.Maps;
@@ -11,6 +12,8 @@ namespace DeenGames.FrontierPlanet.Scenes
     {
         // At 2x zoom, 8x8 dungeon barely fits on-screen.
         private const int TileSize = 32;
+        TileMap fogTilemap;
+        TileMap contentsTilemap;
 
         private DiscoveryDungeon dungeon;
 
@@ -37,8 +40,8 @@ namespace DeenGames.FrontierPlanet.Scenes
             centerY = 56;
 
             var groundTilemap = new TileMap(DiscoveryDungeon.TilesWide, DiscoveryDungeon.TilesHigh, Path.Combine("Content", "Images", "Tilesets", "Dungeon.png"), TileSize, TileSize) { X = centerX, Y = centerY };
-            var contentsTilemap = new TileMap(DiscoveryDungeon.TilesWide, DiscoveryDungeon.TilesHigh, Path.Combine("Content", "Images", "Tilesets", "Dungeon.png"), TileSize, TileSize) { X = centerX, Y = centerY };
-            var fogTilemap = new TileMap(DiscoveryDungeon.TilesWide, DiscoveryDungeon.TilesHigh, Path.Combine("Content", "Images", "Tilesets", "Dungeon.png"), TileSize, TileSize) { X = centerX, Y = centerY };
+            contentsTilemap = new TileMap(DiscoveryDungeon.TilesWide, DiscoveryDungeon.TilesHigh, Path.Combine("Content", "Images", "Tilesets", "Dungeon.png"), TileSize, TileSize) { X = centerX, Y = centerY };
+            fogTilemap = new TileMap(DiscoveryDungeon.TilesWide, DiscoveryDungeon.TilesHigh, Path.Combine("Content", "Images", "Tilesets", "Dungeon.png"), TileSize, TileSize) { X = centerX, Y = centerY };
 
             this.Add(groundTilemap);
             this.Add(contentsTilemap);
@@ -59,21 +62,61 @@ namespace DeenGames.FrontierPlanet.Scenes
                 for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
                 {
                     groundTilemap.Set(x, y, "Floor");
-                    
-                    if (!dungeon.IsVisible(x, y))
-                    {
-                        //fogTilemap.Set(x, y, "Fog");
-                    }
-
-                    var contents = dungeon.Contents(x, y);
-                    if (contents != null)
-                    {
-                        contentsTilemap.Set(x, y, contents);
-                    }
+                    this.UpdateContentsDisplay(x, y);
                 }   
             }
 
+            this.OnMouseClick = () => {
+                // Math.Floor used here to prevent (-1/32) => 0
+                // 0d + is here because Math.Floor is ambiguous
+                var tileX = (int)Math.Floor((0d + this.MouseCoordinates.Item1 - fogTilemap.X) / TileSize);
+                var tileY = (int)Math.Floor((0d + this.MouseCoordinates.Item2 - fogTilemap.Y) / TileSize);
+                if (tileX >= 0 && tileX < DiscoveryDungeon.TilesWide && tileY >= 0 && tileY < DiscoveryDungeon.TilesHigh)
+                {
+                    this.OnTileClicked(tileX, tileY);
+                }
+            };
+
             this.Add(new Entity().Camera(Constants.GameZoom));
+        }
+
+        private void UpdateContentsDisplay(int x, int y)
+        {
+            if (!dungeon.IsVisible(x, y))
+            {
+                fogTilemap.Set(x, y, "Fog");
+            }
+            else
+            {
+                fogTilemap.Set(x, y, null);
+            }
+
+            var contents = dungeon.Contents(x, y);
+            if (contents != null)
+            {
+                contentsTilemap.Set(x, y, contents);
+            }
+        }
+
+        private void OnTileClicked(int tileX, int tileY)
+        {
+            if (!this.dungeon.IsVisible(tileX, tileY))
+            {
+                // Are any adjacents?
+                if (this.IsValidAndVisible(tileX - 1, tileY) || this.IsValidAndVisible(tileX + 1, tileY) ||
+                this.IsValidAndVisible(tileX, tileY - 1) || this.IsValidAndVisible(tileX, tileY + 1))
+                {
+                    this.dungeon.Reveal(tileX, tileY);
+                    this.UpdateContentsDisplay(tileX, tileY);
+                }
+            }
+        }
+
+        private bool IsValidAndVisible(int tileX, int tileY)
+        {
+            return (tileX >= 0 && tileX < DiscoveryDungeon.TilesWide &&
+                tileY >= 0 && tileY < DiscoveryDungeon.TilesHigh &&
+                this.dungeon.IsVisible(tileX, tileY));
         }
     }
 }

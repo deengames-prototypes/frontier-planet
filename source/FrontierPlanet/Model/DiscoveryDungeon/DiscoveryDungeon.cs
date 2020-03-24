@@ -42,22 +42,17 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             return this.contents[x, y];
         }
 
+        public void Reveal(int x, int y)
+        {
+            // TODO: validate is valid coordinates
+            this.isVisible[x, y] = true;
+        }
+
         private void GenerateFloor()
         {
-            // Player starts in a random corner
-            var corners = new Tuple<int, int>[] {
-                new Tuple<int, int>(0, 0),
-                new Tuple<int, int>(TilesWide - 2, 0),
-                new Tuple<int, int>(0, TilesHigh - 2),
-                new Tuple<int, int>(TilesWide - 2, TilesHigh - 2),
-            };
-
-            var playerCorner = corners[random.Next(corners.Length)];
-            // Player is invisible!
-            this.isVisible[playerCorner.Item1, playerCorner.Item2] = true;
-            this.isVisible[playerCorner.Item1 + 1, playerCorner.Item2] = true;
-            this.isVisible[playerCorner.Item1, playerCorner.Item2 + 1] = true;
-            this.isVisible[playerCorner.Item1 + 1, playerCorner.Item2 + 1] = true;
+            var playerX = random.Next(TilesWide);
+            var playerY = random.Next(TilesHigh);
+            this.isVisible[playerX, playerY] = true;
 
             // Generate monsters
             for (var y = 0; y < TilesHigh; y++)
