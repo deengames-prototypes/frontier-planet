@@ -13,7 +13,6 @@ namespace DeenGames.FrontierPlanet.Scenes
 {
     public class TriggerMineRockScene : Scene
     {
-        private const int FontSize = 48;
         private readonly int ArrowVelocity = 200 / Options.RockMiningSpeedMultiplier;
 
         private const int RocksGainedOnMiss = 1;
@@ -57,14 +56,14 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(new EnergyBar(this.EventBus, this.player));
 
             this.rocksGainedLabel = new Entity(true).Label("");
-            this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = FontSize;
+            this.rocksGainedLabel.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
             this.Add(this.rocksGainedLabel);
             this.rocksGainedLabel.Move(300, 50);
 
             this.integrityLabel = new Entity(true).Label("");
-            this.integrityLabel.Get<TextLabelComponent>().FontSize = FontSize;
+            this.integrityLabel.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
             this.Add(this.integrityLabel);
-            this.integrityLabel.Move(this.rocksGainedLabel.X, this.rocksGainedLabel.Y + FontSize);
+            this.integrityLabel.Move(this.rocksGainedLabel.X, this.rocksGainedLabel.Y + FrontierPlanetGame.DefaultFontSize);
 
             this.triggerBar = new Entity().Sprite(Path.Combine("Content", "Images", "Sprites", "Trigger-Bar.png"))
                 .Move(this.integrityLabel.X, this.integrityLabel.Y + 100);

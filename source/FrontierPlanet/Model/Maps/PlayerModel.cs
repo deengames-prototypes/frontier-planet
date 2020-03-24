@@ -7,6 +7,11 @@ namespace DeenGames.FrontierPlanet.Model.Maps
     {
         public int Energy { get; private set; }
         public int MaxEnergy { get; private set; }
+        public int Health { get; private set; }
+        public int MaxHealth { get; private set; }
+
+        private const int NewGameMaxEnergy = 100;
+        private const int NewGameMaxHealth = 50;
 
         // Used in testing, deserialization, etc.
         public PlayerModel() : this(0, 0)
@@ -16,8 +21,11 @@ namespace DeenGames.FrontierPlanet.Model.Maps
     
         public PlayerModel(int x, int y) : base(x, y)
         {
-            this.MaxEnergy = 100;
+            this.MaxEnergy = NewGameMaxEnergy;
             this.Energy = this.MaxEnergy;
+
+            this.MaxHealth = NewGameMaxHealth;
+            this.Health = this.MaxHealth;
         }
         
         public void SubtractEnergy(MapEvent m)

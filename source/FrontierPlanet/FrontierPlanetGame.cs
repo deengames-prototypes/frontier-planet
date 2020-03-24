@@ -10,6 +10,7 @@ namespace DeenGames.FrontierPlanet
     public class FrontierPlanetGame : PuffinGame
     {
         public static FrontierPlanetGame LatestInstance { get; set; }
+        public const int DefaultFontSize = 48;
 
         // Assuming 32x32, this gives us 720p (1280x720) - well, 736, to be exact tiles
         public FrontierPlanetGame() : base(1280, 736)

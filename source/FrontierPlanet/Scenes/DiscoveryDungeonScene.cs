@@ -6,6 +6,7 @@ using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
 using Puffin.Core.Ecs;
+using Puffin.Core.Ecs.Components;
 using Puffin.Core.Tiles;
 
 namespace DeenGames.FrontierPlanet.Scenes
@@ -19,7 +20,9 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private DiscoveryDungeon dungeon;
         private PlayerModel player;
-        private const int RevealTilesEnergyCost = 2;
+        private const int InteractWithTileEnergyCost = 2;
+
+        private Entity healthIndicator;        
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
@@ -90,6 +93,15 @@ namespace DeenGames.FrontierPlanet.Scenes
             };
 
             this.Add(new Entity().Camera(Constants.GameZoom));
+
+            // TODO: add progress bar
+            this.healthIndicator = new Entity(true)
+                .Label($"Health: {this.player.Health}/{this.player.MaxHealth}")
+                // 2x => 2 rows of text
+                .Move(8, FrontierPlanetGame.LatestInstance.Height - (2 * FrontierPlanetGame.DefaultFontSize));
+            this.healthIndicator.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
+            
+            this.Add(this.healthIndicator);
         }
 
         private void UpdateContentsDisplay(int x, int y)
@@ -121,7 +133,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                     var adjacents = GetAdjacents(tileX, tileY);
                     if (adjacents.Any())
                     {
-                        this.player.SubtractEnergy(RevealTilesEnergyCost);
+                        this.player.SubtractEnergy(InteractWithTileEnergyCost);
                         foreach (var revealed in adjacents)
                         {
                             var x = revealed.Item1;

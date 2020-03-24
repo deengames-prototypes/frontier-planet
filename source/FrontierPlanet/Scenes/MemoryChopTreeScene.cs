@@ -22,7 +22,6 @@ namespace DeenGames.FrontierPlanet.Scenes
         private const int GridHeight = 4;
         private const int TileWidth = 60;
         private const int TileHeight = 60;
-        private const int FontSize = 36;
         private const int GridTilesXOffset = 300;
         private const int GridTilesYOffset = 100;
         private const int EnergyPerClick = 2;
@@ -269,7 +268,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 this.TileY = tileY;
                 this.Sprite(Path.Join("Content", "Images", "Sprites", "Tree-Texture.png"))
                     .Label($"{this.Number}", 10, -10);
-                this.Get<TextLabelComponent>().FontSize = FontSize * 2;
+                this.Get<TextLabelComponent>().FontSize = 72;
             }
 
             public void Show()
