@@ -1,5 +1,6 @@
 using System;
 using DeenGames.FrontierPlanet.Events;
+using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 
 namespace DeenGames.FrontierPlanet.Model.Maps
 {
@@ -43,6 +44,14 @@ namespace DeenGames.FrontierPlanet.Model.Maps
         public bool HasEnergyTo(MapEvent m)
         {
             return this.Energy >= this.EnergyCost(m);
+        }
+
+        public void TakeDamageFrom(DungeonMonster monster)
+        {
+            // TODO: take into account my equipment
+            this.Health -= monster.Strength;
+            this.Health = Math.Max(this.Health, 0);
+            // If DEAD?!
         }
         
         internal int EnergyCost(MapEvent m)

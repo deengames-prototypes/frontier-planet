@@ -1,4 +1,5 @@
 using System;
+using DeenGames.FrontierPlanet.Model.Maps;
 
 namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 {
@@ -20,13 +21,14 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         private bool[,] isVisible;
         
         private DungeonContents[,] contents;
-
+        private PlayerModel player;
         private int floorNum = 1;
         private Random random = new Random();
 
-        public DiscoveryDungeon(int floorNum)
+        public DiscoveryDungeon(int floorNum, PlayerModel player)
         {
             this.floorNum = floorNum;
+            this.player = player;
             this.isVisible = new bool[TilesWide, TilesHigh];
             this.contents = new DungeonContents[TilesWide, TilesHigh];
 
@@ -52,6 +54,21 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         {
             // TODO: validate is valid coordinates
             this.isVisible[x, y] = true;
+        }
+
+        public void AttackMonsterAt(int x, int y)
+        {
+            var monster = this.contents[x, y] as DungeonMonster;
+            monster.TakeDamageFrom(this.player);
+            if (monster.Health > 0)
+            {
+                this.player.TakeDamageFrom(monster);
+            }
+            else
+            {
+                this.contents[x, y] = null;
+                // TODO: grant XP etc.
+            }
         }
 
         private void GenerateFloor()

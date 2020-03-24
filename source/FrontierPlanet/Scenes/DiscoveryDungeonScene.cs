@@ -26,7 +26,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
-            this.dungeon = new DiscoveryDungeon(1);
+            this.dungeon = new DiscoveryDungeon(1, player);
             this.player = player;
         }
 
@@ -96,12 +96,19 @@ namespace DeenGames.FrontierPlanet.Scenes
 
             // TODO: add progress bar
             this.healthIndicator = new Entity(true)
-                .Label($"Health: {this.player.Health}/{this.player.MaxHealth}")
+                .Label("")
                 // 2x => 2 rows of text
                 .Move(8, FrontierPlanetGame.LatestInstance.Height - (2 * FrontierPlanetGame.DefaultFontSize));
             this.healthIndicator.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
             
             this.Add(this.healthIndicator);
+
+            this.UpdateHealthDisplay();
+        }
+
+        private void UpdateHealthDisplay()
+        {
+            this.healthIndicator.Get<TextLabelComponent>().Text = $"Health: {this.player.Health}/{this.player.MaxHealth}";
         }
 
         private void UpdateContentsDisplay(int x, int y)
@@ -149,6 +156,19 @@ namespace DeenGames.FrontierPlanet.Scenes
                 else
                 {
                     // Interact
+                    var contents = this.dungeon.Contents(tileX, tileY);
+                    if (contents is DungeonMonster)
+                    {
+                        var monster = contents as DungeonMonster;
+                        this.dungeon.AttackMonsterAt(tileX, tileY);
+                        this.UpdateHealthDisplay();
+                        this.healthIndicator.Get<TextLabelComponent>().Text += $"     Monster: {monster.Health}/{monster.MaxHealth}";
+                        
+                        if (monster.Health <= 0)
+                        {
+                            this.contentsTilemap.Set(tileX, tileY, null);
+                        }
+                    }
                 }
             }
         }

@@ -1,13 +1,16 @@
+using System;
+using DeenGames.FrontierPlanet.Model.Maps;
+
 namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 {
-    class DungeonContents
+    public class DungeonContents
     {
         public static DungeonContents Stairs = new DungeonContents("Stairs");
         public static DungeonContents Alien = new DungeonContents("Alien");
         
         public string Sprite { get; private set; }
 
-        private DungeonContents(string sprite)
+        protected DungeonContents(string sprite)
         {
             this.Sprite = sprite;
         }
@@ -15,7 +18,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         // TODO: accept stats
         public static DungeonContents CreateMonster()
         {
-            return new DungeonContents("Monster");
+            return new DungeonMonster(20, 5);
         }
 
         // Generic could work for now
