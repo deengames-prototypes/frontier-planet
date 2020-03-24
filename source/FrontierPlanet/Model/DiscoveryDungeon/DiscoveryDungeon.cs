@@ -71,6 +71,16 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             }
         }
 
+        public void ConsumeItemAt(int x, int y)
+        {
+            var heal = this.contents[x, y] as DungeonHeal;
+            var healPercent = DungeonHeal.HealPercent;
+            var healAmount = (int)Math.Ceiling((healPercent / 100f) * this.player.MaxHealth);
+            player.Heal(healAmount);
+
+            this.contents[x, y] = null;
+        }
+
         private void GenerateFloor()
         {
             var playerX = random.Next(TilesWide);
@@ -97,15 +107,15 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)
                         {
-                            this.contents[x, y] = DungeonContents.CreateMonster();
+                            this.contents[x, y] = new DungeonMonster(20, 5);
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.ItemProbability)
                         {
-                            this.contents[x, y] = DungeonContents.CreateItem();
+                            this.contents[x, y] = new DungeonHeal();
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.TreasureChestProbability)
                         {
-                            this.contents[x, y] = DungeonContents.CreateTreasure();
+                            this.contents[x, y] = new DungeonContents("Treasure");
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {
