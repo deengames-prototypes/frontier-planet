@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
@@ -16,10 +18,13 @@ namespace DeenGames.FrontierPlanet.Scenes
         TileMap contentsTilemap;
 
         private DiscoveryDungeon dungeon;
+        private PlayerModel player;
+        private const int RevealTilesEnergyCost = 2;
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
             this.dungeon = new DiscoveryDungeon(1);
+            this.player = player;
         }
 
         override public void Ready()
@@ -57,14 +62,21 @@ namespace DeenGames.FrontierPlanet.Scenes
             contentsTilemap.Define("Item", 2, 1); 
             contentsTilemap.Define("Alien", 3, 1); // alien
 
+            (int, int) startPosition = (-1, -1);
             for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
             {
                 for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
                 {
                     groundTilemap.Set(x, y, "Floor");
                     this.UpdateContentsDisplay(x, y);
+                    if (dungeon.IsVisible(x, y))
+                    {
+                        startPosition = (x, y);
+                    }
                 }   
             }
+
+            this.OnTileClicked(startPosition.Item1, startPosition.Item2);
 
             this.OnMouseClick = () => {
                 // Math.Floor used here to prevent (-1/32) => 0
@@ -100,23 +112,60 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private void OnTileClicked(int tileX, int tileY)
         {
-            if (!this.dungeon.IsVisible(tileX, tileY))
+            // You can't reveal tiles by clicking on stuff
+            if (this.dungeon.IsVisible(tileX, tileY))
             {
-                // Are any adjacents?
-                if (this.IsValidAndVisible(tileX - 1, tileY) || this.IsValidAndVisible(tileX + 1, tileY) ||
-                this.IsValidAndVisible(tileX, tileY - 1) || this.IsValidAndVisible(tileX, tileY + 1))
+                if (this.dungeon.Contents(tileX, tileY) == null)
                 {
-                    this.dungeon.Reveal(tileX, tileY);
-                    this.UpdateContentsDisplay(tileX, tileY);
+                    // Reveal
+                    var adjacents = GetAdjacents(tileX, tileY);
+                    if (adjacents.Any())
+                    {
+                        this.player.SubtractEnergy(RevealTilesEnergyCost);
+                        foreach (var revealed in adjacents)
+                        {
+                            var x = revealed.Item1;
+                            var y = revealed.Item2;
+                            if (!this.dungeon.IsVisible(x, y))
+                            {
+                                this.dungeon.Reveal(x, y);
+                                this.UpdateContentsDisplay(x, y);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Interact
                 }
             }
         }
 
-        private bool IsValidAndVisible(int tileX, int tileY)
+        private List<(int, int)> GetAdjacents(int tileX, int tileY)
         {
-            return (tileX >= 0 && tileX < DiscoveryDungeon.TilesWide &&
-                tileY >= 0 && tileY < DiscoveryDungeon.TilesHigh &&
-                this.dungeon.IsVisible(tileX, tileY));
+            var toReturn = new List<(int, int)>();
+
+            if (tileX > 0)
+            {
+                toReturn.Add((tileX - 1, tileY));
+            }
+            if (tileX < DiscoveryDungeon.TilesWide - 1)
+            {
+                toReturn.Add((tileX + 1, tileY));
+            }
+
+            if (tileY > 0)
+            {
+                toReturn.Add((tileX, tileY - 1));
+            }
+            if (tileY < DiscoveryDungeon.TilesHigh - 1)
+            {
+                toReturn.Add((tileX, tileY + 1));
+            }
+
+            toReturn.RemoveAll((coordinates)  => this.dungeon.IsVisible(coordinates.Item1, coordinates.Item2));
+
+            return toReturn;
         }
     }
 }
