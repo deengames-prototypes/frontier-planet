@@ -37,6 +37,11 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             return this.isVisible[x, y];
         }
 
+        public bool IsStairs(int x, int y)
+        {
+            return this.contents[x, y] == "Stairs";
+        }
+
         public string Contents(int x, int y)
         {
             return this.contents[x, y];
@@ -54,12 +59,22 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             var playerY = random.Next(TilesHigh);
             this.isVisible[playerX, playerY] = true;
 
+            var stairsX = playerX;
+            var stairsY = playerY;
+            this.contents[stairsX, stairsY] = "Stairs";
+
+            while (stairsX == playerX || stairsY == playerY)
+            {
+                stairsX = random.Next(TilesWide);
+                stairsY = random.Next(TilesHigh);
+            }
+
             // Generate monsters
             for (var y = 0; y < TilesHigh; y++)
             {
                 for (var x = 0; x < TilesWide; x++)
                 {
-                    if (!this.isVisible[x, y])
+                    if (this.contents[x, y] != "Stairs" && (x != playerX && y != playerY) && !this.isVisible[x, y])
                     {
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)

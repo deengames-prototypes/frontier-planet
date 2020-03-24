@@ -50,8 +50,8 @@ namespace DeenGames.FrontierPlanet.Scenes
             fogTilemap.Define("Fog", 1, 0);
 
             groundTilemap.Define("Floor", 2, 0);
-            groundTilemap.Define("Stairs", 3, 0);
 
+            contentsTilemap.Define("Stairs", 3, 0);
             contentsTilemap.Define("Monster", 0, 1); // generic monster
             contentsTilemap.Define("Treasure", 1, 1); 
             contentsTilemap.Define("Item", 2, 1); 
