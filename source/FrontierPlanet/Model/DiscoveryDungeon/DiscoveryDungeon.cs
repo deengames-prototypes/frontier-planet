@@ -61,13 +61,13 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 
             var stairsX = playerX;
             var stairsY = playerY;
-            this.contents[stairsX, stairsY] = "Stairs";
 
-            while (stairsX == playerX || stairsY == playerY)
+            while (isVisible[stairsX, stairsY])
             {
                 stairsX = random.Next(TilesWide);
                 stairsY = random.Next(TilesHigh);
             }
+            this.contents[stairsX, stairsY] = "Stairs";
 
             // Generate monsters
             for (var y = 0; y < TilesHigh; y++)
