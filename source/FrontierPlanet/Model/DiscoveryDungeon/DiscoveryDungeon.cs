@@ -18,7 +18,8 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
         private bool[,] isVisible;
-        private string[,] contents;
+        
+        private DungeonContents[,] contents;
 
         private int floorNum = 1;
         private Random random = new Random();
@@ -27,7 +28,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         {
             this.floorNum = floorNum;
             this.isVisible = new bool[TilesWide, TilesHigh];
-            this.contents = new string[TilesWide, TilesHigh];
+            this.contents = new DungeonContents[TilesWide, TilesHigh];
 
             this.GenerateFloor();
         }
@@ -39,10 +40,10 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 
         public bool IsStairs(int x, int y)
         {
-            return this.contents[x, y] == "Stairs";
+            return this.contents[x, y] == DungeonContents.Stairs;
         }
 
-        public string Contents(int x, int y)
+        public DungeonContents Contents(int x, int y)
         {
             return this.contents[x, y];
         }
@@ -67,31 +68,31 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                 stairsX = random.Next(TilesWide);
                 stairsY = random.Next(TilesHigh);
             }
-            this.contents[stairsX, stairsY] = "Stairs";
+            this.contents[stairsX, stairsY] = DungeonContents.Stairs;
 
             // Generate monsters
             for (var y = 0; y < TilesHigh; y++)
             {
                 for (var x = 0; x < TilesWide; x++)
                 {
-                    if (this.contents[x, y] != "Stairs" && (x != playerX && y != playerY) && !this.isVisible[x, y])
+                    if (this.contents[x, y] != DungeonContents.Stairs && (x != playerX && y != playerY) && !this.isVisible[x, y])
                     {
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)
                         {
-                            this.contents[x, y] = "Monster";
+                            this.contents[x, y] = DungeonContents.CreateMonster();
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.ItemProbability)
                         {
-                            this.contents[x, y] = "Item";
+                            this.contents[x, y] = DungeonContents.CreateItem();
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.TreasureChestProbability)
                         {
-                            this.contents[x, y] = "Treasure";
+                            this.contents[x, y] = DungeonContents.CreateTreasure();
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {
-                            this.contents[x, y] = "Alien";
+                            this.contents[x, y] = DungeonContents.Alien;
                         }
                     }
                 }

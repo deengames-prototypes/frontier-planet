@@ -118,7 +118,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             var contents = dungeon.Contents(x, y);
             if (contents != null)
             {
-                contentsTilemap.Set(x, y, contents);
+                contentsTilemap.Set(x, y, contents.Sprite);
             }
         }
 
