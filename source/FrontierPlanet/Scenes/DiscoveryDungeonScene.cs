@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
@@ -22,7 +23,10 @@ namespace DeenGames.FrontierPlanet.Scenes
         private PlayerModel player;
         private const int InteractWithTileEnergyCost = 2;
 
-        private Entity healthIndicator;        
+        // UI
+        private Entity healthIndicator;
+        private Entity blackout;
+        private DateTime? blackoutStart = null;
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
@@ -79,8 +83,6 @@ namespace DeenGames.FrontierPlanet.Scenes
                 }   
             }
 
-            this.OnTileClicked(startPosition.Item1, startPosition.Item2);
-
             this.OnMouseClick = () => {
                 // Math.Floor used here to prevent (-1/32) => 0
                 // 0d + is here because Math.Floor is ambiguous
@@ -92,6 +94,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 }
             };
 
+            /////// UI
             this.Add(new Entity().Camera(Constants.GameZoom));
 
             // TODO: add progress bar
@@ -104,6 +107,30 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(this.healthIndicator);
 
             this.UpdateHealthDisplay();
+
+            this.blackout = new Entity(true)
+                .Colour(0x000000, FrontierPlanetGame.LatestInstance.Width, FrontierPlanetGame.LatestInstance.Height)
+                .Label("", 500, 300);
+
+            this.blackout.Get<TextLabelComponent>().FontSize = 72;
+            this.blackout.Get<ColourComponent>().Alpha = 0;
+            
+            // Clear sight around start tile
+            this.OnTileClicked(startPosition.Item1, startPosition.Item2);
+        }
+
+        override public void Update(float elapsedSeconds)
+        {
+            base.Update(elapsedSeconds);
+            
+            if (blackoutStart != null)
+            {
+                var timeSinceBlackout = (float)(DateTime.Now - blackoutStart.Value).TotalSeconds;
+                var alpha = timeSinceBlackout;
+                this.blackout.Get<ColourComponent>().Alpha = alpha;
+                
+                // If it's at least 2s, we can quit/return.
+            }
         }
 
         private void UpdateHealthDisplay()
@@ -134,6 +161,8 @@ namespace DeenGames.FrontierPlanet.Scenes
             // You can't reveal tiles by clicking on stuff
             if (this.dungeon.IsVisible(tileX, tileY))
             {
+                this.UpdateHealthDisplay(); // clear last dead monster
+
                 if (this.dungeon.Contents(tileX, tileY) == null)
                 {
                     // Reveal
@@ -168,6 +197,20 @@ namespace DeenGames.FrontierPlanet.Scenes
                         {
                             this.contentsTilemap.Set(tileX, tileY, null);
                         }
+
+                        if (this.player.Health <= 0)
+                        {
+                            this.blackout.Get<TextLabelComponent>().Text = "You Died!";
+                            this.Add(this.blackout);
+                            blackoutStart = DateTime.Now;
+                        }
+                    }
+                    // TODO: utilize proper items like regular out-of-dungeon healing items?
+                    else if (contents is DungeonHeal)
+                    {
+                        this.dungeon.ConsumeItemAt(tileX, tileY);
+                        this.UpdateHealthDisplay();
+                        this.contentsTilemap.Set(tileX, tileY, null);
                     }
                 }
             }

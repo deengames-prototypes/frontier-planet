@@ -49,9 +49,13 @@ namespace DeenGames.FrontierPlanet.Model.Maps
         public void TakeDamageFrom(DungeonMonster monster)
         {
             // TODO: take into account my equipment
-            this.Health -= monster.Strength;
-            this.Health = Math.Max(this.Health, 0);
+            this.Health = Math.Max(this.Health - monster.Strength, 0);
             // If DEAD?!
+        }
+
+        public void Heal(int amount)
+        {
+            this.Health = Math.Min(this.Health + amount, this.MaxHealth);
         }
         
         internal int EnergyCost(MapEvent m)
