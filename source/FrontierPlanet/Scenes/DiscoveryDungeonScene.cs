@@ -203,13 +203,16 @@ namespace DeenGames.FrontierPlanet.Scenes
                 if (this.dungeon.Contents(tileX, tileY) == null)
                 {
                     // Reveal
-                    this.Reveal(tileX, tileY);
-                    this.player.SubtractEnergy(InteractWithTileEnergyCost);
-                    this.UpdateHealthDisplay();
-
-                    if (this.player.Energy <= 0)
+                    bool revealedAnything = this.Reveal(tileX, tileY);
+                    if (revealedAnything)
                     {
-                        this.TriggerGameOver("You are out of energy!");
+                        this.player.SubtractEnergy(InteractWithTileEnergyCost);
+                        this.UpdateHealthDisplay();
+
+                        if (this.player.Energy <= 0)
+                        {
+                            this.TriggerGameOver("You are out of energy!");
+                        }
                     }
                 }
                 else
@@ -266,27 +269,29 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.isGameOver = true;
         }
 
-        private void Reveal(int tileX, int tileY)
+        private bool Reveal(int tileX, int tileY)
         {
+            // Returns true if we revealed anything
             var adjacents = GetAdjacents(tileX, tileY);
-            if (adjacents.Any())
+            foreach (var revealed in adjacents)
             {
-                foreach (var revealed in adjacents)
+                var x = revealed.Item1;
+                var y = revealed.Item2;
+                if (!this.dungeon.IsVisible(x, y))
                 {
-                    var x = revealed.Item1;
-                    var y = revealed.Item2;
-                    if (!this.dungeon.IsVisible(x, y))
-                    {
-                        this.dungeon.Reveal(x, y);
-                        this.UpdateContentsDisplay(x, y);
-                    }
+                    this.dungeon.Reveal(x, y);
+                    this.UpdateContentsDisplay(x, y);
                 }
             }
+
+            return adjacents.Any();
         }
 
         private List<(int, int)> GetAdjacents(int tileX, int tileY)
         {
             var toReturn = new List<(int, int)>();
+
+            toReturn.Add((tileX, tileY));
 
             if (tileX > 0)
             {
@@ -306,7 +311,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 toReturn.Add((tileX, tileY + 1));
             }
 
-            toReturn.RemoveAll((coordinates)  => this.dungeon.IsVisible(coordinates.Item1, coordinates.Item2));
+            toReturn.RemoveAll((coordinates) => this.dungeon.IsVisible(coordinates.Item1, coordinates.Item2));
 
             return toReturn;
         }
