@@ -28,6 +28,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private Entity blackout;
         private DateTime? blackoutStart = null;
         private bool isGameOver = false;
+        private bool snipeNextMonster = false;
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
@@ -110,8 +111,10 @@ namespace DeenGames.FrontierPlanet.Scenes
             var skillButton = new Entity(true).Sprite(Path.Combine("Content", "Images", "Sprites", "Dungeon-Snipe.png"))
                 .Move(8, this.healthIndicator.Y - FrontierPlanetGame.DefaultFontSize);
             
-            skillButton.Mouse(() => {
-                System.Console.WriteLine("!");
+            skillButton.Mouse(() =>
+            {
+                this.healthIndicator.Get<TextLabelComponent>().Text = "Click a monster to snipe it.";
+                this.snipeNextMonster = true;
             }, 32, 32);
 
             this.Add(skillButton);
@@ -204,7 +207,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                     if (contents is DungeonMonster)
                     {
                         var monster = contents as DungeonMonster;
-                        this.dungeon.AttackMonsterAt(tileX, tileY);
+                        this.dungeon.AttackMonsterAt(tileX, tileY, snipeNextMonster);
                         this.UpdateHealthDisplay();
                         this.healthIndicator.Get<TextLabelComponent>().Text += $"     Monster: {monster.Health}/{monster.MaxHealth}";
                         
@@ -220,6 +223,8 @@ namespace DeenGames.FrontierPlanet.Scenes
                             blackoutStart = DateTime.Now;
                             this.isGameOver = true;
                         }
+
+                        this.snipeNextMonster = false;
                     }
                     // TODO: utilize proper items like regular out-of-dungeon healing items?
                     else if (contents is DungeonHeal)

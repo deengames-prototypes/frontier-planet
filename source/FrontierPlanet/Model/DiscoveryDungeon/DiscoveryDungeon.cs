@@ -56,15 +56,22 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             this.isVisible[x, y] = true;
         }
 
-        public void AttackMonsterAt(int x, int y)
+        public void AttackMonsterAt(int x, int y, bool usingSnipe)
         {
             var monster = this.contents[x, y] as DungeonMonster;
             monster.TakeDamageFrom(this.player);
-            if (monster.Health > 0)
+            if (usingSnipe)
+            {
+                // Snipe = second attack / 2x damage
+                monster.TakeDamageFrom(this.player);
+            }
+
+            // Don't retaliate if sniped
+            if (monster.Health > 0 && !usingSnipe)
             {
                 this.player.TakeDamageFrom(monster);
             }
-            else
+            else if (monster.Health <= 0)
             {
                 this.contents[x, y] = null;
                 // TODO: grant XP etc.
