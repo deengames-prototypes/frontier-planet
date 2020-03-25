@@ -4,7 +4,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
     {
         public const int HealPercent = 40;
         
-        public DungeonHeal() : base("Item")
+        public DungeonHeal() : base("Heal")
         {
 
         }

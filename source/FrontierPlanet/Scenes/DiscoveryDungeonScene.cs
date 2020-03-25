@@ -63,14 +63,14 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.Add(fogTilemap);
 
             fogTilemap.Define("Fog", 1, 0);
-
             groundTilemap.Define("Floor", 2, 0);
 
             contentsTilemap.Define("Stairs", 3, 0);
-            contentsTilemap.Define("Monster", 0, 1); // generic monster
-            contentsTilemap.Define("Treasure", 1, 1); 
-            contentsTilemap.Define("Item", 2, 1); 
-            contentsTilemap.Define("Alien", 3, 1); // alien
+            contentsTilemap.Define("Alien", 0, 1);
+            contentsTilemap.Define("Bomb", 1, 1); 
+            contentsTilemap.Define("Heal", 2, 1); 
+            contentsTilemap.Define("EnergyBoost", 3, 1);
+            contentsTilemap.Define("Monster", 0, 2);
 
             (int, int) startPosition = (-1, -1);
             for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
@@ -234,7 +234,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                     // TODO: utilize proper items like regular out-of-dungeon healing items?
                     else if (contents is DungeonHeal)
                     {
-                        this.dungeon.ConsumeItemAt(tileX, tileY);
+                        this.dungeon.ConsumeHealAt(tileX, tileY);
                         this.UpdateHealthDisplay();
                         this.contentsTilemap.Set(tileX, tileY, null);
                     }

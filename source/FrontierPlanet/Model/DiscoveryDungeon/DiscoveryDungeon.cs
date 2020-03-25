@@ -13,8 +13,8 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         // Given that each tile is independent: 25% monster change, 12.5% item/chest chance
         // NB: this assumes no wall tiles.
         private const float MonsterProbability = 1/4f;
-        private const float ItemProbability = 1/8f;
-        private const float TreasureChestProbability = 1/8f;
+        private const float HealProbability = 1/8f;
+        private const float EnergyBoostProbability = 1/8f;
         private const float AlienProbability = 1/32f; // one on every other 4x4 floors
 
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
@@ -78,7 +78,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             }
         }
 
-        public void ConsumeItemAt(int x, int y)
+        public void ConsumeHealAt(int x, int y)
         {
             var heal = this.contents[x, y] as DungeonHeal;
             var healPercent = DungeonHeal.HealPercent;
@@ -116,13 +116,13 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         {
                             this.contents[x, y] = new DungeonMonster(20, 5);
                         }
-                        else if (random.NextDouble() <= DiscoveryDungeon.ItemProbability)
+                        else if (random.NextDouble() <= DiscoveryDungeon.HealProbability)
                         {
                             this.contents[x, y] = new DungeonHeal();
                         }
-                        else if (random.NextDouble() <= DiscoveryDungeon.TreasureChestProbability)
+                        else if (random.NextDouble() <= DiscoveryDungeon.EnergyBoostProbability)
                         {
-                            this.contents[x, y] = new DungeonContents("Treasure");
+                            this.contents[x, y] = new DungeonEnergyBoost();
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {
