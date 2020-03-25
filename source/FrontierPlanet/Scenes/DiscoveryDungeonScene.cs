@@ -129,7 +129,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             this.blackout.Get<ColourComponent>().Alpha = 0;
             
             // Clear sight around start tile
-            this.OnTileClicked(startPosition.Item1, startPosition.Item2);
+            this.Reveal(startPosition.Item1, startPosition.Item2);
         }
 
         override public void Update(float elapsedSeconds)
@@ -148,7 +148,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private void UpdateHealthDisplay()
         {
-            this.healthIndicator.Get<TextLabelComponent>().Text = $"Health: {this.player.Health}/{this.player.MaxHealth}";
+            this.healthIndicator.Get<TextLabelComponent>().Text = $"Health: {this.player.Health}/{this.player.MaxHealth} Energy: {this.player.Energy}/{this.player.MaxEnergy}";
         }
 
         private void UpdateContentsDisplay(int x, int y)
@@ -179,26 +179,14 @@ namespace DeenGames.FrontierPlanet.Scenes
             // You can't reveal tiles by clicking on stuff
             if (this.dungeon.IsVisible(tileX, tileY))
             {
-                this.UpdateHealthDisplay(); // clear last dead monster
+                this.UpdateHealthDisplay(); // clear dead monster health
 
                 if (this.dungeon.Contents(tileX, tileY) == null)
                 {
                     // Reveal
-                    var adjacents = GetAdjacents(tileX, tileY);
-                    if (adjacents.Any())
-                    {
-                        this.player.SubtractEnergy(InteractWithTileEnergyCost);
-                        foreach (var revealed in adjacents)
-                        {
-                            var x = revealed.Item1;
-                            var y = revealed.Item2;
-                            if (!this.dungeon.IsVisible(x, y))
-                            {
-                                this.dungeon.Reveal(x, y);
-                                this.UpdateContentsDisplay(x, y);
-                            }
-                        }
-                    }
+                    this.Reveal(tileX, tileY);
+                    this.player.SubtractEnergy(InteractWithTileEnergyCost);
+                    this.UpdateHealthDisplay();
                 }
                 else
                 {
@@ -232,6 +220,24 @@ namespace DeenGames.FrontierPlanet.Scenes
                         this.dungeon.ConsumeItemAt(tileX, tileY);
                         this.UpdateHealthDisplay();
                         this.contentsTilemap.Set(tileX, tileY, null);
+                    }
+                }
+            }
+        }
+
+        private void Reveal(int tileX, int tileY)
+        {
+            var adjacents = GetAdjacents(tileX, tileY);
+            if (adjacents.Any())
+            {
+                foreach (var revealed in adjacents)
+                {
+                    var x = revealed.Item1;
+                    var y = revealed.Item2;
+                    if (!this.dungeon.IsVisible(x, y))
+                    {
+                        this.dungeon.Reveal(x, y);
+                        this.UpdateContentsDisplay(x, y);
                     }
                 }
             }
