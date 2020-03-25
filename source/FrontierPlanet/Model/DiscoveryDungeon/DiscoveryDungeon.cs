@@ -90,7 +90,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             var stairsX = playerX;
             var stairsY = playerY;
 
-            while (isVisible[stairsX, stairsY])
+            while (stairsX == playerX || stairsY == playerY)
             {
                 stairsX = random.Next(TilesWide);
                 stairsY = random.Next(TilesHigh);
