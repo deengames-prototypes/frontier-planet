@@ -231,16 +231,9 @@ namespace DeenGames.FrontierPlanet.Scenes
 
                         this.snipeNextMonster = false;
                     }
-                    // TODO: utilize proper items like regular out-of-dungeon healing items?
-                    else if (contents is DungeonHeal)
+                    else
                     {
-                        this.dungeon.ConsumeHealAt(tileX, tileY);
-                        this.UpdateHealthDisplay();
-                        this.contentsTilemap.Set(tileX, tileY, null);
-                    }
-                    else if (contents is DungeonEnergyBoost)
-                    {
-                        this.dungeon.ConsumeEnergyBoostAt(tileX, tileY);
+                        this.dungeon.ConsumeItemAt(tileX, tileY);
                         this.UpdateHealthDisplay();
                         this.contentsTilemap.Set(tileX, tileY, null);
                     }

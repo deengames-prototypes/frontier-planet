@@ -78,18 +78,31 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             }
         }
 
-        public void ConsumeHealAt(int x, int y)
+        public void ConsumeItemAt(int x, int y)
         {
-            var healPercent = DungeonHeal.HealPercent;
+            switch (this.contents[x, y].Sprite)
+            {
+                case "Heal":
+                    this.ConsumeHealAt(x, y);
+                    return;
+                case "EnergyBoost":
+                    this.ConsumeEnergyBoostAt(x, y);
+                    return;
+            }
+        }
+
+        private void ConsumeHealAt(int x, int y)
+        {
+            var healPercent = DungeonContents.HealPercent;
             var healAmount = (int)Math.Ceiling((healPercent / 100f) * this.player.MaxHealth);
             player.Heal(healAmount);
 
             this.contents[x, y] = null;
         }
 
-        public void ConsumeEnergyBoostAt(int x, int y)
+        private void ConsumeEnergyBoostAt(int x, int y)
         {
-            var boostAmount = DungeonEnergyBoost.BoostAmount;
+            var boostAmount = DungeonContents.EnergyBoostAmount;
             player.RecoverEnergy(boostAmount);
             this.contents[x, y] = null;
         }
@@ -124,11 +137,11 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.HealProbability)
                         {
-                            this.contents[x, y] = new DungeonHeal();
+                            this.contents[x, y] = DungeonContents.Heal;
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.EnergyBoostProbability)
                         {
-                            this.contents[x, y] = new DungeonEnergyBoost();
+                            this.contents[x, y] = DungeonContents.EnergyBoost;
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {
