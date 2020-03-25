@@ -21,7 +21,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private DiscoveryDungeon dungeon;
         private PlayerModel player;
-        private const int InteractWithTileEnergyCost = 1;
+        private const int InteractWithTileEnergyCost = 2;
         private const int SnipeEnergyCost = 5;
 
         // UI
