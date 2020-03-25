@@ -80,11 +80,17 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
 
         public void ConsumeHealAt(int x, int y)
         {
-            var heal = this.contents[x, y] as DungeonHeal;
             var healPercent = DungeonHeal.HealPercent;
             var healAmount = (int)Math.Ceiling((healPercent / 100f) * this.player.MaxHealth);
             player.Heal(healAmount);
 
+            this.contents[x, y] = null;
+        }
+
+        public void ConsumeEnergyBoostAt(int x, int y)
+        {
+            var boostAmount = DungeonEnergyBoost.BoostAmount;
+            player.RecoverEnergy(boostAmount);
             this.contents[x, y] = null;
         }
 

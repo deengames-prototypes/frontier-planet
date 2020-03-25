@@ -57,6 +57,11 @@ namespace DeenGames.FrontierPlanet.Model.Maps
         {
             this.Health = Math.Min(this.Health + amount, this.MaxHealth);
         }
+
+        public void RecoverEnergy(int amount)
+        {
+            this.Energy = Math.Min(this.Energy + amount, this.MaxEnergy);
+        }
         
         internal int EnergyCost(MapEvent m)
         {
