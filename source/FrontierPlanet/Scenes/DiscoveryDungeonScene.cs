@@ -97,15 +97,24 @@ namespace DeenGames.FrontierPlanet.Scenes
 
             /////// UI
             this.Add(new Entity().Camera(Constants.GameZoom));
-
+            
             // TODO: add progress bar
             this.healthIndicator = new Entity(true)
                 .Label("")
-                // 2x => 2 rows of text
-                .Move(8, FrontierPlanetGame.LatestInstance.Height - (2 * FrontierPlanetGame.DefaultFontSize));
+                // One row of text
+                .Move(8, FrontierPlanetGame.LatestInstance.Height - FrontierPlanetGame.DefaultFontSize);
             this.healthIndicator.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
             
             this.Add(this.healthIndicator);
+
+            var skillButton = new Entity(true).Sprite(Path.Combine("Content", "Images", "Sprites", "Dungeon-Snipe.png"))
+                .Move(8, this.healthIndicator.Y - FrontierPlanetGame.DefaultFontSize);
+            
+            skillButton.Mouse(() => {
+                System.Console.WriteLine("!");
+            }, 32, 32);
+
+            this.Add(skillButton);
 
             this.UpdateHealthDisplay();
 
