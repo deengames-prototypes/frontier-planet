@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using DeenGames.FrontierPlanet.Model.DiscoveryDungeon;
 using DeenGames.FrontierPlanet.Model.Maps;
 using Puffin.Core;
@@ -27,6 +26,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private Entity healthIndicator;
         private Entity blackout;
         private DateTime? blackoutStart = null;
+        private bool isGameOver = false;
 
         public DiscoveryDungeonScene(PlayerModel player)
         {
@@ -122,7 +122,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         override public void Update(float elapsedSeconds)
         {
             base.Update(elapsedSeconds);
-            
+
             if (blackoutStart != null)
             {
                 var timeSinceBlackout = (float)(DateTime.Now - blackoutStart.Value).TotalSeconds;
@@ -158,6 +158,11 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private void OnTileClicked(int tileX, int tileY)
         {
+            if (isGameOver)
+            {
+                return;
+            }
+
             // You can't reveal tiles by clicking on stuff
             if (this.dungeon.IsVisible(tileX, tileY))
             {
@@ -203,6 +208,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                             this.blackout.Get<TextLabelComponent>().Text = "You Died!";
                             this.Add(this.blackout);
                             blackoutStart = DateTime.Now;
+                            this.isGameOver = true;
                         }
                     }
                     // TODO: utilize proper items like regular out-of-dungeon healing items?
