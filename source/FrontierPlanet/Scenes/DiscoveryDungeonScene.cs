@@ -182,6 +182,10 @@ namespace DeenGames.FrontierPlanet.Scenes
             {
                 contentsTilemap.Set(x, y, contents.Sprite);
             }
+            else
+            {
+                contentsTilemap.Set(x, y, null);
+            }
         }
 
         private void OnTileClicked(int tileX, int tileY)
@@ -235,6 +239,19 @@ namespace DeenGames.FrontierPlanet.Scenes
                     {
                         this.dungeon.ConsumeItemAt(tileX, tileY);
                         this.UpdateHealthDisplay();
+
+                        // Bombs affect all visible tiles, so we need to update potentially everything.
+                        if (this.contentsTilemap.Get(tileX, tileY) == "Bomb")
+                        {
+                            for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
+                            {
+                                for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
+                                {
+                                    this.UpdateContentsDisplay(x, y);
+                                }
+                            }
+                        }
+
                         this.contentsTilemap.Set(tileX, tileY, null);
                     }
                 }

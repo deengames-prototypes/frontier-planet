@@ -15,6 +15,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         private const float MonsterProbability = 1/4f;
         private const float HealProbability = 1/8f;
         private const float EnergyBoostProbability = 1/8f;
+        private const float BombProbability = 1/16f;
         private const float AlienProbability = 1/32f; // one on every other 4x4 floors
 
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
@@ -83,28 +84,49 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
             switch (this.contents[x, y].Sprite)
             {
                 case "Heal":
-                    this.ConsumeHealAt(x, y);
-                    return;
+                    this.ConsumeHeal();
+                    break;
                 case "EnergyBoost":
-                    this.ConsumeEnergyBoostAt(x, y);
-                    return;
+                    this.ConsumeEnergyBoost();
+                    break;
+                case "Bomb":
+                    this.ConsumeBomb();
+                    break;
             }
+            this.contents[x, y] = null;
         }
 
-        private void ConsumeHealAt(int x, int y)
+        private void ConsumeHeal()
         {
             var healPercent = DungeonContents.HealPercent;
             var healAmount = (int)Math.Ceiling((healPercent / 100f) * this.player.MaxHealth);
             player.Heal(healAmount);
 
-            this.contents[x, y] = null;
         }
 
-        private void ConsumeEnergyBoostAt(int x, int y)
+        private void ConsumeEnergyBoost()
         {
             var boostAmount = DungeonContents.EnergyBoostAmount;
             player.RecoverEnergy(boostAmount);
-            this.contents[x, y] = null;
+        }
+
+        private void ConsumeBomb()
+        {
+            for (var y = 0; y < TilesHigh; y++)
+            {
+                for (var x = 0; x < TilesWide; x++)
+                {
+                    if (this.isVisible[x, y] && this.contents[x, y] is DungeonMonster)
+                    {
+                        var monster = this.contents[x, y] as DungeonMonster;
+                        monster.TakeDamage(DungeonContents.BombDamage);
+                        if (monster.Health <= 0)
+                        {
+                            this.contents[x, y] = null;
+                        }
+                    }
+                }
+            }
         }
 
         private void GenerateFloor()
@@ -142,6 +164,10 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         else if (random.NextDouble() <= DiscoveryDungeon.EnergyBoostProbability)
                         {
                             this.contents[x, y] = DungeonContents.EnergyBoost;
+                        }
+                        else if (random.NextDouble() <= DiscoveryDungeon.BombProbability)
+                        {
+                            this.contents[x, y] = DungeonContents.Bomb;
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.AlienProbability)
                         {

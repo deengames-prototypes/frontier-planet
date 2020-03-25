@@ -21,8 +21,12 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         internal void TakeDamageFrom(PlayerModel player)
         {
             // TODO: take into account player strength/equipment
-            this.Health -= DamagePerHit;
-            this.Health = Math.Max(this.Health, 0);
+            this.TakeDamage(DamagePerHit);
+        }
+
+        internal void TakeDamage(int damage)
+        {
+            this.Health = Math.Max(this.Health - damage, 0);
         }
     }
 }
