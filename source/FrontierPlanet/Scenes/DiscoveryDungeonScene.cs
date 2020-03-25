@@ -21,7 +21,8 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private DiscoveryDungeon dungeon;
         private PlayerModel player;
-        private const int InteractWithTileEnergyCost = 2;
+        private const int InteractWithTileEnergyCost = 1;
+        private const int SnipeEnergyCost = 5;
 
         // UI
         private Entity healthIndicator;
@@ -113,8 +114,22 @@ namespace DeenGames.FrontierPlanet.Scenes
             
             skillButton.Mouse(() =>
             {
-                this.healthIndicator.Get<TextLabelComponent>().Text = "Click a monster to snipe it.";
-                this.snipeNextMonster = true;
+                if (player.Energy >= SnipeEnergyCost)
+                {
+                    this.healthIndicator.Get<TextLabelComponent>().Text = "Click a monster to snipe it.";
+                    this.snipeNextMonster = true;
+                    player.SubtractEnergy(SnipeEnergyCost);
+
+                    if (this.player.Energy <= 0)
+                    {
+                        this.TriggerGameOver("Out of energy!");
+                    }
+                }
+                else
+                {
+                    this.UpdateHealthDisplay();
+                    this.healthIndicator.Get<TextLabelComponent>().Text += "     Not enough energy to snipe.";
+                }
             }, 32, 32);
 
             this.Add(skillButton);
@@ -187,6 +202,11 @@ namespace DeenGames.FrontierPlanet.Scenes
                     this.Reveal(tileX, tileY);
                     this.player.SubtractEnergy(InteractWithTileEnergyCost);
                     this.UpdateHealthDisplay();
+
+                    if (this.player.Energy <= 0)
+                    {
+                        this.TriggerGameOver("You are out of energy!");
+                    }
                 }
                 else
                 {
@@ -206,10 +226,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
                         if (this.player.Health <= 0)
                         {
-                            this.blackout.Get<TextLabelComponent>().Text = "You Died!";
-                            this.Add(this.blackout);
-                            blackoutStart = DateTime.Now;
-                            this.isGameOver = true;
+                            this.TriggerGameOver("You Died!");
                         }
 
                         this.snipeNextMonster = false;
@@ -223,6 +240,14 @@ namespace DeenGames.FrontierPlanet.Scenes
                     }
                 }
             }
+        }
+
+        private void TriggerGameOver(string message)
+        {
+            this.blackout.Get<TextLabelComponent>().Text = message;
+            this.Add(this.blackout);
+            blackoutStart = DateTime.Now;
+            this.isGameOver = true;
         }
 
         private void Reveal(int tileX, int tileY)
