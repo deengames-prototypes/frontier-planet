@@ -9,7 +9,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         public int Health { get; private set; }
 
         public readonly int Strength;
-        private const int DamagePerHit = 5;
+        private const int DamagePerHit = 25;
 
         public DungeonMonster(int health, int strength) : base("Monster")
         {

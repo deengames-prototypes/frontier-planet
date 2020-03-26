@@ -10,7 +10,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         
         public const int EnergyBoostAmount = 25;
         public const int HealPercent = 40;
-        public const int BombDamage = 25;
+        public const int BombDamage = 125;
         
         public string Sprite { get; private set; }
 

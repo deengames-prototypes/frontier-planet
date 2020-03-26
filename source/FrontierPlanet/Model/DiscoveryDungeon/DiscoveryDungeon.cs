@@ -15,8 +15,8 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         private const float MonsterProbability = 1/4f;
         private const float HealProbability = 1/8f;
         private const float EnergyBoostProbability = 1/8f;
-        private const float BombProbability = 1/16f;
-        private const float AlienProbability = 1/32f; // one on every other 4x4 floors
+        private const float BombProbability = 1/48f;
+        private const float AlienProbability = 1/32f; // one on every other floor
 
         private const int StartVisibleSize = 2; // 2 = 2x2 visible on start
         private bool[,] isVisible;
@@ -155,7 +155,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)
                         {
-                            this.contents[x, y] = new DungeonMonster(20, 5);
+                            this.contents[x, y] = new DungeonMonster(100, 25);
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.HealProbability)
                         {
