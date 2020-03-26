@@ -21,6 +21,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         private DiscoveryDungeon dungeon;
         private PlayerModel player;
+        private int currentFloorNumber = 0;
         private const int InteractWithTileEnergyCost = 2;
         private const int SnipeEnergyCost = 5;
 
@@ -32,8 +33,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private bool snipeNextMonster = false;
 
         public DiscoveryDungeonScene(PlayerModel player)
-        {
-            this.dungeon = new DiscoveryDungeon(1, player);
+        {            
             this.player = player;
         }
 
@@ -72,17 +72,14 @@ namespace DeenGames.FrontierPlanet.Scenes
             contentsTilemap.Define("EnergyBoost", 3, 1);
             contentsTilemap.Define("Monster", 0, 2);
 
-            (int, int) startPosition = (-1, -1);
+            contentsTilemap.Clear();
+            fogTilemap.Clear();
+
             for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
             {
                 for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
                 {
                     groundTilemap.Set(x, y, "Floor");
-                    this.UpdateContentsDisplay(x, y);
-                    if (dungeon.IsVisible(x, y))
-                    {
-                        startPosition = (x, y);
-                    }
                 }   
             }
 
@@ -142,9 +139,8 @@ namespace DeenGames.FrontierPlanet.Scenes
 
             this.blackout.Get<TextLabelComponent>().FontSize = 72;
             this.blackout.Get<ColourComponent>().Alpha = 0;
-            
-            // Clear sight around start tile
-            this.Reveal(startPosition.Item1, startPosition.Item2);
+
+            this.GenerateNextFloor();
         }
 
         override public void Update(float elapsedSeconds)
@@ -158,6 +154,44 @@ namespace DeenGames.FrontierPlanet.Scenes
                 this.blackout.Get<ColourComponent>().Alpha = alpha;
                 
                 // If it's at least 2s, we can quit/return.
+            }
+        }
+
+        
+        private void GenerateNextFloor()
+        {
+            this.currentFloorNumber++;
+            this.dungeon = new DiscoveryDungeon(this.currentFloorNumber, this.player);
+
+            contentsTilemap.Clear();
+            fogTilemap.Clear();
+
+            (int, int) startPosition = (-1, -1);
+            for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
+            {
+                for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
+                {
+                    if (this.dungeon.IsVisible(x, y))
+                    {
+                        startPosition = (x, y);
+                    }
+                }   
+            }
+
+            this.RedrawEverything();
+            
+            // Clear sight around start tile
+            this.Reveal(startPosition.Item1, startPosition.Item2);
+        }
+
+        private void RedrawEverything()
+        {
+            for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
+            {
+                for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
+                {
+                    this.UpdateContentsDisplay(x, y);
+                }   
             }
         }
 
@@ -246,16 +280,17 @@ namespace DeenGames.FrontierPlanet.Scenes
                         // Bombs affect all visible tiles, so we need to update potentially everything.
                         if (this.contentsTilemap.Get(tileX, tileY) == "Bomb")
                         {
-                            for (var y = 0; y < DiscoveryDungeon.TilesHigh; y++)
-                            {
-                                for (var x = 0; x < DiscoveryDungeon.TilesWide; x++)
-                                {
-                                    this.UpdateContentsDisplay(x, y);
-                                }
-                            }
+                            this.contentsTilemap.Set(tileX, tileY, null);
+                            this.RedrawEverything();
                         }
-
-                        this.contentsTilemap.Set(tileX, tileY, null);
+                        else if (this.contentsTilemap.Get(tileX, tileY) == "Stairs")
+                        {
+                            this.GenerateNextFloor();
+                        }
+                        else
+                        {
+                            this.contentsTilemap.Set(tileX, tileY, null);
+                        }
                     }
                 }
             }
