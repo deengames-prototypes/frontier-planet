@@ -70,7 +70,9 @@ namespace DeenGames.FrontierPlanet.Scenes
             contentsTilemap.Define("Bomb", 1, 1); 
             contentsTilemap.Define("Heal", 2, 1); 
             contentsTilemap.Define("EnergyBoost", 3, 1);
-            contentsTilemap.Define("Monster", 0, 2);
+            contentsTilemap.Define("Balanced", 0, 2);
+            contentsTilemap.Define("Tank", 1, 2);
+            contentsTilemap.Define("GlassCannon", 2, 2);
 
             contentsTilemap.Clear();
             fogTilemap.Clear();
@@ -204,7 +206,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         {
             if (!dungeon.IsVisible(x, y))
             {
-                fogTilemap.Set(x, y, "Fog");
+                //fogTilemap.Set(x, y, "Fog");
             }
             else
             {
@@ -230,7 +232,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             }
 
             // You can't reveal tiles by clicking on stuff
-            if (this.dungeon.IsVisible(tileX, tileY))
+            //if (this.dungeon.IsVisible(tileX, tileY))
             {
                 this.UpdateHealthDisplay(); // clear dead monster health
 

@@ -9,9 +9,8 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         public int Health { get; private set; }
 
         public readonly int Strength;
-        private const int DamagePerHit = 25;
 
-        public DungeonMonster(int health, int strength) : base("Monster")
+        public DungeonMonster(string name, int health, int strength) : base(name)
         {
             this.MaxHealth = health;
             this.Health = health;
@@ -21,7 +20,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
         internal void TakeDamageFrom(PlayerModel player)
         {
             // TODO: take into account player strength/equipment
-            this.TakeDamage(DamagePerHit);
+            this.TakeDamage(player.DamagePerHit);
         }
 
         internal void TakeDamage(int damage)

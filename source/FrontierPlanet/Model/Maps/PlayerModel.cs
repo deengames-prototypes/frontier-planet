@@ -28,6 +28,8 @@ namespace DeenGames.FrontierPlanet.Model.Maps
             this.MaxHealth = NewGameMaxHealth;
             this.Health = this.MaxHealth;
         }
+
+        public int DamagePerHit { get { return 25; } }
         
         public void SubtractEnergy(MapEvent m)
         {

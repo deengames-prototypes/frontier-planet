@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DeenGames.FrontierPlanet.Model.Maps;
 
 namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
@@ -155,7 +156,7 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                         // Not a starting square, so we can put stuff on it
                         if (random.NextDouble() <= DiscoveryDungeon.MonsterProbability)
                         {
-                            this.contents[x, y] = new DungeonMonster(100, 25);
+                            this.SpawnMonster(x, y);
                         }
                         else if (random.NextDouble() <= DiscoveryDungeon.HealProbability)
                         {
@@ -176,6 +177,45 @@ namespace DeenGames.FrontierPlanet.Model.DiscoveryDungeon
                     }
                 }
             }
+        }
+
+        private void SpawnMonster(int x, int y)
+        {
+            const int BalancedHp = 100;
+            const int BalancedStrength = 25;
+            const int TankHp = 200;
+            const int TankStrength = 15;
+            const int GlassCannonHp = 50;
+            const int GlassCannonStrength = 120;
+
+            DungeonMonster monster;
+            // Tank, glass cannon
+            var tankProbability = 0f;
+            var glassCannonProbability = 0f;
+
+            if (this.floorNum >= 2)
+            {
+                tankProbability = 0.1f * this.floorNum;
+            }
+            if (this.floorNum >= 3)
+            {
+                glassCannonProbability = 0.05f * this.floorNum;
+            }
+            
+            if (random.NextDouble() <= glassCannonProbability)
+            {
+                monster = new DungeonMonster("GlassCannon", GlassCannonHp, GlassCannonStrength);
+            }
+            else if (random.NextDouble() <= tankProbability)
+            {
+                monster = new DungeonMonster("Tank", TankHp, TankStrength);
+            }
+            else
+            {
+                monster = new DungeonMonster("Balanced", BalancedHp, BalancedStrength);
+            }
+
+            this.contents[x, y] = monster;
         }
     }
 }
