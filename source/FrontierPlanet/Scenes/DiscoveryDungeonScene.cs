@@ -26,6 +26,7 @@ namespace DeenGames.FrontierPlanet.Scenes
 
         // UI
         private Entity healthIndicator;
+        private Entity floorLabel;
         private Entity blackout;
         private DateTime? blackoutStart = null;
         private bool isGameOver = false;
@@ -98,6 +99,10 @@ namespace DeenGames.FrontierPlanet.Scenes
             /////// UI
             this.Add(new Entity().Camera(Constants.GameZoom));
             
+            this.floorLabel = new Entity(true).Label("Floor: 1B").Move(550, 0);
+            this.floorLabel.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
+            this.Add(this.floorLabel);
+
             // TODO: add progress bar
             this.healthIndicator = new Entity(true)
                 .Label("")
@@ -166,6 +171,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private void GenerateNextFloor()
         {
             this.currentFloorNumber++;
+            this.floorLabel.Get<TextLabelComponent>().Text = $"Floor: {this.currentFloorNumber}B";
             this.dungeon = new DiscoveryDungeon(this.currentFloorNumber, this.player);
 
             contentsTilemap.Clear();
