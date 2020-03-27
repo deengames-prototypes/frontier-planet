@@ -23,6 +23,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         private int currentFloorNumber = 0;
         private const int InteractWithTileEnergyCost = 2;
         private const int SnipeEnergyCost = 5;
+        private const int LastFloorNumber = 10;
 
         // UI
         private Entity healthIndicator;
@@ -176,6 +177,12 @@ namespace DeenGames.FrontierPlanet.Scenes
         private void GenerateNextFloor()
         {
             this.currentFloorNumber++;
+            if (currentFloorNumber > LastFloorNumber)
+            {
+                this.TriggerGameOver("You win!\nCongratulations!");
+                this.PlayAudio("win.wav");
+            }
+
             this.floorLabel.Get<TextLabelComponent>().Text = $"Floor: {this.currentFloorNumber}B";
             this.dungeon = new DiscoveryDungeon(this.currentFloorNumber, this.player);
 
