@@ -258,6 +258,10 @@ namespace DeenGames.FrontierPlanet.Scenes
                         {
                             this.TriggerGameOver("You are out of energy!");
                         }
+                        else
+                        {
+                            this.PlayAudio("uncover-tile.wav");
+                        }
                     }
                 }
                 else
@@ -305,6 +309,13 @@ namespace DeenGames.FrontierPlanet.Scenes
                     }
                 }
             }
+        }
+
+        private void PlayAudio(string v)
+        {
+            var e = new Entity().Audio(Path.Join("Content", "Audio", "Dungeon", v));
+            this.Add(e);
+            e.Get<AudioComponent>().Play();
         }
 
         private void TriggerGameOver(string message)
