@@ -107,8 +107,11 @@ namespace DeenGames.FrontierPlanet.Scenes
             
             this.Add(this.healthIndicator);
 
+
+            var skillLabel = new Entity(true).Label("Skills: ").Move(8, this.healthIndicator.Y - FrontierPlanetGame.DefaultFontSize);
+            skillLabel.Get<TextLabelComponent>().FontSize = FrontierPlanetGame.DefaultFontSize;
             var skillButton = new Entity(true).Sprite(Path.Combine("Content", "Images", "Sprites", "Dungeon-Snipe.png"))
-                .Move(8, this.healthIndicator.Y - FrontierPlanetGame.DefaultFontSize);
+                .Move(skillLabel.X + 100, skillLabel.Y + 12);
             
             skillButton.Mouse(() =>
             {
@@ -130,6 +133,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                 }
             }, 32, 32);
 
+            this.Add(skillLabel);
             this.Add(skillButton);
 
             this.UpdateHealthDisplay();
