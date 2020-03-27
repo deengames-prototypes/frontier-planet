@@ -129,6 +129,11 @@ namespace DeenGames.FrontierPlanet.Scenes
                     if (this.player.Energy <= 0)
                     {
                         this.TriggerGameOver("Out of energy!");
+                        this.PlayAudio("lose.wav");
+                    }
+                    else
+                    {
+                        this.PlayAudio("snipe.wav");
                     }
                 }
                 else
@@ -257,6 +262,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                         if (this.player.Energy <= 0)
                         {
                             this.TriggerGameOver("You are out of energy!");
+                            this.PlayAudio("lose.wav");
                         }
                         else
                         {
@@ -274,6 +280,7 @@ namespace DeenGames.FrontierPlanet.Scenes
                         this.dungeon.AttackMonsterAt(tileX, tileY, snipeNextMonster);
                         this.UpdateHealthDisplay();
                         this.healthIndicator.Get<TextLabelComponent>().Text += $"     Monster: {monster.Health}/{monster.MaxHealth}";
+                        var audio = $"monster-{monster.Sprite.ToLower()}.wav";
                         
                         if (monster.Health <= 0)
                         {
@@ -283,7 +290,15 @@ namespace DeenGames.FrontierPlanet.Scenes
                         if (this.player.Health <= 0)
                         {
                             this.TriggerGameOver("You Died!");
+                            audio = "lose.wav";                            
                         }
+
+                        if (this.snipeNextMonster)
+                        {
+                            audio = "snipe.wav";
+                        }
+
+                        this.PlayAudio(audio);
 
                         this.snipeNextMonster = false;
                     }
@@ -295,15 +310,18 @@ namespace DeenGames.FrontierPlanet.Scenes
                         // Bombs affect all visible tiles, so we need to update potentially everything.
                         if (this.contentsTilemap.Get(tileX, tileY) == "Bomb")
                         {
+                            this.PlayAudio("bomb.wav");
                             this.contentsTilemap.Set(tileX, tileY, null);
                             this.RedrawEverything();
                         }
                         else if (this.contentsTilemap.Get(tileX, tileY) == "Stairs")
                         {
+                            this.PlayAudio("descend.wav");
                             this.GenerateNextFloor();
                         }
                         else
                         {
+                            this.PlayAudio($"{this.contentsTilemap.Get(tileX, tileY).ToLower()}.wav");
                             this.contentsTilemap.Set(tileX, tileY, null);
                         }
                     }
