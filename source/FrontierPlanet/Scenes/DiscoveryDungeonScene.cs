@@ -205,7 +205,7 @@ namespace DeenGames.FrontierPlanet.Scenes
         {
             if (!dungeon.IsVisible(x, y))
             {
-                //fogTilemap.Set(x, y, "Fog");
+                fogTilemap.Set(x, y, "Fog");
             }
             else
             {
