@@ -253,7 +253,7 @@ namespace DeenGames.FrontierPlanet.Scenes
             }
 
             // You can't reveal tiles by clicking on stuff
-            //if (this.dungeon.IsVisible(tileX, tileY))
+            if (this.dungeon.IsVisible(tileX, tileY))
             {
                 this.UpdateHealthDisplay(); // clear dead monster health
 

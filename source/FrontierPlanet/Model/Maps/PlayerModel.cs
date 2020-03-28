@@ -12,7 +12,7 @@ namespace DeenGames.FrontierPlanet.Model.Maps
         public int MaxHealth { get; private set; }
 
         private const int NewGameMaxEnergy = 100;
-        private const int NewGameMaxHealth = 25;
+        private const int NewGameMaxHealth = 250;
 
         // Used in testing, deserialization, etc.
         public PlayerModel() : this(0, 0)
